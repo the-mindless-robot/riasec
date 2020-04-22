@@ -80,7 +80,7 @@ class PanelRouter {
         for (const btn of this.jumpBtns) {
             btn.addEventListener('click', (event) => {
                 let nextIndex = Number(event.target.dataset.jump) - 1;
-                console.log('nextIndex', nextIndex, 'active', this.activePanel);
+                // console.log('nextIndex', nextIndex, 'active', this.activePanel);
                 this._jumpTo(nextIndex);
             });
         }
@@ -88,7 +88,7 @@ class PanelRouter {
         for (const btn of this.skipBtns) {
             btn.addEventListener('click', (event) => {
                 let nextIndex = Number(event.target.dataset.skip) - 1;
-                console.log('index', nextIndex, 'active', this.activePanel);
+                // console.log('index', nextIndex, 'active', this.activePanel);
                 this._skipTo(nextIndex);
             });
         }
@@ -144,8 +144,8 @@ class PanelRouter {
         window.addEventListener('popstate', (event) => {
             if (event.state && event.state.hasOwnProperty('slug')) {
                 const newIndex = this.slugToIndex[event.state.slug];
-                console.log('document location:', document.location);
-                console.log('goto:', newIndex, this.activePanel);
+                // console.log('document location:', document.location);
+                // console.log('goto:', newIndex, this.activePanel);
                 let relativePosition = Number(newIndex) - Number(this.activePanel);
                 // back/forward already updates URL
                 // only need to update content so use "false"
@@ -209,7 +209,7 @@ class PanelRouter {
     }
 
     async _showPanel(index) {
-        console.log('loading panel');
+        // console.log('loading panel');
         let panel = this.getPanelInstance(index);
         let async = panel.hasAsyncOnQueue();
 
@@ -225,7 +225,7 @@ class PanelRouter {
         await panel.activate();
 
         if (async) {
-            console.log('remove loader');
+            // console.log('remove loader');
             this._hideLoader();
             this._enableNav();
         }
@@ -302,7 +302,7 @@ class PanelRouter {
             if (slug) {
                 document.title = slug;
                 window.history.pushState({ slug }, `panel${slug}`, `/${slug}`);
-                console.log('hist', window.history);
+                // console.log('hist', window.history);
             }
         }
 
@@ -340,7 +340,7 @@ class PanelRouter {
     }
 
     getPanelInstance(index) {
-        console.log(`get panel i:${index}`, this.panelsList[index])
+        // console.log(`get panel i:${index}`, this.panelsList[index])
         return this.panelsList[index];
     }
 

@@ -94,6 +94,7 @@ function getRandomNumber(limit) {
 }
 
 function displayQuestions(arrayOfQuestions) {
+
     let questionsList = [...arrayOfQuestions];
     if (config.pagination) {
         buildPagination(questionsList);
@@ -113,6 +114,8 @@ function displayQuestions(arrayOfQuestions) {
 }
 
 function buildPagination(questionsList) {
+    console.log('display questions1');
+
     const odd = Number(config.numQuestionsPerArea) % 2 == 0 ? false : true;
     let questionsPerPage = 12;
     if (odd) {
@@ -121,13 +124,13 @@ function buildPagination(questionsList) {
     const numPages = Math.ceil(questionsList.length / questionsPerPage);
 
     const panelsContainer = document.getElementById('panels');
-    const resultsElem = panelsContainer.querySelector('.panel[data-nav="results"]');
+    const resultsElem = panelsContainer.querySelector('#results');
     const resultsElemClone = resultsElem.cloneNode(true);
     console.log('resElemClone', resultsElemClone);
     panelsContainer.innerHTML = "";
 
     for (let i = 0; i < numPages; i++) {
-        let panel = `<div class="panel" data-nav="questions">
+        let panel = `<div class="panel" data-nav="${getNavValue(i, numPages)}">
             <div class="panel-content">
             <h2>Questions</h2>
                 <div id="questions">
@@ -141,6 +144,11 @@ function buildPagination(questionsList) {
     }
     panelsContainer.appendChild(resultsElemClone);
     setupRouter();
+}
+
+function getNavValue(i, numPages) {
+    const navValue = i == numPages-1 ? "lastPage" : "questions";
+    return navValue;
 }
 
 function addQuestions(i, questionsPerPage, questionsList) {
@@ -182,16 +190,21 @@ function setupRouter() {
 }
 
 function updateNav(panel) {
-    const navValue = panel.elem.dataset.nav;
-    const nav = document.getElementById('nav');
-    const navOptions = nav.querySelectorAll('button');
-    navOptions.forEach(btn => {
-        if(btn.classList.contains(navValue)) {
-            btn.style.display = "inline-block";
-        } else {
-            btn.style.display = "none";
-        }
-    });
+    console.debug('updateNav', panel);
+    // const navValue = panel.elem.dataset.nav;
+    const navValue = typeof panel.elem.dataset.nav == "string" && panel.elem.dataset.nav.length > 0 ? panel.elem.dataset.nav : false;
+    if(navValue) {
+        const nav = document.getElementById('nav');
+        const navOptions = nav.querySelectorAll('button');
+        navOptions.forEach(btn => {
+            if(btn.classList.contains(navValue)) {
+                btn.style.display = "inline-block";
+            } else {
+                btn.style.display = "none";
+            }
+        });
+    }
+
 }
 
 
@@ -210,12 +223,12 @@ function updateNav(panel) {
 
 */
 
-document.getElementById('results').addEventListener('click', getResults);
+document.getElementById('resultsBtn').addEventListener('click', getResults);
 document.getElementById('clear').addEventListener('click', clearValues);
 
 function getResults() {
     let results;
-
+    console.log('in results');
     if (config.rating) {
         results = ratingEval();
     } else {
@@ -346,14 +359,15 @@ a8"    `Y88  88  I8[    ""  88P'    "8a  88  ""     `Y8  `8b     d8'
                             88                              d8'
 */
 function displayResults(RIASEC) {
-    for (let [index, area] of RIASEC.areas.entries()) {
+    console.log('RIASEC', RIASEC);
+    for (let area of RIASEC.areas) {
         let areaElem = document.getElementById(area);
         areaElem.innerHTML = RIASEC.scores[area];
 
         let scorePercent = computePercent(RIASEC.scores[area]);
         areaElem.style.width = scorePercent + "%";
 
-        if (index < 3) {
+        if (RIASEC.areas.indexOf(area) < 3) {
             areaElem.classList.add('highlight');
         }
 
