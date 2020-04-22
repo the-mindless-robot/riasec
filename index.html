@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>RIASEC</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="panels.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="pageContainer">
+        <div>
+            <h1>RIASEC</h1>
+        </div>
+        <div id="panels">
+            <div class="panel" data-nav="questions">
+                <div class="panel-content">
+                    <h2>Questions</h2>
+                    <div id="questions">
+                        <ol>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="panel" data-nav="results">
+                <div class="panel-content">
+                    <h2>Results</h2>
+                    <div id="code"></div>
+                    <div class="area">
+                        <span class="label">Realistic</span>
+                        <span class="value" id="Realistic"></span>
+                    </div>
+                    <div class="area">
+                        <span class="label">Investigative</span>
+                        <span class="value" id="Investigative"></span>
+                    </div>
+                    <div class="area">
+                        <span class="label">Artistic</span>
+                        <span class="value" id="Artistic"></span>
+                    </div>
+                    <div class="area">
+                        <span class="label">Social</span>
+                        <span class="value" id="Social"></span>
+                    </div>
+                    <div class="area">
+                        <span class="label">Enterprising</span>
+                        <span class="value" id="Enterprising"></span>
+                    </div>
+                    <div class="area">
+                        <span class="label">Conventional</span>
+                        <span class="value" id="Conventional"></span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div id="nav">
+            <button id="results" class="next questions">Get Results</button>
+            <button id="clear" class="questions">Reset</button>
+            <button class="prev results">Back</button>
+        </div>
+    </div>
+
+
+
+
+</body>
+<script src="config.js"></script>
+<script src="panels.js"></script>
+<script src="panelRouter.js"></script>
+<script src="onetWebService.js"></script>
+<script src="questions.js"></script>
+
+
+
+
+</html>

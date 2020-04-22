@@ -1,0 +1,79 @@
+#questions ol{
+    margin: 0;
+    padding: 0;
+}
+
+#questions ol li{
+    display: flex;
+    padding: 10px 0;
+}
+
+#questions ol li div.question {
+    flex: 1 0 75%;
+    border-bottom: 1px solid #d4d4d4;
+}
+
+#questions ol li div.value {
+    flex: 1 0 auto;
+}
+
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    /* Preferred icon size */
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    color: #d4d4d4;
+    cursor: pointer;
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+
+    /* Support for IE. */
+    font-feature-settings: 'liga';
+}
+
+.material-icons.active {
+    color: #fdb930;
+}
+
+.area {
+    margin-bottom: 10px;
+}
+
+.area span.value {
+    padding: 20px 0;
+    background: #ffc34b5e;
+    display: inline-block;
+}
+
+.area span.label {
+    display: block;
+}
+
+.area span.highlight {
+    background-color: #fdb930;
+}
+
+#code {
+    font-weight: bold;
+    font-size: 4rem;
+    font-family: sans-serif;
+    margin-bottom: 20px;
+}
+
+button {
+    display: inline-block;
+}
+
