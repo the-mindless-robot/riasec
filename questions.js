@@ -156,7 +156,10 @@ function addQuestions(i, questionsPerPage, questionsList) {
     let index = i * questionsPerPage;
     const end = index + questionsPerPage;
     for(index; index < end; index++) {
-        questionsHTML += questionsList[index];
+        if(questionsList[index]) {
+            questionsHTML += questionsList[index];
+        }
+
     }
     return questionsHTML;
 }
