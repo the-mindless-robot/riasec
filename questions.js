@@ -75,7 +75,6 @@ function randomizeQuestions(questions) {
 
 // @TODO build html for rating function
 function buildLiHTML(question, area) {
-    if (config.rating) {
         return `<li><div class="question">${question}</div>
         <div class="value" data-area="${area}">
             <i data-value="1" class="material-icons">star</i>
@@ -85,8 +84,6 @@ function buildLiHTML(question, area) {
             <i data-value="5" class="material-icons">star</i>
         </div>
         </li>`;
-    }
-    return `<li><div class="question">${question}</div><div class="value"><input type="checkbox" data-area="${area}"/></div></li>`;
 }
 
 function getRandomNumber(limit) {
@@ -107,9 +104,9 @@ function displayQuestions(arrayOfQuestions) {
         setupRouter();
     }
 
-    if (config.rating) {
-        initStars();
-    }
+
+    initStars();
+
     return;
 }
 
@@ -232,11 +229,9 @@ document.getElementById('clear').addEventListener('click', clearValues);
 function getResults() {
     let results;
     console.log('in results');
-    if (config.rating) {
-        results = ratingEval();
-    } else {
-        results = checkBoxesEval();
-    }
+
+    results = ratingEval();
+
     if (Object.keys(results).length < 6) {
         results = addEmptyAreas(results);
     }
@@ -247,12 +242,10 @@ function getResults() {
 function clearValues() {
     const inputs = selectInputs();
     for (let input of inputs) {
-        if (config.rating) {
-            const stars = input.parentElement.querySelectorAll('.material-icons');
-            stars.forEach(star => star.classList.remove('active', 'selected'));
-        } else {
-            input.checked = false;
-        }
+
+        const stars = input.parentElement.querySelectorAll('.material-icons');
+        stars.forEach(star => star.classList.remove('active', 'selected'));
+
     }
 }
 
@@ -288,9 +281,9 @@ function getRIASEC(results) {
 
 function computePercent(value) {
     let maxScore = Number(config.numQuestionsPerArea);
-    if (config.rating) {
-        maxScore = Number(config.numQuestionsPerArea) * 5;
-    }
+
+    maxScore = Number(config.numQuestionsPerArea) * 5;
+
     let decimal = Number(value) / maxScore;
     let percent = decimal * 100;
     console.log(decimal, percent, Math.floor(percent));
@@ -313,23 +306,6 @@ function sortByScore(results) {
         return 0;
     });
     return areas;
-}
-
-function checkBoxesEval() {
-    const inputs = selectInputs();
-    const results = {};
-    for (let input of inputs) {
-        if (input.checked) {
-            let area = input.dataset.area;
-            if (results.hasOwnProperty(area)) {
-                results[area] += 1;
-            } else {
-                results[area] = 1;
-            }
-        }
-    }
-
-    return results;
 }
 
 function ratingEval() {
@@ -395,12 +371,8 @@ aa    ]8I    88,    88,    ,88  88          aa    ]8I
 */
 
 function selectInputs() {
-    let inputs;
-    if (config.rating) {
-        inputs = document.querySelectorAll("#questions i.selected");
-    } else {
-        inputs = document.querySelectorAll("#questions input");
-    }
+    const inputs = document.querySelectorAll("#questions i.selected");
+
     console.log('inputs', typeof inputs);
     let inputsArray = Array.from(inputs);
     console.log('inputsArray', inputsArray);
