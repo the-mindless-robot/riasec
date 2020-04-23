@@ -105,7 +105,7 @@ function displayQuestions(arrayOfQuestions) {
     }
 
 
-    initStars();
+
 
     return;
 }
@@ -127,7 +127,7 @@ function buildPagination(questionsList) {
     panelsContainer.innerHTML = "";
 
     for (let i = 0; i < numPages; i++) {
-        let panel = `<div class="panel" data-nav="${getNavValue(i, numPages)}">
+        let panel = `<div class="panel">
             <div class="panel-content">
             <h2>Questions</h2>
                 <div id="questions">
@@ -135,17 +135,24 @@ function buildPagination(questionsList) {
                     ${addQuestions(i, questionsPerPage, questionsList)}
                     </ol>
                 </div>
+                <div class="nav">
+                    ${getNavValue(i, numPages)}
+                </div>
             </div>
         </div>`;
         panelsContainer.innerHTML+= panel;
     }
     panelsContainer.appendChild(resultsElemClone);
-    setupRouter();
+    appStart();
 }
 
 function getNavValue(i, numPages) {
-    const navValue = i == numPages-1 ? "lastPage" : "questions";
-    return navValue;
+    const lastPage = i == numPages-1 ? true : false;
+    if(lastPage) {
+        return `<button class="prev">PREV</button>
+        <button id="resultsBtn" class="next">GET RESULTS</button>`;
+    }
+    return `<button class="prev">PREV</button><button class="next">NEXT</button>`;
 }
 
 function addQuestions(i, questionsPerPage, questionsList) {
@@ -175,39 +182,17 @@ function addQuestions(i, questionsPerPage, questionsList) {
 
 
 */
-function setupRouter() {
+function appStart() {
     const router = new PanelRouter('panels');
-    const updateNavOnActivate = () => {
-        updateNav(router.getPanelInstance(router.activePanel));
-    };
-    const updateNavOnQueue = () => {
-        updateNav(router.getPanelInstance(router._nextActivePanel(router.activePanel)));
-    };
-
-    const options = {onActivated: updateNavOnActivate, onQueued: updateNavOnQueue};
-    router.setAllPanelOptions(options);
     router.start();
+    initStars();
+    setEventListeners();
 }
 
-function updateNav(panel) {
-    console.debug('updateNav', panel);
-    // const navValue = panel.elem.dataset.nav;
-    const navValue = typeof panel.elem.dataset.nav == "string" && panel.elem.dataset.nav.length > 0 ? panel.elem.dataset.nav : false;
-    if(navValue) {
-        const nav = document.getElementById('nav');
-        const navOptions = nav.querySelectorAll('button');
-        navOptions.forEach(btn => {
-            if(btn.classList.contains(navValue)) {
-                btn.style.display = "inline-block";
-            } else {
-                btn.style.display = "none";
-            }
-        });
-    }
-
+function setEventListeners() {
+    document.getElementById('resultsBtn').addEventListener('click', getResults);
+    document.getElementById('clear').addEventListener('click', clearValues);
 }
-
-
 
 /*
 
@@ -222,9 +207,6 @@ function updateNav(panel) {
 
 
 */
-
-document.getElementById('resultsBtn').addEventListener('click', getResults);
-document.getElementById('clear').addEventListener('click', clearValues);
 
 function getResults() {
     let results;
