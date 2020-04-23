@@ -143,6 +143,7 @@ function buildPagination(questionsList) {
         panelsContainer.innerHTML+= panel;
     }
     panelsContainer.appendChild(resultsElemClone);
+
     appStart();
 }
 
@@ -222,13 +223,9 @@ function getResults() {
 }
 
 function clearValues() {
-    const inputs = selectInputs();
-    for (let input of inputs) {
-
-        const stars = input.parentElement.querySelectorAll('.material-icons');
-        stars.forEach(star => star.classList.remove('active', 'selected'));
-
-    }
+    // const activeStars = document.querySelectorAll('i.activated');
+    // // console.log('active', activeStars)
+    // activeStars.forEach(star => star.classList.remove('activated', 'selected'));
 }
 
 function addEmptyAreas(results) {
@@ -376,7 +373,7 @@ function adjustRating(ev) {
     const starElems = Array.from(stars);
     clearStars(starElems);
     for (let i = 0; i < value; i++) {
-        starElems[i].classList.add('active');
+        starElems[i].classList.add('activated');
     }
 
     ev.target.classList.add('selected');
@@ -384,6 +381,6 @@ function adjustRating(ev) {
 
 function clearStars(stars) {
     for (let star of stars) {
-        star.classList.remove('active', 'selected');
+        star.classList.remove('activated', 'selected');
     }
 }
