@@ -194,7 +194,7 @@ class PanelRouter {
     _slideOutAllPanels(newIndex) {
         if (this._isValidIndex(newIndex)) {
             for (let i = this.activePanel; i > newIndex; i--) {
-                setTimeout(() => this._slideOutPanel(i), 1000);
+                this._slideOutPanel(i);
             }
         } else {
             console.debug('out of bounds');
