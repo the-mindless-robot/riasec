@@ -280,12 +280,9 @@ function getRIASEC(results) {
 }
 
 function computePercent(value) {
-    let maxScore = Number(config.numQuestionsPerArea);
-
-    maxScore = Number(config.numQuestionsPerArea) * 5;
-
-    let decimal = Number(value) / maxScore;
-    let percent = decimal * 100;
+    const maxScore = Number(config.numQuestionsPerArea) * 5;
+    const decimal = Number(value) / maxScore;
+    const percent = decimal * 100;
     console.log(decimal, percent, Math.floor(percent));
 
     return Math.floor(percent);
