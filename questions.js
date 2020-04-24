@@ -1,6 +1,3 @@
-
-
-
 const onet = new OnetWebService(config.username);
 let path = '/mnm/interestprofiler/questions';
 if (config.spanish) {
@@ -27,11 +24,12 @@ onet.call(path, { start: 1, end: 60 }, (response) => {
         console.log('Error', response.error);
     } else {
         console.log('Response', response);
-        buildQuestionsObj(response.question);
+        parseQuestions(response.question);
+        appStart();
     }
 });
 
-function buildQuestionsObj(questionsArray) {
+function parseQuestions(questionsArray) {
     const questions = {};
     for (question of questionsArray) {
         if (questions.hasOwnProperty(question.area)) {
@@ -43,7 +41,6 @@ function buildQuestionsObj(questionsArray) {
             questions[question.area] = [question.text];
         }
     }
-    console.log('questions', questions);
     randomizeQuestions(questions);
 }
 
@@ -90,28 +87,12 @@ function getRandomNumber(limit) {
     return Math.floor(Math.random() * limit);
 }
 
-function displayQuestions(arrayOfQuestions) {
-
+ function displayQuestions(arrayOfQuestions) {
     let questionsList = [...arrayOfQuestions];
-    if (config.pagination) {
-        buildPagination(questionsList);
-    } else {
-        let container = document.querySelector("#questions ol");
-        container.innerHTML = "";
-        for (let q of questionsList) {
-            container.innerHTML += q;
-        }
-        setupRouter();
-    }
-
-
-
-
-    return;
+    buildPagination(questionsList);
 }
 
 function buildPagination(questionsList) {
-    console.log('display questions1');
 
     const odd = Number(config.numQuestionsPerArea) % 2 == 0 ? false : true;
     let questionsPerPage = 12;
@@ -143,8 +124,7 @@ function buildPagination(questionsList) {
         panelsContainer.innerHTML+= panel;
     }
     panelsContainer.appendChild(resultsElemClone);
-
-    appStart();
+    return;
 }
 
 function getNavValue(i, numPages) {
@@ -223,9 +203,8 @@ function getResults() {
 }
 
 function clearValues() {
-    // const activeStars = document.querySelectorAll('i.activated');
-    // // console.log('active', activeStars)
-    // activeStars.forEach(star => star.classList.remove('activated', 'selected'));
+    const activeStars = document.querySelectorAll('i.activated');
+    activeStars.forEach(star => star.classList.remove('activated', 'selected'));
 }
 
 function addEmptyAreas(results) {
@@ -250,12 +229,92 @@ function getRIASEC(results) {
     for (let i = 0; i < 3; i++) {
         code += sortedResults[i].charAt(0);
     }
+
+
+
     const RIASEC = {
         scores: results,
         code: code.toUpperCase(),
         areas: sortedResults
     }
+
+    console.log('code', code);
+    let permutations = getPermutations(code);
+    console.log('permuts', permutations);
+
+    permutations = [...permutations, ...checkRemainingAreas(RIASEC)];
+    console.log('all', permutations);
+    RIASEC.permuts = permutations;
+
     displayResults(RIASEC);
+}
+
+function checkRemainingAreas(RIASEC) {
+    const r = RIASEC;
+    let baselineValue = r.scores[r.areas[2]];
+    let remainingAreas = r.areas.slice(3);
+    let additionalPermuts = [];
+    console.log('remainingAreas', remainingAreas);
+
+    for(let area of remainingAreas) {
+        let within = checkValues(baselineValue, r.scores[area]);
+        let newCode = r.code.slice(0,2) + area.charAt(0).toUpperCase();
+        console.log('newCode', newCode);
+        if(within.onePoint) {
+            //get all permutaions of new code
+            let permuts = getPermutations(newCode);
+            console.log('permuts', permuts);
+            //add to additional
+            additionalPermuts = [...additionalPermuts, ...permuts];
+
+
+            continue;
+        }
+        if(within.tenPercent) {
+            additionalPermuts = [...additionalPermuts, newCode];
+        }
+    }
+    console.log('add', additionalPermuts);
+    return additionalPermuts;
+}
+
+function checkValues(baseline, testValue) {
+    const diff = baseline - testValue;
+    const results = {
+        tenPercent: false,
+        onePoint: false
+    };
+    if(diff < 5) {
+        results.tenPercent = true;
+    }
+    if(diff <= 1) {
+        results.onePoint = true;
+    }
+    return results;
+}
+
+
+
+function getPermutations(string) {
+    // console.log('start', string);
+    //return single char
+    if (string.length < 2) return string;
+
+    const permutations = [];
+    for (let i = 0; i < string.length; i++) {
+    //    console.group();
+      let first = string[i];
+    //    console.log('first', first);
+      if (string.indexOf(first) != i) continue; // skip it this time
+
+      let remainingString = string.slice(0, i) + string.slice(i + 1, string.length); //Note: you can concat Strings via '+' in JS
+    //   console.log('remaing', remainingString);
+    //   console.groupEnd();
+      for (let subPermutation of getPermutations(remainingString)) {
+        permutations.push(first + subPermutation)
+      }
+    }
+    return permutations;
 }
 
 function computePercent(value) {
@@ -329,6 +388,12 @@ function displayResults(RIASEC) {
         let codeElem = document.getElementById('code');
         codeElem.innerHTML = RIASEC.code;
     }
+
+    let permutString = '';
+    for(let code of RIASEC.permuts) {
+        permutString += code + " ";
+    }
+    document.getElementById('permuts').innerHTML = permutString;
 }
 
 
@@ -348,22 +413,16 @@ aa    ]8I    88,    88,    ,88  88          aa    ]8I
 
 function selectInputs() {
     const inputs = document.querySelectorAll("#questions i.selected");
-
-    console.log('inputs', typeof inputs);
     let inputsArray = Array.from(inputs);
-    console.log('inputsArray', inputsArray);
     return inputsArray;
 }
 
 function initStars() {
     const stars = document.querySelectorAll('.material-icons');
     const allStars = Array.from(stars);
-    console.log('allStars', allStars);
-
     for (let star of allStars) {
         star.addEventListener('click', adjustRating);
     }
-
 }
 
 function adjustRating(ev) {
