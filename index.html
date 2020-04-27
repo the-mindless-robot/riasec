@@ -87,13 +87,24 @@
         const codesToPrograms = {};
         for(let program of data.Sheet1) {
             const codeArray = buildCodeArray(program.hollandcode);
-
+            for(let code of codeArray) {
+                //check if exists
+                if(codesToPrograms.hasOwnProperty(code)) {
+                    //if exists add program value to key
+                    codesToPrograms[code].push(program.discipline);
+                } else {
+                    //create new key and add value
+                    codesToPrograms[code] = [program.discipline];
+                }
+            }
         }
+        console.log('codesToPrograms', codesToPrograms);
     }
 
     function buildCodeArray(codeString) {
         const [...codeArray] = removeSpaces(codeString).split(',');
-        console.log('value', codeArray);
+        // console.log('value', codeArray);
+        return codeArray;
     }
 
     function removeSpaces(string) {
