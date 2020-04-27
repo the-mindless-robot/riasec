@@ -27,37 +27,54 @@
             <div id="results" class="panel" data-nav="results">
                 <div class="panel-content">
                     <h2>Results</h2>
-                    <div id="code"></div>
-                    <div id="permuts">
+                    <div class="flex">
+                        <div class="resutls">
+                            <div id="code"></div>
+                            <div id="permuts">
+                            </div>
+                            <div class="area">
+                                <span class="label">Realistic</span>
+                                <span class="value" id="Realistic"></span>
+                            </div>
+                            <div class="area">
+                                <span class="label">Investigative</span>
+                                <span class="value" id="Investigative"></span>
+                            </div>
+                            <div class="area">
+                                <span class="label">Artistic</span>
+                                <span class="value" id="Artistic"></span>
+                            </div>
+                            <div class="area">
+                                <span class="label">Social</span>
+                                <span class="value" id="Social"></span>
+                            </div>
+                            <div class="area">
+                                <span class="label">Enterprising</span>
+                                <span class="value" id="Enterprising"></span>
+                            </div>
+                            <div class="area">
+                                <span class="label">Conventional</span>
+                                <span class="value" id="Conventional"></span>
+                            </div>
+                        </div>
+                        <div class="programs">
+                            <div id="matches">
 
-                    </div>
-                    <div class="area">
-                        <span class="label">Realistic</span>
-                        <span class="value" id="Realistic"></span>
-                    </div>
-                    <div class="area">
-                        <span class="label">Investigative</span>
-                        <span class="value" id="Investigative"></span>
-                    </div>
-                    <div class="area">
-                        <span class="label">Artistic</span>
-                        <span class="value" id="Artistic"></span>
-                    </div>
-                    <div class="area">
-                        <span class="label">Social</span>
-                        <span class="value" id="Social"></span>
-                    </div>
-                    <div class="area">
-                        <span class="label">Enterprising</span>
-                        <span class="value" id="Enterprising"></span>
-                    </div>
-                    <div class="area">
-                        <span class="label">Conventional</span>
-                        <span class="value" id="Conventional"></span>
+                            </div>
+                        </div>
                     </div>
                     <button id="clear" class="jump" data-jump="1">Reset</button>
                 </div>
             </div>
+
+            <!-- <div id="programs" class="panel">
+                <div class="panel-content">
+                    <div id="matches">
+
+                    </div>
+                    <button id="clear" class="jump" data-jump="1">Reset</button>
+                </div>
+            </div> -->
         </div>
         <div id="nav">
             <!-- <button class="prev questions lastPage">PREV</button>
@@ -71,49 +88,12 @@
 
 
 </body>
+<script src="GoogleSheet.js"></script>
 <script src="config.js"></script>
 <script src="panels.js"></script>
 <script src="panelRouter.js"></script>
 <script src="onetWebService.js"></script>
 <script src="questions.js"></script>
-<script src="GoogleSheet.js"></script>
-<script>
-    const id = "1mSjbAORDq8HxoWT10a220onnIJYiVEGNK5j2PZnEVYE";
-    const programDataSheet = new GoogleSheet(id);
-    programDataSheet.load(formatData);
-
-    function formatData(data) {
-        console.log('data', data);
-        const codesToPrograms = {};
-        for(let program of data.Sheet1) {
-            const codeArray = buildCodeArray(program.hollandcode);
-            for(let code of codeArray) {
-                //check if exists
-                if(codesToPrograms.hasOwnProperty(code)) {
-                    //if exists add program value to key
-                    codesToPrograms[code].push(program.discipline);
-                } else {
-                    //create new key and add value
-                    codesToPrograms[code] = [program.discipline];
-                }
-            }
-        }
-        console.log('codesToPrograms', codesToPrograms);
-    }
-
-    function buildCodeArray(codeString) {
-        const [...codeArray] = removeSpaces(codeString).split(',');
-        // console.log('value', codeArray);
-        return codeArray;
-    }
-
-    function removeSpaces(string) {
-        return string.replace(/\s/g, '');
-    }
-
-</script>
-
-
 
 
 </html>

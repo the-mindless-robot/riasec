@@ -33,8 +33,7 @@ class GoogleSheet {
         sheet[sheetName] = rows;
 
         if(callback && typeof callback == 'function') {
-            callback(sheet);
-            return;
+            return callback(sheet);
         }
         return sheet;
     }

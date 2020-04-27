@@ -230,23 +230,21 @@ function getRIASEC(results) {
         code += sortedResults[i].charAt(0);
     }
 
-
-
     const RIASEC = {
         scores: results,
         code: code.toUpperCase(),
         areas: sortedResults
     }
-
-    console.log('code', code);
+    // console.log('code', code);
     let permutations = getPermutations(code);
-    console.log('permuts', permutations);
-
+    // console.log('permuts', permutations);
     permutations = [...permutations, ...checkRemainingAreas(RIASEC)];
+    // permutations = [...permutations, ...twoLetterCodes(permutaions)];
     console.log('all', permutations);
     RIASEC.permuts = permutations;
 
     displayResults(RIASEC);
+    findProgramMatches(permutations);
 }
 
 function checkRemainingAreas(RIASEC) {
@@ -277,6 +275,7 @@ function checkRemainingAreas(RIASEC) {
     console.log('add', additionalPermuts);
     return additionalPermuts;
 }
+
 
 function checkValues(baseline, testValue) {
     const diff = baseline - testValue;
@@ -358,6 +357,39 @@ function ratingEval() {
 
     return results;
 }
+
+/*
+
+                                                    88
+                                  ,d                88
+                                  88                88
+88,dPYba,,adPYba,   ,adPPYYba,  MM88MMM  ,adPPYba,  88,dPPYba,    ,adPPYba,  ,adPPYba,
+88P'   "88"    "8a  ""     `Y8    88    a8"     ""  88P'    "8a  a8P_____88  I8[    ""
+88      88      88  ,adPPPPP88    88    8b          88       88  8PP"""""""   `"Y8ba,
+88      88      88  88,    ,88    88,   "8a,   ,aa  88       88  "8b,   ,aa  aa    ]8I
+88      88      88  `"8bbdP"Y8    "Y888  `"Ybbd8"'  88       88   `"Ybbd8"'  `"YbbdP"'
+
+
+*/
+
+function findProgramMatches(codes) {
+    //from config
+    console.log('original', codesToPrograms);
+    const codeToProgram = JSON.parse(JSON.stringify(codesToPrograms));
+    console.log('copy', codeToProgram);
+    let programs = [];
+    for(let code of codes) {
+        if(codeToProgram.hasOwnProperty(code)) {
+            programs = [...programs, ...codeToProgram[code]];
+        } else {
+            console.debug('No match found: ', code);
+        }
+    }
+    console.log('programs', programs);
+}
+
+
+
 
 /*
 
