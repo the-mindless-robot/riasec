@@ -76,6 +76,31 @@
 <script src="panelRouter.js"></script>
 <script src="onetWebService.js"></script>
 <script src="questions.js"></script>
+<script src="GoogleSheet.js"></script>
+<script>
+    const id = "1mSjbAORDq8HxoWT10a220onnIJYiVEGNK5j2PZnEVYE";
+    const programDataSheet = new GoogleSheet(id);
+    programDataSheet.load(formatData);
+
+    function formatData(data) {
+        console.log('data', data);
+        const codesToPrograms = {};
+        for(let program of data.Sheet1) {
+            const codeArray = buildCodeArray(program.hollandcode);
+
+        }
+    }
+
+    function buildCodeArray(codeString) {
+        const [...codeArray] = removeSpaces(codeString).split(',');
+        console.log('value', codeArray);
+    }
+
+    function removeSpaces(string) {
+        return string.replace(/\s/g, '');
+    }
+
+</script>
 
 
 
