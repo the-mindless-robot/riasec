@@ -239,12 +239,21 @@ function getRIASEC(results) {
     let permutations = getPermutations(code);
     // console.log('permuts', permutations);
     permutations = [...permutations, ...checkRemainingAreas(RIASEC)];
-    // permutations = [...permutations, ...twoLetterCodes(permutaions)];
+    permutations = [...permutations, ...twoLetterCodes(permutations)];
     console.log('all', permutations);
     RIASEC.permuts = permutations;
 
     displayResults(RIASEC);
     findProgramMatches(permutations);
+}
+
+function twoLetterCodes(permutations) {
+    const twoLetterCodes = [];
+    for (let value of permutations) {
+        twoLetterCodes.push(value.slice(0,2));
+    }
+    console.log('twoLetterCodes', twoLetterCodes);
+    return twoLetterCodes;
 }
 
 function checkRemainingAreas(RIASEC) {
