@@ -269,10 +269,7 @@ function addEmptyAreas(results) {
 
 // resutls -> object; scores by RIASEC area
 function getRIASEC(results) {
-    console.log('results', results);
     let sortedResults = sortByScore(results);
-    console.log('sorted', sortedResults);
-    // @TODO check for equal values
     let code = "";
     for (let i = 0; i < 3; i++) {
         code += sortedResults[i].charAt(0);
@@ -477,7 +474,7 @@ function displayResults(RIASEC) {
         let scorePercent = computePercent(RIASEC.scores[area]);
         areaElem.style.width = scorePercent + "%";
 
-        if (RIASEC.areas.indexOf(area) < 3) {
+        if (RIASEC.code.indexOf(area.charAt(0)) != -1) {
             areaElem.classList.add('highlight');
         }
 
