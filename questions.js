@@ -395,6 +395,8 @@ function findProgramMatches(codes) {
     }
     console.log('programs', programs);
     console.log('unique', removeDuplicates(programs));
+
+    displayMatches(removeDuplicates(programs));
 }
 
 function removeDuplicates(array) {
@@ -444,7 +446,17 @@ function displayResults(RIASEC) {
     document.getElementById('permuts').innerHTML = permutString;
 }
 
+function displayMatches(programs) {
+    let matchesHTML = "";
+    for(let program of programs) {
+        matchesHTML += buildMatchHTML(program);
+    }
+    document.getElementById('matches').innerHTML = matchesHTML;
+}
 
+function buildMatchHTML(program) {
+    return `<span class="program">${program}</span>`;
+}
 
 
 /*
