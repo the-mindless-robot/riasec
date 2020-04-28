@@ -252,7 +252,6 @@ function twoLetterCodes(permutations) {
     for (let value of permutations) {
         twoLetterCodes.push(value.slice(0,2));
     }
-    console.log('twoLetterCodes', twoLetterCodes);
     return twoLetterCodes;
 }
 
@@ -395,9 +394,17 @@ function findProgramMatches(codes) {
         }
     }
     console.log('programs', programs);
+    console.log('unique', removeDuplicates(programs));
 }
 
-
+function removeDuplicates(array) {
+    const arrayCopy = [...array];
+    let uniqueArray = arrayCopy.filter((value, index)=>{
+        //only return first instance
+        return arrayCopy.indexOf(value) === index;
+    });
+    return uniqueArray;
+}
 
 
 /*
