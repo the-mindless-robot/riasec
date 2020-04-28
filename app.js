@@ -489,7 +489,7 @@ function displayResults(RIASEC) {
     for(let code of RIASEC.permuts) {
         permutString += code + " ";
     }
-    document.getElementById('permuts').innerHTML = permutString;
+    document.getElementById('permuts').innerHTML = `(${RIASEC.permuts.length}) ${permutString}`;
 }
 
 function displayMatches(programs) {
