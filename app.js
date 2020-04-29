@@ -314,20 +314,18 @@ function checkRemainingAreas(RIASEC) {
         let within = checkValues(baselineValue, r.scores[area]);
         let newCode = r.code.slice(0,2) + area.charAt(0).toUpperCase();
         console.log('newCode', newCode);
-        if(within.tenPercent) {
+        if(within.twoPoints) {
             //get all permutaions of new code
             let permuts = getPermutations(newCode);
-            console.log('permuts', permuts);
             //add to additional
             additionalPermuts = [...additionalPermuts, ...permuts];
             // do not do both
-            // continue;
+            continue;
         }
-        // if(within.tenPercent) {
-        //     additionalPermuts = [...additionalPermuts, newCode];
-        // }
+        if(within.tenPercent) {
+            additionalPermuts = [...additionalPermuts, newCode];
+        }
     }
-    console.log('add', additionalPermuts);
     return additionalPermuts;
 }
 
@@ -336,13 +334,13 @@ function checkValues(baseline, testValue) {
     const diff = baseline - testValue;
     const results = {
         tenPercent: false,
-        onePoint: false
+        twoPoints: false
     };
-    if(diff < 5) {
+    if(diff <= 5) {
         results.tenPercent = true;
     }
-    if(diff <= 1) {
-        results.onePoint = true;
+    if(diff <= 2) {
+        results.twoPoints = true;
     }
     return results;
 }
@@ -497,13 +495,9 @@ function displayResults(RIASEC) {
 
 function highlightUnmatched(RIASEC) {
     let codes = document.querySelectorAll('span.code');
-    console.log('codeElems', codes);
-
     codes = Array.from(codes);
-    console.log('codeArray', codes);
     for(let code of codes) {
         if(RIASEC.unmatchedCodes.indexOf(code.innerHTML) != -1) {
-            console.log('missed');
             code.classList.add('unmatched');
         }
     }
