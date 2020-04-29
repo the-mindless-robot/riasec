@@ -313,7 +313,7 @@ function checkRemainingAreas(RIASEC) {
         let within = checkValues(baselineValue, r.scores[area]);
         let newCode = r.code.slice(0,2) + area.charAt(0).toUpperCase();
         console.log('newCode', newCode);
-        if(within.twoPoints) {
+        if(within.fivePercent) {
             //get all permutaions of new code
             let permuts = getPermutations(newCode);
             //add to additional
@@ -333,13 +333,13 @@ function checkValues(baseline, testValue) {
     const diff = baseline - testValue;
     const results = {
         tenPercent: false,
-        twoPoints: false
+        fivePercent: false
     };
     if(diff <= 5) {
         results.tenPercent = true;
     }
-    if(diff <= 2) {
-        results.twoPoints = true;
+    if(diff <= 3) {
+        results.fivePercent = true;
     }
     return results;
 }
