@@ -86,6 +86,22 @@ span.program {
     padding: 5px 0;
 }
 
+span.code {
+    padding: 3px;
+    margin: 2px;
+    font-weight: bold;
+    display: inline-block;
+    background: #023867;
+    color: #fff;
+    border-radius: 2px;
+    font-family: sans-serif;
+}
+
+span.code.unmatched {
+    background: #d4d4d4;
+    color: rgb(99, 99, 99);
+}
+
 .flex {
     margin: 25px 0 0;
     border-top: 1px solid #000;

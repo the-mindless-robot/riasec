@@ -289,8 +289,8 @@ function getRIASEC(results) {
     console.log('all', uniquePermutations);
     RIASEC.permuts = uniquePermutations;
 
-    displayResults(RIASEC);
-    findProgramMatches(uniquePermutations);
+    // displayResults(RIASEC);
+    findProgramMatches(RIASEC);
 }
 
 function twoLetterCodes(permutations) {
@@ -303,7 +303,9 @@ function twoLetterCodes(permutations) {
 
 function checkRemainingAreas(RIASEC) {
     const r = RIASEC;
+    //use 3rd highest score as baseline
     let baselineValue = r.scores[r.areas[2]];
+    //get bottom three areas
     let remainingAreas = r.areas.slice(3);
     let additionalPermuts = [];
     console.log('remainingAreas', remainingAreas);
@@ -312,18 +314,18 @@ function checkRemainingAreas(RIASEC) {
         let within = checkValues(baselineValue, r.scores[area]);
         let newCode = r.code.slice(0,2) + area.charAt(0).toUpperCase();
         console.log('newCode', newCode);
-        if(within.onePoint) {
+        if(within.tenPercent) {
             //get all permutaions of new code
             let permuts = getPermutations(newCode);
             console.log('permuts', permuts);
             //add to additional
             additionalPermuts = [...additionalPermuts, ...permuts];
             // do not do both
-            continue;
+            // continue;
         }
-        if(within.tenPercent) {
-            additionalPermuts = [...additionalPermuts, newCode];
-        }
+        // if(within.tenPercent) {
+        //     additionalPermuts = [...additionalPermuts, newCode];
+        // }
     }
     console.log('add', additionalPermuts);
     return additionalPermuts;
@@ -423,22 +425,24 @@ function ratingEval() {
 
 */
 
-function findProgramMatches(codes) {
-    //from config
-    console.log('original', codesToPrograms);
-    const codeToProgram = JSON.parse(JSON.stringify(codesToPrograms));
-    console.log('copy', codeToProgram);
+function findProgramMatches(RIASEC) {
+    const codes = RIASEC.permuts;
+    //codes to program from config
     let programs = [];
+    RIASEC.unmatchedCodes = [];
     for(let code of codes) {
-        if(codeToProgram.hasOwnProperty(code)) {
-            programs = [...programs, ...codeToProgram[code]];
+        if(codesToPrograms.hasOwnProperty(code)) {
+            programs = [...programs, ...codesToPrograms[code]];
         } else {
             console.debug('No match found: ', code);
+            RIASEC.unmatchedCodes.push(code);
         }
     }
+
     console.log('programs', programs);
     console.log('unique', removeDuplicates(programs));
 
+    displayResults(RIASEC);
     displayMatches(removeDuplicates(programs));
 }
 
@@ -475,6 +479,7 @@ function displayResults(RIASEC) {
         areaElem.style.width = scorePercent + "%";
 
         if (RIASEC.code.indexOf(area.charAt(0)) != -1) {
+            console.log('area', area, area.charAt(0), RIASEC.code.indexOf(area.charAt(0)));
             areaElem.classList.add('highlight');
         }
 
@@ -484,9 +489,24 @@ function displayResults(RIASEC) {
 
     let permutString = '';
     for(let code of RIASEC.permuts) {
-        permutString += code + " ";
+        permutString += `<span class="code">${code}</span>`;
     }
     document.getElementById('permuts').innerHTML = `(${RIASEC.permuts.length}) ${permutString}`;
+    highlightUnmatched(RIASEC);
+}
+
+function highlightUnmatched(RIASEC) {
+    let codes = document.querySelectorAll('span.code');
+    console.log('codeElems', codes);
+
+    codes = Array.from(codes);
+    console.log('codeArray', codes);
+    for(let code of codes) {
+        if(RIASEC.unmatchedCodes.indexOf(code.innerHTML) != -1) {
+            console.log('missed');
+            code.classList.add('unmatched');
+        }
+    }
 }
 
 function displayMatches(programs) {
