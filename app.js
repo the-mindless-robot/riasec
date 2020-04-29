@@ -67,11 +67,10 @@ a8"    `Y88  88       88  a8P_____88  I8[    ""    88     88  a8"     "8a  88P' 
 */
 
 onet.call(path, { start: 1, end: 60 }, (response) => {
-    console.debug('called');
     if (response.hasOwnProperty('error')) {
-        console.log('Error', response.error);
+        console.error('Error', response.error);
     } else {
-        console.log('Response', response);
+        // console.log('Response', response);
         parseQuestions(response.question);
         appStart();
     }
@@ -118,7 +117,6 @@ function randomizeQuestions(questions) {
     displayQuestions(arrayOfQuestionsHTML)
 }
 
-// @TODO build html for rating function
 function buildLiHTML(question, area) {
         return `<li><div class="question">${question}</div>
         <div class="value" data-area="${area}">
@@ -253,6 +251,8 @@ function getResults() {
 function clearValues() {
     const activeStars = document.querySelectorAll('i.activated');
     activeStars.forEach(star => star.classList.remove('activated', 'selected'));
+    const highlightedAreas = document.querySelectorAll('.value.highlight');
+    highlightedAreas.forEach(area => area.classList.remove('highlight'));
 }
 
 function addEmptyAreas(results) {
@@ -289,7 +289,6 @@ function getRIASEC(results) {
     console.log('all', uniquePermutations);
     RIASEC.permuts = uniquePermutations;
 
-    // displayResults(RIASEC);
     findProgramMatches(RIASEC);
 }
 
@@ -424,11 +423,12 @@ function ratingEval() {
 */
 
 function findProgramMatches(RIASEC) {
+
     const codes = RIASEC.permuts;
-    //codes to program from config
     let programs = [];
     RIASEC.unmatchedCodes = [];
     for(let code of codes) {
+        //codes to program from data
         if(codesToPrograms.hasOwnProperty(code)) {
             programs = [...programs, ...codesToPrograms[code]];
         } else {
@@ -477,13 +477,12 @@ function displayResults(RIASEC) {
         areaElem.style.width = scorePercent + "%";
 
         if (RIASEC.code.indexOf(area.charAt(0)) != -1) {
-            console.log('area', area, area.charAt(0), RIASEC.code.indexOf(area.charAt(0)));
             areaElem.classList.add('highlight');
         }
-
-        let codeElem = document.getElementById('code');
-        codeElem.innerHTML = RIASEC.code;
     }
+
+    let codeElem = document.getElementById('code');
+    codeElem.innerHTML = RIASEC.code;
 
     let permutString = '';
     for(let code of RIASEC.permuts) {
