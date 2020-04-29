@@ -47,10 +47,48 @@ function removeSpaces(string) {
     return string.replace(/\s/g, '');
 }
 
-//load program data in background
+//load/parse program data in background
 const programData = new GoogleSheet(config.sheet);
 let codesToPrograms = null;
-programData.load(formatData).then(data =>{codesToPrograms=data;});
+let areaRanking = null;
+programData.load(formatData).then(data => {
+    codesToPrograms = data;
+    areaRanking = getAreaRanking(data);
+});
+
+function getAreaRanking(data) {
+    let areaRanking = {};
+    let allCodes = Object.keys(data);
+    let areas = ['R', 'I', 'A', 'S', 'E', 'C'];
+    for (let char of areas) {
+        let numProgramsInArea = 0;
+        for (let code of allCodes) {
+            if (code.indexOf(char) != -1) {
+                let numPrograms = Number(data[code].length);
+                numProgramsInArea += numPrograms;
+            }
+        }
+        areaRanking[char] = numProgramsInArea;
+    }
+
+    const areasSorted = sortObjByKey(areaRanking);
+    const fullNameSorted = areasSorted.map(area => charToArea(area));
+    areaRanking.sorted = fullNameSorted;
+    console.debug('areaRanking', areaRanking);
+    return areaRanking;
+}
+
+function charToArea(char) {
+    const areasMap = {
+        R: "Realistic",
+        I: "Investigative",
+        A: "Artistic",
+        S: "Social",
+        E: "Enterprising",
+        C: "Conventional"
+    }
+    return areasMap[char.toUpperCase()];
+}
 
 /*
 
@@ -118,7 +156,7 @@ function randomizeQuestions(questions) {
 }
 
 function buildLiHTML(question, area) {
-        return `<li><div class="question">${question}</div>
+    return `<li><div class="question">${question}</div>
         <div class="value" data-area="${area}">
             <i data-value="1" class="material-icons">star</i>
             <i data-value="2" class="material-icons">star</i>
@@ -133,7 +171,7 @@ function getRandomNumber(limit) {
     return Math.floor(Math.random() * limit);
 }
 
- function displayQuestions(arrayOfQuestions) {
+function displayQuestions(arrayOfQuestions) {
     let questionsList = [...arrayOfQuestions];
     buildPagination(questionsList);
 }
@@ -167,15 +205,15 @@ function buildPagination(questionsList) {
                 </div>
             </div>
         </div>`;
-        panelsContainer.innerHTML+= panel;
+        panelsContainer.innerHTML += panel;
     }
     panelsContainer.appendChild(resultsElemClone);
     return;
 }
 
 function getNavValue(i, numPages) {
-    const lastPage = i == numPages-1 ? true : false;
-    if(lastPage) {
+    const lastPage = i == numPages - 1 ? true : false;
+    if (lastPage) {
         return `<button class="prev">PREV</button>
         <button id="resultsBtn" class="next">GET RESULTS</button>`;
     }
@@ -186,8 +224,8 @@ function addQuestions(i, questionsPerPage, questionsList) {
     let questionsHTML = '';
     let index = i * questionsPerPage;
     const end = index + questionsPerPage;
-    for(index; index < end; index++) {
-        if(questionsList[index]) {
+    for (index; index < end; index++) {
+        if (questionsList[index]) {
             questionsHTML += questionsList[index];
         }
 
@@ -237,7 +275,6 @@ function setEventListeners() {
 
 function getResults() {
     let results;
-    console.log('in results');
 
     results = ratingEval();
 
@@ -269,7 +306,8 @@ function addEmptyAreas(results) {
 
 // resutls -> object; scores by RIASEC area
 function getRIASEC(results) {
-    let sortedResults = sortByScore(results);
+
+    let sortedResults = sortObjByKey(results, areaRanking.sorted);
     let code = "";
     for (let i = 0; i < 3; i++) {
         code += sortedResults[i].charAt(0);
@@ -292,10 +330,12 @@ function getRIASEC(results) {
     findProgramMatches(RIASEC);
 }
 
+
+
 function twoLetterCodes(permutations) {
     const twoLetterCodes = [];
     for (let value of permutations) {
-        twoLetterCodes.push(value.slice(0,2));
+        twoLetterCodes.push(value.slice(0, 2));
     }
     return twoLetterCodes;
 }
@@ -309,11 +349,11 @@ function checkRemainingAreas(RIASEC) {
     let additionalPermuts = [];
     console.log('remainingAreas', remainingAreas);
 
-    for(let area of remainingAreas) {
+    for (let area of remainingAreas) {
         let within = checkValues(baselineValue, r.scores[area]);
-        let newCode = r.code.slice(0,2) + area.charAt(0).toUpperCase();
+        let newCode = r.code.slice(0, 2) + area.charAt(0).toUpperCase();
         console.log('newCode', newCode);
-        if(within.fivePercent) {
+        if (within.fivePercent) {
             //get all permutaions of new code
             let permuts = getPermutations(newCode);
             //add to additional
@@ -321,7 +361,7 @@ function checkRemainingAreas(RIASEC) {
             // do not do both
             continue;
         }
-        if(within.tenPercent) {
+        if (within.tenPercent) {
             additionalPermuts = [...additionalPermuts, newCode];
         }
     }
@@ -335,10 +375,10 @@ function checkValues(baseline, testValue) {
         tenPercent: false,
         fivePercent: false
     };
-    if(diff <= 5) {
+    if (diff <= 5) {
         results.tenPercent = true;
     }
-    if(diff <= 3) {
+    if (diff <= 3) {
         results.fivePercent = true;
     }
     return results;
@@ -351,17 +391,17 @@ function getPermutations(string) {
 
     const permutations = [];
     for (let i = 0; i < string.length; i++) {
-    //    console.group();
-      let first = string[i];
-    //    console.log('first', first);
-      if (string.indexOf(first) != i) continue; // skip it this time
+        //    console.group();
+        let first = string[i];
+        //    console.log('first', first);
+        if (string.indexOf(first) != i) continue; // skip it this time
 
-      let remainingString = string.slice(0, i) + string.slice(i + 1, string.length); //Note: you can concat Strings via '+' in JS
-    //   console.log('remaing', remainingString);
-    //   console.groupEnd();
-      for (let subPermutation of getPermutations(remainingString)) {
-        permutations.push(first + subPermutation)
-      }
+        let remainingString = string.slice(0, i) + string.slice(i + 1, string.length); //Note: you can concat Strings via '+' in JS
+        //   console.log('remaing', remainingString);
+        //   console.groupEnd();
+        for (let subPermutation of getPermutations(remainingString)) {
+            permutations.push(first + subPermutation)
+        }
     }
     return permutations;
 }
@@ -375,11 +415,25 @@ function computePercent(value) {
     return Math.floor(percent);
 }
 
-function sortByScore(results) {
-    let areas = Object.keys(results);
-    areas.sort((a, b) => {
-        let valueA = results[a];
-        let valueB = results[b];
+//obj -> object to be sorted
+//orderBy -> array of keys in specific order
+//key -> if second level is obj -> key to sort by
+function sortObjByKey(obj, orderBy = false, key = false) {
+    let array;
+    if (orderBy) {
+        array = [...orderBy];
+    } else {
+        array = Object.keys(obj);
+    }
+    array.sort((a, b) => {
+        let valueA, valueB;
+        if (key) {
+            valueA = obj[a][key];
+            valueB = obj[b][key];
+        } else {
+            valueA = obj[a];
+            valueB = obj[b];
+        }
 
         if (valueA > valueB) {
             return -1;
@@ -389,7 +443,7 @@ function sortByScore(results) {
         }
         return 0;
     });
-    return areas;
+    return array;
 }
 
 function ratingEval() {
@@ -427,9 +481,9 @@ function findProgramMatches(RIASEC) {
     const codes = RIASEC.permuts;
     let programs = [];
     RIASEC.unmatchedCodes = [];
-    for(let code of codes) {
+    for (let code of codes) {
         //codes to program from data
-        if(codesToPrograms.hasOwnProperty(code)) {
+        if (codesToPrograms.hasOwnProperty(code)) {
             programs = [...programs, ...codesToPrograms[code]];
         } else {
             console.debug('No match found: ', code);
@@ -446,7 +500,7 @@ function findProgramMatches(RIASEC) {
 
 function removeDuplicates(array) {
     const arrayCopy = [...array];
-    let uniqueArray = arrayCopy.filter((value, index)=>{
+    let uniqueArray = arrayCopy.filter((value, index) => {
         //only return first instance
         return arrayCopy.indexOf(value) === index;
     });
@@ -485,7 +539,7 @@ function displayResults(RIASEC) {
     codeElem.innerHTML = RIASEC.code;
 
     let permutString = '';
-    for(let code of RIASEC.permuts) {
+    for (let code of RIASEC.permuts) {
         permutString += `<span class="code">${code}</span>`;
     }
     document.getElementById('permuts').innerHTML = `(${RIASEC.permuts.length}) ${permutString}`;
@@ -495,8 +549,8 @@ function displayResults(RIASEC) {
 function highlightUnmatched(RIASEC) {
     let codes = document.querySelectorAll('span.code');
     codes = Array.from(codes);
-    for(let code of codes) {
-        if(RIASEC.unmatchedCodes.indexOf(code.innerHTML) != -1) {
+    for (let code of codes) {
+        if (RIASEC.unmatchedCodes.indexOf(code.innerHTML) != -1) {
             code.classList.add('unmatched');
         }
     }
@@ -504,7 +558,7 @@ function highlightUnmatched(RIASEC) {
 
 function displayMatches(programs) {
     let matchesHTML = "";
-    for(let program of programs) {
+    for (let program of programs) {
         matchesHTML += buildMatchHTML(program);
     }
     document.getElementById('matches').innerHTML = matchesHTML;
