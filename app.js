@@ -155,6 +155,9 @@ function randomizeQuestions(questions) {
     displayQuestions(arrayOfQuestionsHTML)
 }
 
+/*
+TODO: update icons and associated methods to iconify
+*/
 function buildLiHTML(question, area) {
     return `<li><div class="question">${question}</div>
         <div class="value" data-area="${area}">
@@ -214,10 +217,22 @@ function buildPagination(questionsList) {
 function getNavValue(i, numPages) {
     const lastPage = i == numPages - 1 ? true : false;
     if (lastPage) {
-        return `<button class="prev">PREV</button>
-        <button id="resultsBtn" class="next">GET RESULTS</button>`;
+        return `<button class="prev">
+                    <span class="iconify" data-icon="ic:baseline-chevron-left" data-inline="false"></span>
+                    <span class="btnLabel">PREV</span>
+                </button>
+                <button id="resultsBtn" class="next">
+                    <span class="btnLabel">GET RESULTS</span>
+                </button>`;
     }
-    return `<button class="prev">PREV</button><button class="next">NEXT</button>`;
+    return `<button class="prev">
+                <span class="iconify" data-icon="ic:baseline-chevron-left" data-inline="false"></span>
+                <span class="btnLabel">PREV</span>
+            </button>
+            <button class="next">
+                <span class="btnLabel">NEXT</span>
+                <span class="iconify" data-icon="ic:baseline-chevron-right" data-inline="false"></span>
+            </button>`;
 }
 
 function addQuestions(i, questionsPerPage, questionsList) {
