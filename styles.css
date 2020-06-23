@@ -1,3 +1,16 @@
+
+button, input, submit {
+    border: none;
+}
+
+button:active {
+    border: none;
+}
+
+button:focus {
+    border: none;
+}
+
 #questions ol{
     margin: 0;
     padding: 0;
@@ -169,13 +182,15 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
 
 .nav button {
     padding: 20px 0;
-    border-color: transparent;
     display: flex;
     font-family: 'Poppins', sans-serif;
     font-size: 1.5em;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    color: #0084ff98;
 }
 
 .nav .prev {
@@ -192,10 +207,28 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
     font-size: 2em;
 }
 
+#resultsBtn {
+    padding: 20px;
+}
+
+#resultsBtn .iconify {
+    font-size: 1.25em;
+    padding: 0 3px;
+
+}
 
 .nav button:hover {
     background: #fff;
     cursor: pointer;
+    border-color: #fdb930;
+    color: #0084ff;
+}
+
+.nav button:active, .nav button:focus {
+    border: none !important;
+    background: #fdb930 !important;
+    border:1px solid #fdb930 !important;
+    color: #fff !important;
 }
 
 .nav {

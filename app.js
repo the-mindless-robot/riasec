@@ -222,7 +222,8 @@ function getNavValue(i, numPages) {
                     <span class="btnLabel">PREV</span>
                 </button>
                 <button id="resultsBtn" class="next">
-                    <span class="btnLabel">GET RESULTS</span>
+                    <span class="btnLabel">RESULTS</span>
+                    <span class="iconify" data-icon="ic:baseline-leaderboard" data-inline="false"></span>
                 </button>`;
     }
     return `<button class="prev">
