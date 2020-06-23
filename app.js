@@ -20,7 +20,7 @@ if (config.spanish) {
 function formatData(data) {
     console.log('data', data);
     const codesToPrograms = {};
-    for (let program of data.Sheet1) {
+    for (let program of data.sheet1) {
         const codeArray = buildCodeArray(program.hollandcode);
         for (let code of codeArray) {
             //check if exists
@@ -416,7 +416,7 @@ function computePercent(value) {
 }
 
 //obj -> object to be sorted
-//orderBy -> array of keys in specific order
+//orderBy -> array of obj's keys in specific order
 //key -> if second level is obj -> key to sort by
 function sortObjByKey(obj, orderBy = false, key = false) {
     let array;
