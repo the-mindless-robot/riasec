@@ -167,7 +167,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
 }
 
 .loading-value {
-    width: 60%;
+    width: 0;
     height: 6px;
     background: #fcad11;
 }
@@ -181,7 +181,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
 }
 
 .nav button {
-    padding: 20px 0;
+    padding: 10px 0;
     display: flex;
     font-family: 'Poppins', sans-serif;
     font-size: 1.5em;
