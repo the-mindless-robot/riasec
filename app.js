@@ -268,11 +268,22 @@ function appStart() {
     router.start();
     initStars();
     setEventListeners();
+    setProgressBar(router.getNumPanels());
+    console.log('numPanels', router.getNumPanels());
 }
 
 function setEventListeners() {
     document.getElementById('resultsBtn').addEventListener('click', getResults);
     document.getElementById('clear').addEventListener('click', clearValues);
+}
+
+/*
+progressbar
+*/
+
+function setProgressBar(numPanels) {
+    const increment = Math.ceil(100 / numPanels);
+    console.log('increment', increment);
 }
 
 /*
