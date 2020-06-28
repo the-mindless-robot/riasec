@@ -344,6 +344,14 @@ class PanelRouter {
         return this.panelsList[index];
     }
 
+    getPrevBtns() {
+        return this.prevBtns;
+    }
+
+    getNextBtns() {
+        return this.nextBtns;
+    }
+
     getNumPanels() {
         return this.endingPanel;
     }
