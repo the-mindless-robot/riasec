@@ -163,6 +163,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
 
 #progress-bar {
     background: #fcae115e;
+    /* background: #d48d003d; */
     width: 100%;
 }
 
@@ -170,6 +171,13 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
     width: 0;
     height: 6px;
     background: #fcad11;
+    background: rgb(252,173,17);
+    background: rgb(235,155,0);
+    background: -moz-linear-gradient(300deg, rgba(235,155,0,1) 0%, rgba(252,173,17,1) 65%, rgba(255,222,157,1) 100%);
+    background: -webkit-linear-gradient(300deg, rgba(235,155,0,1) 0%, rgba(252,173,17,1) 65%, rgba(255,222,157,1) 100%);
+    background: linear-gradient(300deg, rgba(235,155,0,1) 0%, rgba(252,173,17,1) 65%, rgba(255,222,157,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#eb9b00",endColorstr="#ffde9d",GradientType=1);
+
 
     -webkit-transition: width .5s ease-in-out;
     -moz-transition: width .5s ease-in-out;
