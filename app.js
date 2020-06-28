@@ -268,8 +268,7 @@ function appStart() {
     router.start();
     initStars();
     setEventListeners();
-    setProgressBar(router.getNumPanels());
-    console.log('numPanels', router.getNumPanels());
+    setProgressBar(router);
 }
 
 function setEventListeners() {
@@ -281,10 +280,51 @@ function setEventListeners() {
 progressbar
 */
 
-function setProgressBar(numPanels) {
+function setProgressBar(router) {
+    const numPanels = router.getNumPanels() - 1;
     const increment = Math.ceil(100 / numPanels);
     console.log('increment', increment);
+
+    setNextBtns(increment, router.getNextBtns());
+    setPrevBtns(increment, router.getPrevBtns());
 }
+
+function setNextBtns(increment, btns) {
+    btns.forEach(btn => {
+        btn.addEventListener('click', (ev) => {
+            updateProgressBar(increment);
+        });
+    });
+}
+
+function setPrevBtns(increment, btns) {
+    btns.forEach(btn => {
+        btn.addEventListener('click', (ev) => {
+            updateProgressBar(increment, true);
+        });
+    });
+}
+
+function updateProgressBar(increment, backward = false) {
+
+    const progress = document.getElementById('progress');
+    const progressDims = progress.getBoundingClientRect();
+    const progressBarDims = document.getElementById('progress-bar').getBoundingClientRect();
+
+    const currentWidth = Math.ceil((progressDims.width / progressBarDims.width) * 100);
+    let newWidth = currentWidth;
+
+    if(backward && currentWidth > 0) {
+        newWidth = currentWidth - Number(increment);
+    }
+    if(!backward && currentWidth < 100) {
+        newWidth = currentWidth + Number(increment);
+    }
+
+    progress.style.width = newWidth + '%';
+}
+
+
 
 /*
 

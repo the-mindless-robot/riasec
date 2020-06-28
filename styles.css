@@ -161,15 +161,16 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
     padding: 0 20px;
 }
 
-.loader {
+.progress-bar {
     background: #fcae115e;
     width: 100%;
 }
 
-.loading-value {
+#progress {
     width: 0;
     height: 6px;
     background: #fcad11;
+    transition: width 1s ease-out 0.5s;
 }
 
 #panels {
@@ -191,6 +192,8 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
     border: 1px solid transparent;
     border-radius: 3px;
     color: #0084ff98;
+    color: #001e3a98;
+    color: #36536f98;
 }
 
 .nav .prev {
