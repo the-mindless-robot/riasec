@@ -277,7 +277,17 @@ function setEventListeners() {
 }
 
 /*
-progressbar
+
+                                                                                                 88
+                                                                                                 88
+                                                                                                 88
+8b,dPPYba,   8b,dPPYba,   ,adPPYba,    ,adPPYb,d8  8b,dPPYba,   ,adPPYba,  ,adPPYba,  ,adPPYba,  88,dPPYba,   ,adPPYYba,  8b,dPPYba,
+88P'    "8a  88P'   "Y8  a8"     "8a  a8"    `Y88  88P'   "Y8  a8P_____88  I8[    ""  I8[    ""  88P'    "8a  ""     `Y8  88P'   "Y8
+88       d8  88          8b       d8  8b       88  88          8PP"""""""   `"Y8ba,    `"Y8ba,   88       d8  ,adPPPPP88  88
+88b,   ,a8"  88          "8a,   ,a8"  "8a,   ,d88  88          "8b,   ,aa  aa    ]8I  aa    ]8I  88b,   ,a8"  88,    ,88  88
+88`YbbdP"'   88           `"YbbdP"'    `"YbbdP"Y8  88           `"Ybbd8"'  `"YbbdP"'  `"YbbdP"'  8Y"Ybbd8"'   `"8bbdP"Y8  88
+88                                     aa,    ,88
+88                                      "Y8bbdP"
 */
 
 function setProgressBar(router) {
@@ -357,6 +367,9 @@ function clearValues() {
     activeStars.forEach(star => star.classList.remove('activated', 'selected'));
     const highlightedAreas = document.querySelectorAll('.value.highlight');
     highlightedAreas.forEach(area => area.classList.remove('highlight'));
+    const progress = document.getElementById('progress');
+    progress.style.width = 0;
+
 }
 
 function addEmptyAreas(results) {
