@@ -161,7 +161,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
     padding: 0 20px;
 }
 
-.progress-bar {
+#progress-bar {
     background: #fcae115e;
     width: 100%;
 }
@@ -170,7 +170,11 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
     width: 0;
     height: 6px;
     background: #fcad11;
-    transition: width 1s ease-out 0.5s;
+
+    -webkit-transition: width .5s ease-in-out;
+    -moz-transition: width .5s ease-in-out;
+    -o-transition: width .5s ease-in-out;
+    transition: width .5s ease-in-out;
 }
 
 #panels {
