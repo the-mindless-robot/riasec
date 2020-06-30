@@ -170,7 +170,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
 }
 
 #progress-bar {
-    background: #fcae115e;
+    background: #ffd88981;
     /* background: #d48d003d; */
     width: 100%;
 }
@@ -201,7 +201,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
     font-family: 'Poppins', sans-serif;
 }
 
-.nav button {
+.nav a {
     padding: 10px 0;
     display: flex;
     font-family: 'Poppins', sans-serif;
@@ -226,7 +226,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
     padding-left: 20px;
 }
 
-.nav button .iconify {
+.nav a .iconify {
     font-size: 2em;
 }
 
@@ -240,14 +240,14 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
 
 }
 
-.nav button:hover {
+.nav a:hover {
     background: #fff;
     cursor: pointer;
     border-color: #fdb930;
     color: #0084ff;
 }
 
-.nav button:active, .nav button:focus {
+.nav a:active, .nav a:focus, .nav a:target {
     border: none !important;
     background: #fdb930 !important;
     border:1px solid #fdb930 !important;

@@ -217,23 +217,23 @@ function buildPagination(questionsList) {
 function getNavValue(i, numPages) {
     const lastPage = i == numPages - 1 ? true : false;
     if (lastPage) {
-        return `<button class="prev">
+        return `<a class="prev">
                     <span class="iconify" data-icon="ic:baseline-chevron-left" data-inline="false"></span>
                     <span class="btnLabel">PREV</span>
-                </button>
-                <button id="resultsBtn" class="next">
+                </a>
+                <a id="resultsBtn" class="next">
                     <span class="btnLabel">RESULTS</span>
                     <span class="iconify" data-icon="ic:baseline-leaderboard" data-inline="false"></span>
-                </button>`;
+                </a>`;
     }
-    return `<button class="prev">
+    return `<a class="prev">
                 <span class="iconify" data-icon="ic:baseline-chevron-left" data-inline="false"></span>
                 <span class="btnLabel">PREV</span>
-            </button>
-            <button class="next">
+            </a>
+            <a class="next">
                 <span class="btnLabel">NEXT</span>
                 <span class="iconify" data-icon="ic:baseline-chevron-right" data-inline="false"></span>
-            </button>`;
+            </a>`;
 }
 
 function addQuestions(i, questionsPerPage, questionsList) {
