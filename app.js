@@ -191,12 +191,13 @@ function buildPagination(questionsList) {
     const panelsContainer = document.getElementById('panels');
     const resultsElem = panelsContainer.querySelector('#results');
     const resultsElemClone = resultsElem.cloneNode(true);
+    panelsContainer.removeChild(resultsElem);
     console.log('resElemClone', resultsElemClone);
-    panelsContainer.innerHTML = "";
+    // panelsContainer.innerHTML = "";
 
     for (let i = 0; i < numPages; i++) {
-        let panel = `<div class="panel">
-            <div class="panel-content">
+        const newPanel = buildPanel();
+        const panelContent = `<div class="panel-content">
             <h2>Questions</h2>
                 <div id="questions">
                     <ol>
@@ -206,12 +207,18 @@ function buildPagination(questionsList) {
                 <div class="nav">
                     ${getNavValue(i, numPages)}
                 </div>
-            </div>
-        </div>`;
-        panelsContainer.innerHTML += panel;
+            </div>`;
+        newPanel.innerHTML = panelContent;
+        panelsContainer.appendChild(newPanel);
     }
     panelsContainer.appendChild(resultsElemClone);
     return;
+}
+
+function buildPanel() {
+    const newPanel = document.createElement('div');
+    newPanel.classList.add('panel');
+    return newPanel;
 }
 
 function getNavValue(i, numPages) {
