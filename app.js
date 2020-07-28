@@ -198,7 +198,7 @@ function buildPagination(questionsList) {
     for (let i = 0; i < numPages; i++) {
         const newPanel = buildPanel();
         const panelContent = `<div class="panel-content">
-            <h2>Questions</h2>
+            <h2>I would like to...</h2>
                 <div id="questions">
                     <ol>
                     ${addQuestions(i, questionsPerPage, questionsList)}
