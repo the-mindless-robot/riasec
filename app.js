@@ -218,6 +218,7 @@ function buildPagination(questionsList) {
 function buildPanel() {
     const newPanel = document.createElement('div');
     newPanel.classList.add('panel');
+    newPanel.dataset.area = 'questions';
     return newPanel;
 }
 
@@ -310,6 +311,7 @@ function setNextBtns(increment, btns) {
     btns.forEach(btn => {
         btn.addEventListener('click', (ev) => {
             updateProgressBar(increment);
+            updateHelpDisplay();
         });
     });
 }
@@ -699,4 +701,36 @@ function clearStars(stars) {
     for (let star of stars) {
         star.classList.remove('activated', 'selected');
     }
+}
+
+/*
+
+88                       88
+88                       88
+88                       88
+88,dPPYba,    ,adPPYba,  88  8b,dPPYba,
+88P'    "8a  a8P_____88  88  88P'    "8a
+88       88  8PP"""""""  88  88       d8
+88       88  "8b,   ,aa  88  88b,   ,a8"
+88       88   `"Ybbd8"'  88  88`YbbdP"'
+                             88
+                             88
+*/
+
+function updateHelpDisplay() {
+    const activePanels = document.querySelectorAll('.panel.active');
+    const currentPanel = activePanels[activePanels.length - 1];
+    const dataArea = currentPanel.dataset.area || false;
+    const helpContent = document.getElementById('helpContent');
+
+    console.debug('current', currentPanel);
+
+    if(dataArea && dataArea == 'questions') {
+        console.log('in questions');
+        helpContent.style.display = 'block';
+        return;
+    }
+
+    helpContent.style.display = 'none';
+
 }

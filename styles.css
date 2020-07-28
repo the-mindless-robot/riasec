@@ -212,12 +212,12 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
   background: #d4d4d4;
 }
 
-#pageContainer h2{
+#pageContainer h2, #pageContainer  h3, #pageContainer  h4 {
     font-family: 'Poppins', sans-serif;
     font-size: 2.5em;
 }
 
-#pageContainer p {
+#pageContainer {
     font-family: 'Open Sans', sans-serif;
 }
 
@@ -240,6 +240,13 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
     color: #36536f98;
 }
 
+
+p.divider {
+    margin: 30px 10px;
+    font-weight: bold;
+    font-style: italic;
+}
+
 .nav .prev {
     padding-left: 0;
     padding-right: 20px;
@@ -252,6 +259,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
 
 .nav a .iconify {
     font-size: 2em;
+    color: #36536f98
 }
 
 #resultsBtn {
@@ -271,10 +279,18 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
     color: #0084ff;
 }
 
+.nav a:hover .iconify {
+    color: #0084ff;
+}
+
 .nav a:active, .nav a:focus, .nav a:target {
     border: none !important;
     background: #fdb930 !important;
     border:1px solid #fdb930 !important;
+    color: #fff !important;
+}
+
+.nav a:active .iconify, .nav a:focus .iconify, .nav a:target .iconify{
     color: #fff !important;
 }
 
@@ -320,4 +336,32 @@ div.divider {
 .inline-title {
     font-weight: bold;
     font-size: 1.05em;
+}
+
+.side-nav {
+    position: fixed;
+    top: 275px;
+    z-index: 1000;
+    max-width: 300px;
+    background: #fff;
+    border: 1px solid #fdb930;
+    padding: 10px;
+    display: none;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#pageContainer .side-nav h4 {
+    padding: 0;
+    font-size: 2em;
+    align-items: center;
+    margin: 0;
+}
+
+.side-nav h4 .iconify {
+    font-size: 36px;
+}
+
+.side-nav ul {
+    padding-left: 20px;
 }
