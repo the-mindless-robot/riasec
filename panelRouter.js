@@ -5,6 +5,9 @@
  *
  */
 
+//TODO: build hooks to assign action on trigger
+// id panelChange, onForward, onBackward, onNext, onPrev, onJump, onSkip  etc.
+
 class PanelRouter {
     constructor(containerId) {
         //elements
@@ -112,7 +115,7 @@ class PanelRouter {
             this._updateUrl(nextIndex);
     }
 
-    // @TODO integrate into forward/back funcions
+    // TODO: integrate into forward/back funcions
     // preserves order
     // activates all panels in between current and destination panel
     _jumpTo(nextIndex, updateUrl = true) {
