@@ -69,6 +69,13 @@ button:focus {
 
 .area {
     margin-bottom: 10px;
+    position: relative;
+}
+
+.area .value {
+
+    box-sizing: border-box;
+    height: 50px;
 }
 
 .area span.value {
@@ -364,4 +371,14 @@ div.divider {
 
 .side-nav ul {
     padding-left: 20px;
+}
+
+.area .score {
+    position: absolute;
+    right: 102%;
+    font-weight: bold;
+    padding: 0 5px;
+    font-size: 65px;
+    top: 0;
+    color: #d4d4d4;
 }

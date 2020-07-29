@@ -36,8 +36,9 @@ html, body {
 }
 
 .panel-content {
-    width: 42em;
+    max-width: 42em;
     margin: 0 auto;
+    padding: 10px;
 }
 
 .panel.active {

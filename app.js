@@ -613,10 +613,11 @@ a8"    `Y88  88  I8[    ""  88P'    "8a  88  ""     `Y8  `8b     d8'
 function displayResults(RIASEC) {
     console.log('RIASEC', RIASEC);
     for (let area of RIASEC.areas) {
-        let areaElem = document.getElementById(area);
-        areaElem.innerHTML = RIASEC.scores[area];
+        const areaElem = document.getElementById(area);
+        const areaValue = document.getElementById(area+'-score');
+        areaValue.innerHTML = RIASEC.scores[area];
 
-        let scorePercent = computePercent(RIASEC.scores[area]);
+        const scorePercent = computePercent(RIASEC.scores[area]);
         areaElem.style.width = scorePercent + "%";
 
         if (RIASEC.code.indexOf(area.charAt(0)) != -1) {
@@ -624,7 +625,7 @@ function displayResults(RIASEC) {
         }
     }
 
-    let codeElem = document.getElementById('code');
+    const codeElem = document.getElementById('code');
     codeElem.innerHTML = RIASEC.code;
 
     let permutString = '';
