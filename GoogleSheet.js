@@ -7,7 +7,6 @@ class GoogleSheet {
         let moreData;
         let sheetNumber = options && options.hasOwnProperty('start') ? options.start : 1;
         const sheetNumberEnd = options && options.hasOwnProperty('end') ? options.end : false;
-
         do {
             moreData = false;
             const url = 'https://spreadsheets.google.com/feeds/list/' + this.id + '/' + sheetNumber + '/public/values?alt=json';

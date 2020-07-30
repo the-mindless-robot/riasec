@@ -51,7 +51,7 @@ function removeSpaces(string) {
 const programData = new GoogleSheet(config.sheet);
 let codesToPrograms = null;
 let areaRanking = null;
-programData.load(formatData).then(data => {
+programData.load(formatData,{end: 1}).then(data => {
     codesToPrograms = data;
     areaRanking = getAreaRanking(data);
 });
