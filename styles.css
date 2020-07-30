@@ -72,25 +72,21 @@ button:focus {
     position: relative;
 }
 
-.area .value {
-
-    box-sizing: border-box;
-    height: 50px;
-}
-
 .area span.value {
     padding: 20px 0;
     background: #ffc34b5e;
     display: inline-block;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
+    box-sizing: border-box;
+    height: 50px;
 }
 
 .area span.label {
     display: block;
 }
 
-.area span.highlight {
+.area.highlight .value {
     background-color: #fdb930;
     background: rgb(235,155,0);
     background: -moz-linear-gradient(300deg, rgba(235,155,0,1) 0%, rgba(252,173,17,1) 65%, rgba(255,222,157,1) 100%);
@@ -98,6 +94,10 @@ button:focus {
     background: linear-gradient(300deg, rgba(235,155,0,1) 0%, rgba(252,173,17,1) 65%, rgba(255,222,157,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#eb9b00",endColorstr="#ffde9d",GradientType=1);
 
+}
+
+.area.highlight .label {
+    font-weight: bold;
 }
 
 #code {
@@ -381,4 +381,9 @@ div.divider {
     font-size: 65px;
     top: 0;
     color: #d4d4d4;
+    letter-spacing: -3px;
+}
+
+.area.highlight .score {
+    color: #000;
 }

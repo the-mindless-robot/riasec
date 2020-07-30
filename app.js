@@ -614,11 +614,13 @@ function displayResults(RIASEC) {
     console.log('RIASEC', RIASEC);
     for (let area of RIASEC.areas) {
         const areaElem = document.getElementById(area);
-        const areaValue = document.getElementById(area+'-score');
-        areaValue.innerHTML = RIASEC.scores[area];
+        const areaScore = document.getElementById(area+'-score');
+        const areaValue = document.getElementById(area+'-value');
+
+        areaScore.innerHTML = RIASEC.scores[area];
 
         const scorePercent = computePercent(RIASEC.scores[area]);
-        areaElem.style.width = scorePercent + "%";
+        areaValue.style.width = scorePercent + "%";
 
         if (RIASEC.code.indexOf(area.charAt(0)) != -1) {
             areaElem.classList.add('highlight');
