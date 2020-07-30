@@ -356,6 +356,12 @@ div.divider {
     display: none;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+    left: -300px;
+    transition: left .3s ease-in-out;
+}
+
+.side-nav.active {
+    left: 0;
 }
 
 #pageContainer .side-nav h4 {
@@ -381,7 +387,7 @@ div.divider {
     font-size: 65px;
     top: 0;
     color: #d4d4d4;
-    letter-spacing: -3px;
+    letter-spacing: -3 px;
 }
 
 .area.highlight .score {

@@ -215,6 +215,8 @@ function buildPagination(questionsList) {
     return;
 }
 
+
+
 function buildPanel() {
     const newPanel = document.createElement('div');
     newPanel.classList.add('panel');
@@ -320,6 +322,7 @@ function setPrevBtns(increment, btns) {
     btns.forEach(btn => {
         btn.addEventListener('click', (ev) => {
             updateProgressBar(increment, true);
+            updateHelpDisplay();
         });
     });
 }
@@ -333,10 +336,10 @@ function updateProgressBar(increment, backward = false) {
     const currentWidth = Math.ceil((progressDims.width / progressBarDims.width) * 100);
     let newWidth = currentWidth;
 
-    if(backward && currentWidth > 0) {
+    if (backward && currentWidth > 0) {
         newWidth = currentWidth - Number(increment);
     }
-    if(!backward && currentWidth < 100) {
+    if (!backward && currentWidth < 100) {
         newWidth = currentWidth + Number(increment);
     }
 
@@ -614,8 +617,8 @@ function displayResults(RIASEC) {
     console.log('RIASEC', RIASEC);
     for (let area of RIASEC.areas) {
         const areaElem = document.getElementById(area);
-        const areaScore = document.getElementById(area+'-score');
-        const areaValue = document.getElementById(area+'-value');
+        const areaScore = document.getElementById(area + '-score');
+        const areaValue = document.getElementById(area + '-value');
 
         areaScore.innerHTML = RIASEC.scores[area];
 
@@ -725,15 +728,30 @@ function updateHelpDisplay() {
     const currentPanel = activePanels[activePanels.length - 1];
     const dataArea = currentPanel.dataset.area || false;
     const helpContent = document.getElementById('helpContent');
-
+    const isActive = helpContent.classList.contains('active');
     console.debug('current', currentPanel);
 
-    if(dataArea && dataArea == 'questions') {
-        console.log('in questions');
-        helpContent.style.display = 'block';
-        return;
+    if (dataArea && dataArea == 'questions') {
+        console.log('in questions', isActive);
+
+        if (!isActive) {
+            helpContent.style.display = 'block';
+            setTimeout(() => {
+                console.log('in questions delay');
+                helpContent.classList.add('active');
+            }, 80);
+        }
+
     }
 
-    helpContent.style.display = 'none';
+    if (!dataArea || dataArea != 'questions') {
+        console.log('remove');
+        helpContent.classList.remove('active');
+        setTimeout(() => {
+            console.log('left questions delay');
+            helpContent.style.display = 'none';
+        }, 300);
+    }
+
 
 }
