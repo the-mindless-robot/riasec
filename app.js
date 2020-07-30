@@ -374,7 +374,7 @@ function getResults() {
 function clearValues() {
     const activeStars = document.querySelectorAll('i.activated');
     activeStars.forEach(star => star.classList.remove('activated', 'selected'));
-    const highlightedAreas = document.querySelectorAll('.value.highlight');
+    const highlightedAreas = document.querySelectorAll('.area.highlight');
     highlightedAreas.forEach(area => area.classList.remove('highlight'));
     const progress = document.getElementById('progress');
     progress.style.width = 0;
