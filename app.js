@@ -17,12 +17,37 @@ if (config.spanish) {
     path = '/mpp/interestprofiler/questions';
 }
 
+
+
 function formatData(data) {
     console.log('data', data);
+
+
+    const codesToPrograms = data.hasOwnProperty('programs') ? formatProgramCodes(data.programs) : false;
+    const areas = data.hasOwnProperty('areas') ? formatAreaDefinitions(data.areas) : false;
+    const dataObjects = {codesToPrograms, areas};
+    console.log('dataObjects', dataObjects);
+
+    return dataObjects;
+}
+
+function formatAreaDefinitions(areas) {
+    const areaDefinitions = {};
+    for (const area of areas) {
+        const letter = area.label.charAt(0).toUpperCase();
+        const areaLabel = area.label;
+        const desc = area.desc;
+        areaDefinitions[letter] = {areaLabel, desc};
+    }
+    console.log('areaDefinitions', areaDefinitions);
+    return areaDefinitions;
+}
+
+function formatProgramCodes(programs) {
     const codesToPrograms = {};
-    for (let program of data.sheet1) {
+    for (const program of programs) {
         const codeArray = buildCodeArray(program.hollandcode);
-        for (let code of codeArray) {
+        for (const code of codeArray) {
             //check if exists
             if (codesToPrograms.hasOwnProperty(code)) {
                 //if exists add program value to key
@@ -49,22 +74,26 @@ function removeSpaces(string) {
 
 //load/parse program data in background
 const programData = new GoogleSheet(config.sheet);
+let dataObjects = {};
 let codesToPrograms = null;
 let areaRanking = null;
-programData.load(formatData,{end: 1}).then(data => {
-    codesToPrograms = data;
-    areaRanking = getAreaRanking(data);
+programData.load(formatData,{end: 2}).then(formattedData => {
+    console.log('formattedData', formattedData);
+
+
+    codesToPrograms = formattedData.codesToPrograms;
+    areaRanking = getAreaRanking(formattedData);
 });
 
-function getAreaRanking(data) {
+function getAreaRanking(formattedData) {
     let areaRanking = {};
-    let allCodes = Object.keys(data);
+    let allCodes = Object.keys(formattedData.codesToPrograms);
     let areas = ['R', 'I', 'A', 'S', 'E', 'C'];
     for (let char of areas) {
         let numProgramsInArea = 0;
         for (let code of allCodes) {
             if (code.indexOf(char) != -1) {
-                let numPrograms = Number(data[code].length);
+                let numPrograms = Number(formattedData.codesToPrograms[code].length);
                 numProgramsInArea += numPrograms;
             }
         }

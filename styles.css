@@ -102,8 +102,7 @@ button:focus {
 
 #code {
     font-weight: bold;
-    font-size: 4rem;
-    font-family: sans-serif;
+    font-size: 5rem;
     margin-bottom: 10px;
 }
 
@@ -276,7 +275,10 @@ p.divider {
 #resultsBtn .iconify {
     font-size: 1.25em;
     padding: 0 3px;
+}
 
+#results .panel-content {
+    max-width: 64em;
 }
 
 .nav a:hover {
