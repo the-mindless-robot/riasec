@@ -25,10 +25,10 @@ function formatData(data) {
 
     const codesToPrograms = data.hasOwnProperty('programs') ? formatProgramCodes(data.programs) : false;
     const areas = data.hasOwnProperty('areas') ? formatAreaDefinitions(data.areas) : false;
-    const dataObjects = {codesToPrograms, areas};
-    console.log('dataObjects', dataObjects);
+    const formattedData = {codesToPrograms, areas};
+    console.log('formattedData', formattedData);
 
-    return dataObjects;
+    return formattedData;
 }
 
 function formatAreaDefinitions(areas) {
@@ -72,23 +72,24 @@ function removeSpaces(string) {
     return string.replace(/\s/g, '');
 }
 
+//TODO:load program urls
 //load/parse program data in background
 const programData = new GoogleSheet(config.sheet);
-let dataObjects = {};
-let codesToPrograms = null;
-let areaRanking = null;
+let dataObjects = null;
+// let codesToPrograms = null;
+// let areaRanking = null;
 programData.load(formatData,{end: 2}).then(formattedData => {
     console.log('formattedData', formattedData);
-
-
     codesToPrograms = formattedData.codesToPrograms;
-    areaRanking = getAreaRanking(formattedData);
+    areas = addAreaRankings(formattedData);
+    dataObjects = {codesToPrograms, areas};
 });
+console.debug('dataObjects', dataObjects);
 
-function getAreaRanking(formattedData) {
-    let areaRanking = {};
-    let allCodes = Object.keys(formattedData.codesToPrograms);
-    let areas = ['R', 'I', 'A', 'S', 'E', 'C'];
+function addAreaRankings(formattedData) {
+    const areaRanking = formattedData.areas;
+    const allCodes = Object.keys(formattedData.codesToPrograms);
+    const areas = ['R', 'I', 'A', 'S', 'E', 'C'];
     for (let char of areas) {
         let numProgramsInArea = 0;
         for (let code of allCodes) {
@@ -97,27 +98,17 @@ function getAreaRanking(formattedData) {
                 numProgramsInArea += numPrograms;
             }
         }
-        areaRanking[char] = numProgramsInArea;
+        areaRanking[char].programs = numProgramsInArea;
     }
 
-    const areasSorted = sortObjByKey(areaRanking);
-    const fullNameSorted = areasSorted.map(area => charToArea(area));
+    // TODO: create options object for sortObjByKey
+    const areasSorted = sortObjByKey(areaRanking, areas, 'programs');
+    const fullNameSorted = areasSorted.map(area => areaRanking[area].areaLabel);
     areaRanking.sorted = fullNameSorted;
     console.debug('areaRanking', areaRanking);
     return areaRanking;
 }
 
-function charToArea(char) {
-    const areasMap = {
-        R: "Realistic",
-        I: "Investigative",
-        A: "Artistic",
-        S: "Social",
-        E: "Enterprising",
-        C: "Conventional"
-    }
-    return areasMap[char.toUpperCase()];
-}
 
 /*
 
@@ -427,8 +418,8 @@ function addEmptyAreas(results) {
 
 // resutls -> object; scores by RIASEC area
 function getRIASEC(results) {
-
-    let sortedResults = sortObjByKey(results, areaRanking.sorted);
+    console.warn('dataObject', dataObjects);
+    let sortedResults = sortObjByKey(results, dataObjects.areas.sorted);
     let code = "";
     for (let i = 0; i < 3; i++) {
         code += sortedResults[i].charAt(0);
