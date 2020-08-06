@@ -605,7 +605,7 @@ function ratingEval() {
 */
 
 function findProgramMatches(RIASEC) {
-
+    const codesToPrograms = dataObjects.codesToPrograms;
     const codes = RIASEC.permuts;
     let programs = [];
     RIASEC.unmatchedCodes = [];
