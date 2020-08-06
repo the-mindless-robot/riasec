@@ -696,6 +696,12 @@ function displayMatches(programs) {
 }
 
 function buildMatchHTML(program) {
+    const url = dataObjects.programsToUrls.hasOwnProperty(program) && dataObjects.programsToUrls[program].length > 0 ? dataObjects.programsToUrls[program].trim() : false;
+
+    if(url) {
+        return `<span class="program"><a href="${url}" target="_blank">${program}</a></span>`;
+    }
+
     return `<span class="program">${program}</span>`;
 }
 
