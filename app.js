@@ -22,13 +22,11 @@ if (config.spanish) {
 function formatData(data) {
     console.log('data', data);
 
-
+    const programsToUrls = data.hasOwnProperty('programs') ? formatProgramUrls(data.programs) : false;
     const codesToPrograms = data.hasOwnProperty('programs') ? formatProgramCodes(data.programs) : false;
     const areas = data.hasOwnProperty('areas') ? formatAreaDefinitions(data.areas) : false;
-    const formattedData = {codesToPrograms, areas};
-    console.log('formattedData', formattedData);
 
-    return formattedData;
+    return {codesToPrograms, areas, programsToUrls};
 }
 
 function formatAreaDefinitions(areas) {
@@ -62,6 +60,20 @@ function formatProgramCodes(programs) {
     return codesToPrograms;
 }
 
+function formatProgramUrls(programs) {
+    const programsToUrls = {};
+    for (const program of programs) {
+        const discipline = program.hasOwnProperty('discipline') && program.discipline.length > 0 ? program.discipline.trim() : false;
+        const url = program.hasOwnProperty('url') && program.url.length > 0 ? `https://www.sdmesa.edu/academics/academic-programs/${program.url.trim()}.shtml` : false;
+
+        if(discipline && url && !programsToUrls.hasOwnProperty(discipline)) {
+            programsToUrls[discipline] = url;
+        }
+    }
+    console.log('programsToUrls', programsToUrls);
+    return programsToUrls;
+}
+
 function buildCodeArray(codeString) {
     const [...codeArray] = removeSpaces(codeString).split(',');
     // console.log('value', codeArray);
@@ -80,11 +92,15 @@ let dataObjects = null;
 // let areaRanking = null;
 programData.load(formatData,{end: 2}).then(formattedData => {
     console.log('formattedData', formattedData);
-    codesToPrograms = formattedData.codesToPrograms;
-    areas = addAreaRankings(formattedData);
-    dataObjects = {codesToPrograms, areas};
+
+    const codesToPrograms = formattedData.codesToPrograms;
+    const areas = addAreaRankings(formattedData);
+    const programsToUrls = formattedData.programsToUrls;
+
+    dataObjects = {codesToPrograms, areas, programsToUrls};
+    console.debug('dataObjects', dataObjects);
 });
-console.debug('dataObjects', dataObjects);
+
 
 function addAreaRankings(formattedData) {
     const areaRanking = formattedData.areas;
