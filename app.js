@@ -65,9 +65,9 @@ function formatProgramUrls(programs) {
     for (const program of programs) {
         const discipline = program.hasOwnProperty('discipline') && program.discipline.length > 0 ? program.discipline.trim() : false;
         const url = program.hasOwnProperty('url') && program.url.length > 0 ? `https://www.sdmesa.edu/academics/academic-programs/${program.url.trim()}.shtml` : false;
-
-        if(discipline && url && !programsToUrls.hasOwnProperty(discipline)) {
-            programsToUrls[discipline] = url;
+        const codes = program.hasOwnProperty('hollandcode') && program.hollandcode.length > 0 ? program.hollandcode.trim() : false;
+        if(discipline && url && codes && !programsToUrls.hasOwnProperty(discipline)) {
+            programsToUrls[discipline] = {url, codes};
         }
     }
     console.log('programsToUrls', programsToUrls);
@@ -668,6 +668,7 @@ function displayResults(RIASEC) {
 
     const codeElem = document.getElementById('code');
     codeElem.innerHTML = RIASEC.code;
+    buildDescription(RIASEC.code);
 
     let permutString = '';
     for (let code of RIASEC.permuts) {
@@ -675,6 +676,22 @@ function displayResults(RIASEC) {
     }
     document.getElementById('permuts').innerHTML = `(${RIASEC.permuts.length}) ${permutString}`;
     highlightUnmatched(RIASEC);
+}
+
+function buildDescription(code) {
+    const descContainer = document.getElementById('desc');
+    let allDescHTML = '';
+    for(const letter of code) {
+        console.log('letter', dataObjects.areas[letter.toUpperCase()]);
+        const desc = dataObjects.areas[letter.toUpperCase()].desc;
+        const areaLabel = dataObjects.areas[letter.toUpperCase()].areaLabel;
+        const descHTML = `<div class="desc">
+                            <h4><span>${areaLabel}</span></h4>
+                            <p>${desc}</p>
+                          </div>`;
+        allDescHTML += descHTML;
+    }
+    descContainer.innerHTML = allDescHTML;
 }
 
 function highlightUnmatched(RIASEC) {
@@ -696,13 +713,19 @@ function displayMatches(programs) {
 }
 
 function buildMatchHTML(program) {
-    const url = dataObjects.programsToUrls.hasOwnProperty(program) && dataObjects.programsToUrls[program].length > 0 ? dataObjects.programsToUrls[program].trim() : false;
+    if(dataObjects.programsToUrls.hasOwnProperty(program)) {
+        const programObj = dataObjects.programsToUrls[program];
+        const url = programObj.hasOwnProperty('url') && programObj.url.length > 0 ? programObj.url.trim() : false;
+        const codes = programObj.hasOwnProperty('codes') && programObj.codes.length > 0 ? ` (${programObj.codes.trim()})` : ``;
+        if(url) {
+            return `<span class="program"><a href="${url}" target="_blank">${program}</a>${codes}</span>`;
+        }
+        return `<span class="program">${program}${codes}</span>`;
 
-    if(url) {
-        return `<span class="program"><a href="${url}" target="_blank">${program}</a></span>`;
+    } else {
+        console.debug('No program found:', program);
     }
 
-    return `<span class="program">${program}</span>`;
 }
 
 

@@ -395,3 +395,53 @@ div.divider {
 .area.highlight .score {
     color: #000;
 }
+
+#desc {
+    display: flex;
+    margin-bottom: 25px;
+}
+
+.desc {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+
+}
+
+#pageContainer .desc h4{
+    margin: 0;
+    padding: 0;
+    font-size: 1.25em;
+    position: relative;
+    display: block;
+}
+
+#pageContainer .desc h4 span{
+    /* background: #fff;
+    padding-right: 5px;
+    position: absolute; */
+    /* top: 0; */
+    /* z-index: 2; */
+
+}
+/*
+#pageContainer .desc h4:after {
+    position: absolute;
+    content: '';
+    height: 2px;
+    width: 100%;
+    top: 40%;
+    left: 0;
+    background: #fdb930;
+} */
+
+
+.desc p {
+    padding: 0;
+    margin: 0;
+    display: block;
+}
+
+.desc > div {
+    padding: 10px;
+}
