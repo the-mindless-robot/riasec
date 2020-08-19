@@ -66,8 +66,9 @@ function formatProgramUrls(programs) {
         const discipline = program.hasOwnProperty('discipline') && program.discipline.length > 0 ? program.discipline.trim() : false;
         const url = program.hasOwnProperty('url') && program.url.length > 0 ? `https://www.sdmesa.edu/academics/academic-programs/${program.url.trim()}.shtml` : false;
         const codes = program.hasOwnProperty('hollandcode') && program.hollandcode.length > 0 ? program.hollandcode.trim() : false;
-        if(discipline && url && codes && !programsToUrls.hasOwnProperty(discipline)) {
-            programsToUrls[discipline] = {url, codes};
+        const codesArray = program.hasOwnProperty('hollandcode') && program.hollandcode.length > 0 ? buildCodeArray(program.hollandcode) : false;
+        if(discipline && url && codes && codesArray && !programsToUrls.hasOwnProperty(discipline)) {
+            programsToUrls[discipline] = {url, codes, codesArray};
         }
     }
     console.log('programsToUrls', programsToUrls);
@@ -659,7 +660,7 @@ function displayResults(RIASEC) {
     setCodeAndDesc(RIASEC);
     setOptionsAndMatches(RIASEC);
     setBarGraph(RIASEC);
-    setPrograms(RIASEC.programs);
+    setPrograms(RIASEC);
 }
 
 function setCodeAndDesc(RIASEC) {
@@ -724,19 +725,19 @@ function buildDescription(code) {
     descContainer.innerHTML = allDescHTML;
 }
 
-function setPrograms(programs) {
+function setPrograms(RIASEC) {
     let matchesHTML = "";
-    for (let program of programs) {
-        matchesHTML += buildMatchHTML(program);
+    for (let program of RIASEC.programs) {
+        matchesHTML += buildMatchHTML(program, RIASEC.matched);
     }
     document.getElementById('matches').innerHTML = matchesHTML;
 }
 
-function buildMatchHTML(program) {
+function buildMatchHTML(program, matched) {
     if(dataObjects.programsToUrls.hasOwnProperty(program)) {
         const programObj = dataObjects.programsToUrls[program];
         const url = programObj.hasOwnProperty('url') && programObj.url.length > 0 ? programObj.url.trim() : false;
-        const codes = programObj.hasOwnProperty('codes') && programObj.codes.length > 0 ? ` (${programObj.codes.trim()})` : ``;
+        const codes = programObj.hasOwnProperty('codesArray') && programObj.codesArray.length > 0 ? ` ${getMatchedCodeHTML(programObj.codesArray, matched)}` : ``;
         if(url) {
             return `<span class="program"><a href="${url}" target="_blank">${program}</a>${codes}</span>`;
         }
@@ -746,6 +747,17 @@ function buildMatchHTML(program) {
         console.debug('No program found:', program);
     }
 
+}
+
+/* TODO: need codes to array */
+function getMatchedCodeHTML(codes, matched) {
+    let codeHTML = '';
+    for(const code of codes) {
+        if(checkIfMatched(matched, code)) {
+            codeHTML += `<span class="code">${code}</span>`;
+        }
+    }
+    return codeHTML;
 }
 
 

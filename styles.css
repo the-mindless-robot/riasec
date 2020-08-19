@@ -134,15 +134,21 @@ span.code {
     margin: 2px;
     font-weight: bold;
     display: inline-block;
-    background: #023867;
-    color: #fff;
-    border-radius: 2px;
+    /* background: #d0e5ff; */
+    color: #383838;
+    border-radius: 4px;
     font-family: sans-serif;
+    border: 1px solid #3838384d;
 }
 
-span.code.unmatched {
-    background: #d4d4d4;
-    color: rgb(99, 99, 99);
+#permuts span.code {
+    border: none;
+    background: #d0e5ff;
+}
+
+#permuts span.code.unmatched {
+    background: #e2e2e2;
+    color: rgb(185 185 185);
 }
 
 .flex.flex-area{
