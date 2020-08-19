@@ -609,18 +609,23 @@ function findProgramMatches(RIASEC) {
     const codes = RIASEC.permuts;
     let programs = [];
     RIASEC.unmatchedCodes = [];
+    RIASEC.matched = {};
     for (let code of codes) {
         //codes to program from data
         if (codesToPrograms.hasOwnProperty(code)) {
+            // programs = [...programs, [code, ...codesToPrograms[code]]];
             programs = [...programs, ...codesToPrograms[code]];
+            RIASEC.matched[code] = true;
         } else {
             console.debug('No match found: ', code);
             RIASEC.unmatchedCodes.push(code);
+            RIASEC.matched[code] = false;
         }
     }
 
     console.log('programs', programs);
     console.log('unique', removeDuplicates(programs));
+    console.log('RIASEC.matched', RIASEC.matched);
 
     displayResults(RIASEC);
     displayMatches(removeDuplicates(programs));
@@ -672,10 +677,25 @@ function displayResults(RIASEC) {
 
     let permutString = '';
     for (let code of RIASEC.permuts) {
-        permutString += `<span class="code">${code}</span>`;
+        const matched = checkIfMatched(RIASEC.matched, code);
+        permutString += getCodeHTML(code, matched);
     }
     document.getElementById('permuts').innerHTML = `(${RIASEC.permuts.length}) ${permutString}`;
-    highlightUnmatched(RIASEC);
+    // highlightUnmatched(RIASEC);
+}
+
+function getCodeHTML(code, matched = false) {
+    if(matched) {
+        return `<span class="code">${code}</span>`;
+    }
+    return `<span class="code unmatched">${code}</span>`;
+}
+
+function checkIfMatched(MatchesObj, code) {
+    if(MatchesObj.hasOwnProperty(code) && MatchesObj[code] === true) {
+        return true;
+    }
+    return false;
 }
 
 function buildDescription(code) {
@@ -694,15 +714,15 @@ function buildDescription(code) {
     descContainer.innerHTML = allDescHTML;
 }
 
-function highlightUnmatched(RIASEC) {
-    let codes = document.querySelectorAll('span.code');
-    codes = Array.from(codes);
-    for (let code of codes) {
-        if (RIASEC.unmatchedCodes.indexOf(code.innerHTML) != -1) {
-            code.classList.add('unmatched');
-        }
-    }
-}
+// function highlightUnmatched(RIASEC) {
+//     let codes = document.querySelectorAll('span.code');
+//     codes = Array.from(codes);
+//     for (let code of codes) {
+//         if (RIASEC.unmatchedCodes.indexOf(code.innerHTML) != -1) {
+//             code.classList.add('unmatched');
+//         }
+//     }
+// }
 
 function displayMatches(programs) {
     let matchesHTML = "";
