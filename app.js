@@ -608,7 +608,6 @@ function findProgramMatches(RIASEC) {
     const codesToPrograms = dataObjects.codesToPrograms;
     const codes = RIASEC.permuts;
     let programs = [];
-    RIASEC.unmatchedCodes = [];
     RIASEC.matched = {};
     for (let code of codes) {
         //codes to program from data
@@ -618,7 +617,6 @@ function findProgramMatches(RIASEC) {
             RIASEC.matched[code] = true;
         } else {
             console.debug('No match found: ', code);
-            RIASEC.unmatchedCodes.push(code);
             RIASEC.matched[code] = false;
         }
     }
@@ -627,8 +625,10 @@ function findProgramMatches(RIASEC) {
     console.log('unique', removeDuplicates(programs));
     console.log('RIASEC.matched', RIASEC.matched);
 
+    RIASEC.programs = removeDuplicates(programs);
+
     displayResults(RIASEC);
-    displayMatches(removeDuplicates(programs));
+
 }
 
 function removeDuplicates(array) {
@@ -656,6 +656,28 @@ a8"    `Y88  88  I8[    ""  88P'    "8a  88  ""     `Y8  `8b     d8'
 */
 function displayResults(RIASEC) {
     console.log('RIASEC', RIASEC);
+    setCodeAndDesc(RIASEC);
+    setOptionsAndMatches(RIASEC);
+    setBarGraph(RIASEC);
+    setPrograms(RIASEC.programs);
+}
+
+function setCodeAndDesc(RIASEC) {
+    const codeElem = document.getElementById('code');
+    codeElem.innerHTML = RIASEC.code;
+    buildDescription(RIASEC.code);
+}
+
+function setOptionsAndMatches(RIASEC) {
+    let permutString = '';
+    for (let code of RIASEC.permuts) {
+        const matched = checkIfMatched(RIASEC.matched, code);
+        permutString += getCodeHTML(code, matched);
+    }
+    document.getElementById('permuts').innerHTML = `(${RIASEC.permuts.length}) ${permutString}`;
+}
+
+function setBarGraph(RIASEC) {
     for (let area of RIASEC.areas) {
         const areaElem = document.getElementById(area);
         const areaScore = document.getElementById(area + '-score');
@@ -670,17 +692,6 @@ function displayResults(RIASEC) {
             areaElem.classList.add('highlight');
         }
     }
-
-    const codeElem = document.getElementById('code');
-    codeElem.innerHTML = RIASEC.code;
-    buildDescription(RIASEC.code);
-
-    let permutString = '';
-    for (let code of RIASEC.permuts) {
-        const matched = checkIfMatched(RIASEC.matched, code);
-        permutString += getCodeHTML(code, matched);
-    }
-    document.getElementById('permuts').innerHTML = `(${RIASEC.permuts.length}) ${permutString}`;
 }
 
 function getCodeHTML(code, matched = false) {
@@ -713,7 +724,7 @@ function buildDescription(code) {
     descContainer.innerHTML = allDescHTML;
 }
 
-function displayMatches(programs) {
+function setPrograms(programs) {
     let matchesHTML = "";
     for (let program of programs) {
         matchesHTML += buildMatchHTML(program);
