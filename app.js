@@ -728,16 +728,16 @@ function buildDescription(code) {
 function setPrograms(RIASEC) {
     let matchesHTML = "";
     for (let program of RIASEC.programs) {
-        matchesHTML += buildMatchHTML(program, RIASEC.matched);
+        matchesHTML += buildMatchHTML(program, RIASEC);
     }
     document.getElementById('matches').innerHTML = matchesHTML;
 }
 
-function buildMatchHTML(program, matched) {
+function buildMatchHTML(program, RIASEC) {
     if(dataObjects.programsToUrls.hasOwnProperty(program)) {
         const programObj = dataObjects.programsToUrls[program];
         const url = programObj.hasOwnProperty('url') && programObj.url.length > 0 ? programObj.url.trim() : false;
-        const codes = programObj.hasOwnProperty('codesArray') && programObj.codesArray.length > 0 ? ` ${getMatchedCodeHTML(programObj.codesArray, matched)}` : ``;
+        const codes = programObj.hasOwnProperty('codesArray') && programObj.codesArray.length > 0 ? ` ${getMatchedCodeHTML(programObj.codesArray, RIASEC)}` : ``;
         if(url) {
             return `<span class="program"><a href="${url}" target="_blank">${program}</a>${codes}</span>`;
         }
@@ -750,16 +750,51 @@ function buildMatchHTML(program, matched) {
 }
 
 /* TODO: need codes to array */
-function getMatchedCodeHTML(codes, matched) {
+function getMatchedCodeHTML(codes, RIASEC) {
     let codeHTML = '';
-    for(const code of codes) {
-        if(checkIfMatched(matched, code)) {
+    const matchedCodes = buildMatchedCodesArray(codes, RIASEC);
+
+    for(const code of matchedCodes) {
+
             codeHTML += `<span class="code">${code}</span>`;
-        }
+
     }
     return codeHTML;
 }
 
+function buildMatchedCodesArray(codes, RIASEC) {
+    const matchedCodesArray = [];
+    for(const code of codes) {
+        if(checkIfMatched(RIASEC.matched, code)) {
+            matchedCodesArray.push(code);
+        }
+    }
+    if(matchedCodesArray.length > 1) {
+        return reOrderArray(matchedCodesArray, RIASEC.permuts);
+    }
+    return matchedCodesArray;
+}
+
+function reOrderArray(array, orderByArray) {
+    console.log('matchedCodes', array);
+    array.sort((a, b) => {
+        let valueA, valueB;
+        valueA = orderByArray.indexOf(a);
+        valueB = orderByArray.indexOf(b);
+
+        if (valueA < valueB) {
+            return -1;
+          }
+          if (valueA > valueB) {
+            return 1;
+          }
+
+          // names must be equal
+          return 0;
+    });
+    console.log('matchedCodesSorted', array);
+    return array;
+}
 
 /*
              ,d
