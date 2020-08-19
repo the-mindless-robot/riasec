@@ -681,7 +681,6 @@ function displayResults(RIASEC) {
         permutString += getCodeHTML(code, matched);
     }
     document.getElementById('permuts').innerHTML = `(${RIASEC.permuts.length}) ${permutString}`;
-    // highlightUnmatched(RIASEC);
 }
 
 function getCodeHTML(code, matched = false) {
@@ -713,16 +712,6 @@ function buildDescription(code) {
     }
     descContainer.innerHTML = allDescHTML;
 }
-
-// function highlightUnmatched(RIASEC) {
-//     let codes = document.querySelectorAll('span.code');
-//     codes = Array.from(codes);
-//     for (let code of codes) {
-//         if (RIASEC.unmatchedCodes.indexOf(code.innerHTML) != -1) {
-//             code.classList.add('unmatched');
-//         }
-//     }
-// }
 
 function displayMatches(programs) {
     let matchesHTML = "";
