@@ -70,6 +70,7 @@ button:focus {
 .area {
     margin-bottom: 10px;
     position: relative;
+    margin-left: 85px;
 }
 
 .area span.value {
@@ -159,7 +160,7 @@ span.code {
 
 .flex .results {
     flex: 1;
-    padding-right: 25px;
+    padding-right: 10px;
 }
 
 
@@ -497,7 +498,7 @@ div.divider {
 }
 
 #results h1 span {
-    font-size: 3.2rem;
+    font-size: 3.6rem;
 }
 
 #results h1 .iconify {
