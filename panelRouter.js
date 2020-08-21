@@ -9,10 +9,10 @@
 // id panelChange, onForward, onBackward, onNext, onPrev, onJump, onSkip  etc.
 
 class PanelRouter {
-    constructor(containerId) {
+    constructor(containerId, panelClass = 'panel') {
         //elements
         this.container = document.getElementById(containerId);
-        this.panels = this._childrenMatches(this.container, '.panel');
+        this.panels = this._childrenMatches(this.container, '.'+ panelClass);
         this.loader = document.getElementById('loader');
         this.prevBtns = document.querySelectorAll('.prev');
         this.nextBtns = document.querySelectorAll('.next');
