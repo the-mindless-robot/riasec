@@ -14,8 +14,10 @@ class PanelRouter {
         this.container = document.getElementById(containerId);
         this.panels = this._childrenMatches(this.container, '.'+ panelClass);
         this.loader = document.getElementById('loader');
-        this.prevBtns = document.querySelectorAll('.prev');
-        this.nextBtns = document.querySelectorAll('.next');
+        this.prevBtnsSelector = `.prev.${panelClass}`;
+        this.prevBtns = document.querySelectorAll(this.prevBtnsSelector);
+        this.nextBtnsSelector = `.next.${panelClass}`;
+        this.nextBtns = document.querySelectorAll(this.nextBtnsSelector);
         this.jumpBtns = document.querySelectorAll('.jump');
         this.skipBtns = document.querySelectorAll('.skip');
 
