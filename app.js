@@ -145,7 +145,7 @@ onet.call(path, { start: 1, end: 60 }, (response) => {
     if (response.hasOwnProperty('error')) {
         console.error('Error', response.error);
     } else {
-        // console.log('Response', response);
+        console.log('Response', response);
         parseQuestions(response.question);
         appStart();
     }
@@ -163,6 +163,7 @@ function parseQuestions(questionsArray) {
             questions[question.area] = [question.text];
         }
     }
+    console.log('questions', questions);
     randomizeQuestions(questions);
 }
 
@@ -257,6 +258,7 @@ function buildPagination(questionsList) {
 function buildPanel() {
     const newPanel = document.createElement('div');
     newPanel.classList.add('panel');
+    newPanel.classList.add('mainPanel');
     newPanel.dataset.area = 'questions';
     return newPanel;
 }
@@ -264,20 +266,20 @@ function buildPanel() {
 function getNavValue(i, numPages) {
     const lastPage = i == numPages - 1 ? true : false;
     if (lastPage) {
-        return `<a class="prev">
+        return `<a class="prev mainPanel">
                     <span class="iconify" data-icon="ic:baseline-chevron-left" data-inline="false"></span>
                     <span class="btnLabel">PREV</span>
                 </a>
-                <a id="resultsBtn" class="next">
+                <a id="resultsBtn" class="next mainPanel">
                     <span class="btnLabel">RESULTS</span>
                     <span class="iconify" data-icon="ic:baseline-leaderboard" data-inline="false"></span>
                 </a>`;
     }
-    return `<a class="prev">
+    return `<a class="prev mainPanel">
                 <span class="iconify" data-icon="ic:baseline-chevron-left" data-inline="false"></span>
                 <span class="btnLabel">PREV</span>
             </a>
-            <a class="next">
+            <a class="next mainPanel">
                 <span class="btnLabel">NEXT</span>
                 <span class="iconify" data-icon="ic:baseline-chevron-right" data-inline="false"></span>
             </a>`;
@@ -311,7 +313,7 @@ function addQuestions(i, questionsPerPage, questionsList) {
 
 */
 function appStart() {
-    const router = new PanelRouter('panels');
+    const router = new PanelRouter('panels', 'mainPanel');
     router.start();
     initStars();
     setEventListeners();
