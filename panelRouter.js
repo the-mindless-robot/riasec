@@ -12,6 +12,7 @@ class PanelRouter {
     constructor(containerId, panelClass = 'panel') {
         //elements
         this.container = document.getElementById(containerId);
+        this.panelClass = panelClass;
         this.panels = this._childrenMatches(this.container, '.'+ panelClass);
         this.loader = document.getElementById('loader');
         this.prevBtnsSelector = `.prev.${panelClass}`;
@@ -35,7 +36,18 @@ class PanelRouter {
         this._initPanels();
         this._setPanelNavigation();
         this._initWindow();
-        console.log('new panel router created');
+        console.debug('new panel router created');
+    }
+
+    updateRouter() {
+        this.panels = this._childrenMatches(this.container, '.'+ this.panelClass);
+        this.prevBtns = document.querySelectorAll(this.prevBtnsSelector);
+        this.nextBtns = document.querySelectorAll(this.nextBtnsSelector);
+
+        this._initPanels();
+        this._setPanelNavigation();
+
+        console.debug('router updated');
     }
 
     _initPanels() {
