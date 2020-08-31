@@ -1,3 +1,10 @@
+/*
+ * Google Sheet Loader
+ * Version 1.0
+ * Joel Arias
+ *
+ */
+
 class GoogleSheet {
     constructor(id) {
         this.id = id;
@@ -7,6 +14,7 @@ class GoogleSheet {
         let moreData;
         let sheetNumber = options && options.hasOwnProperty('start') ? options.start : 1;
         const sheetNumberEnd = options && options.hasOwnProperty('end') ? options.end : false;
+
         do {
             moreData = false;
             const url = 'https://spreadsheets.google.com/feeds/list/' + this.id + '/' + sheetNumber + '/public/values?alt=json';
@@ -43,8 +51,8 @@ async function buildRows(data) {
     if (data.feed.entry) {
         data.feed.entry.forEach(row => {
             // console.log('row => ', row);
-            let rowObj = {};
-            for (let field in row) {
+            const rowObj = {};
+            for (const field in row) {
                 if (field.substring(0, 3) == 'gsx') {
                     rowObj[field.split('$')[1]] = row[field].$t;
                 }
