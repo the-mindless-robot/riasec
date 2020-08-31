@@ -129,21 +129,6 @@ function addAreaRankings(formattedData) {
     return areaRanking;
 }
 
-
-/*
-
-                                                          88
-                                                   ,d     ""
-                                                   88
- ,adPPYb,d8  88       88   ,adPPYba,  ,adPPYba,  MM88MMM  88   ,adPPYba,   8b,dPPYba,   ,adPPYba,
-a8"    `Y88  88       88  a8P_____88  I8[    ""    88     88  a8"     "8a  88P'   `"8a  I8[    ""
-8b       88  88       88  8PP"""""""   `"Y8ba,     88     88  8b       d8  88       88   `"Y8ba,
-"8a    ,d88  "8a,   ,a88  "8b,   ,aa  aa    ]8I    88,    88  "8a,   ,a8"  88       88  aa    ]8I
- `"YbbdP'88   `"YbbdP'Y8   `"Ybbd8"'  `"YbbdP"'    "Y888  88   `"YbbdP"'   88       88  `"YbbdP"'
-         88
-         88
-*/
-
 onet.call(path, { start: 1, end: 60 }, (response) => {
     if (response.hasOwnProperty('error')) {
         console.error('Error', response.error);
@@ -225,6 +210,21 @@ function buildLiHTML(question, area) {
 function getRandomNumber(limit) {
     return Math.floor(Math.random() * limit);
 }
+
+
+/*
+
+                                                          88
+                                                   ,d     ""
+                                                   88
+ ,adPPYb,d8  88       88   ,adPPYba,  ,adPPYba,  MM88MMM  88   ,adPPYba,   8b,dPPYba,   ,adPPYba,
+a8"    `Y88  88       88  a8P_____88  I8[    ""    88     88  a8"     "8a  88P'   `"8a  I8[    ""
+8b       88  88       88  8PP"""""""   `"Y8ba,     88     88  8b       d8  88       88   `"Y8ba,
+"8a    ,d88  "8a,   ,a88  "8b,   ,aa  aa    ]8I    88,    88  "8a,   ,a8"  88       88  aa    ]8I
+ `"YbbdP'88   `"YbbdP'Y8   `"Ybbd8"'  `"YbbdP"'    "Y888  88   `"YbbdP"'   88       88  `"YbbdP"'
+         88
+         88
+*/
 
 function displayQuestions(arrayOfQuestions) {
     let questionsList = [...arrayOfQuestions];
