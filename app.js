@@ -1,24 +1,40 @@
 /*
 
-         88
-         88                ,d
-         88                88
- ,adPPYb,88  ,adPPYYba,  MM88MMM  ,adPPYYba,
-a8"    `Y88  ""     `Y8    88     ""     `Y8
-8b       88  ,adPPPPP88    88     ,adPPPPP88
-"8a,   ,d88  88,    ,88    88,    88,    ,88
- `"8bbdP"Y8  `"8bbdP"Y8    "Y888  `"8bbdP"Y8
+            dddddddd
+            d::::::d                          tttt
+            d::::::d                       ttt:::t
+            d::::::d                       t:::::t
+            d:::::d                        t:::::t
+    ddddddddd:::::d   aaaaaaaaaaaaa  ttttttt:::::ttttttt      aaaaaaaaaaaaa
+  dd::::::::::::::d   a::::::::::::a t:::::::::::::::::t      a::::::::::::a
+ d::::::::::::::::d   aaaaaaaaa:::::at:::::::::::::::::t      aaaaaaaaa:::::a
+d:::::::ddddd:::::d            a::::atttttt:::::::tttttt               a::::a
+d::::::d    d:::::d     aaaaaaa:::::a      t:::::t              aaaaaaa:::::a
+d:::::d     d:::::d   aa::::::::::::a      t:::::t            aa::::::::::::a
+d:::::d     d:::::d  a::::aaaa::::::a      t:::::t           a::::aaaa::::::a
+d:::::d     d:::::d a::::a    a:::::a      t:::::t    tttttta::::a    a:::::a
+d::::::ddddd::::::dda::::a    a:::::a      t::::::tttt:::::ta::::a    a:::::a
+ d:::::::::::::::::da:::::aaaa::::::a      tt::::::::::::::ta:::::aaaa::::::a
+  d:::::::::ddd::::d a::::::::::aa:::a       tt:::::::::::tt a::::::::::aa:::a
+   ddddddddd   ddddd  aaaaaaaaaa  aaaa         ttttttttttt    aaaaaaaaaa  aaaa
 
 
 */
-const onet = new OnetWebService(config.username);
-let path = '/mnm/interestprofiler/questions';
-if (config.spanish) {
-    path = '/mpp/interestprofiler/questions';
-}
 
 
+/*
 
+           88
+           88                                     ,d
+           88                                     88
+,adPPYba,  88,dPPYba,    ,adPPYba,   ,adPPYba,  MM88MMM
+I8[    ""  88P'    "8a  a8P_____88  a8P_____88    88
+ `"Y8ba,   88       88  8PP"""""""  8PP"""""""    88
+aa    ]8I  88       88  "8b,   ,aa  "8b,   ,aa    88,
+`"YbbdP"'  88       88   `"Ybbd8"'   `"Ybbd8"'    "Y888
+
+
+*/
 function formatData(data) {
     console.log('data', data);
 
@@ -129,6 +145,24 @@ function addAreaRankings(formattedData) {
     return areaRanking;
 }
 
+/*
+                                        ,d
+                                        88
+ ,adPPYba,   8b,dPPYba,    ,adPPYba,  MM88MMM
+a8"     "8a  88P'   `"8a  a8P_____88    88
+8b       d8  88       88  8PP"""""""    88
+"8a,   ,a8"  88       88  "8b,   ,aa    88,
+ `"YbbdP"'   88       88   `"Ybbd8"'    "Y888
+
+
+*/
+
+const onet = new OnetWebService(config.username);
+let path = '/mnm/interestprofiler/questions';
+if (config.spanish) {
+    path = '/mpp/interestprofiler/questions';
+}
+
 onet.call(path, { start: 1, end: 60 }, (response) => {
     if (response.hasOwnProperty('error')) {
         console.error('Error', response.error);
@@ -211,6 +245,62 @@ function getRandomNumber(limit) {
     return Math.floor(Math.random() * limit);
 }
 
+
+
+/*
+
+            dddddddd
+            d::::::d  iiii                                       lllllll
+            d::::::d i::::i                                      l:::::l
+            d::::::d  iiii                                       l:::::l
+            d:::::d                                              l:::::l
+    ddddddddd:::::d iiiiiii     ssssssssss   ppppp   ppppppppp    l::::l   aaaaaaaaaaaaayyyyyyy           yyyyyyy
+  dd::::::::::::::d i:::::i   ss::::::::::s  p::::ppp:::::::::p   l::::l   a::::::::::::ay:::::y         y:::::y
+ d::::::::::::::::d  i::::i ss:::::::::::::s p:::::::::::::::::p  l::::l   aaaaaaaaa:::::ay:::::y       y:::::y
+d:::::::ddddd:::::d  i::::i s::::::ssss:::::spp::::::ppppp::::::p l::::l            a::::a y:::::y     y:::::y
+d::::::d    d:::::d  i::::i  s:::::s  ssssss  p:::::p     p:::::p l::::l     aaaaaaa:::::a  y:::::y   y:::::y
+d:::::d     d:::::d  i::::i    s::::::s       p:::::p     p:::::p l::::l   aa::::::::::::a   y:::::y y:::::y
+d:::::d     d:::::d  i::::i       s::::::s    p:::::p     p:::::p l::::l  a::::aaaa::::::a    y:::::y:::::y
+d:::::d     d:::::d  i::::i ssssss   s:::::s  p:::::p    p::::::p l::::l a::::a    a:::::a     y:::::::::y
+d::::::ddddd::::::ddi::::::is:::::ssss::::::s p:::::ppppp:::::::pl::::::la::::a    a:::::a      y:::::::y
+ d:::::::::::::::::di::::::is::::::::::::::s  p::::::::::::::::p l::::::la:::::aaaa::::::a       y:::::y
+  d:::::::::ddd::::di::::::i s:::::::::::ss   p::::::::::::::pp  l::::::l a::::::::::aa:::a     y:::::y
+   ddddddddd   dddddiiiiiiii  sssssssssss     p::::::pppppppp    llllllll  aaaaaaaaaa  aaaa    y:::::y
+                                              p:::::p                                         y:::::y
+                                              p:::::p                                        y:::::y
+                                             p:::::::p                                      y:::::y
+                                             p:::::::p                                     y:::::y
+                                             p:::::::p                                    yyyyyyy
+                                             ppppppppp
+
+*/
+
+
+/*
+
+
+                                        ,d
+                                        88
+8b,dPPYba,   ,adPPYba,   88       88  MM88MMM  ,adPPYba,  8b,dPPYba,
+88P'   "Y8  a8"     "8a  88       88    88    a8P_____88  88P'   "Y8
+88          8b       d8  88       88    88    8PP"""""""  88
+88          "8a,   ,a8"  "8a,   ,a88    88,   "8b,   ,aa  88
+88           `"YbbdP"'    `"YbbdP'Y8    "Y888  `"Ybbd8"'  88
+
+
+*/
+function appStart() {
+    const router = new PanelRouter('panels', 'mainPanel');
+    router.start();
+    setEventListeners();
+    setProgressBar(router);
+}
+
+/*TODO: has to be invoked after questions/results sections are built*/
+function setEventListeners() {
+    document.getElementById('resultsBtn').addEventListener('click', getResults);
+    document.getElementById('clear').addEventListener('click', clearValues);
+}
 
 /*
 
@@ -316,32 +406,6 @@ function addQuestions(i, questionsPerPage, questionsList) {
 
 /*
 
-
-                                        ,d
-                                        88
-8b,dPPYba,   ,adPPYba,   88       88  MM88MMM  ,adPPYba,  8b,dPPYba,
-88P'   "Y8  a8"     "8a  88       88    88    a8P_____88  88P'   "Y8
-88          8b       d8  88       88    88    8PP"""""""  88
-88          "8a,   ,a8"  "8a,   ,a88    88,   "8b,   ,aa  88
-88           `"YbbdP"'    `"YbbdP'Y8    "Y888  `"Ybbd8"'  88
-
-
-*/
-function appStart() {
-    const router = new PanelRouter('panels', 'mainPanel');
-    router.start();
-    setEventListeners();
-    setProgressBar(router);
-}
-
-/*TODO: has to be invoked after questions/results sections are built*/
-function setEventListeners() {
-    document.getElementById('resultsBtn').addEventListener('click', getResults);
-    document.getElementById('clear').addEventListener('click', clearValues);
-}
-
-/*
-
                                                                                                  88
                                                                                                  88
                                                                                                  88
@@ -400,18 +464,138 @@ function updateProgressBar(increment, backward = false) {
     progress.style.width = newWidth + '%';
 }
 
+/*
+             ,d
+             88
+,adPPYba,  MM88MMM  ,adPPYYba,  8b,dPPYba,  ,adPPYba,
+I8[    ""    88     ""     `Y8  88P'   "Y8  I8[    ""
+ `"Y8ba,     88     ,adPPPPP88  88           `"Y8ba,
+aa    ]8I    88,    88,    ,88  88          aa    ]8I
+`"YbbdP"'    "Y888  `"8bbdP"Y8  88          `"YbbdP"'
+
+
+*/
+
+function selectInputs() {
+    const inputs = document.querySelectorAll("#questions i.selected");
+    let inputsArray = Array.from(inputs);
+    return inputsArray;
+}
+
+function initStars() {
+    const stars = document.querySelectorAll('.material-icons');
+    const allStars = Array.from(stars);
+    for (let star of allStars) {
+        star.addEventListener('click', adjustRating);
+    }
+}
+
+function adjustRating(ev) {
+    const value = ev.target.dataset.value;
+    const parent = ev.target.parentElement;
+    const stars = parent.querySelectorAll('.material-icons');
+    const starElems = Array.from(stars);
+    clearStars(starElems);
+    for (let i = 0; i < value; i++) {
+        starElems[i].classList.add('activated');
+    }
+
+    ev.target.classList.add('selected');
+}
+
+function clearStars(stars) {
+    for (let star of stars) {
+        star.classList.remove('activated', 'selected');
+    }
+}
+
+/*
+
+88                       88
+88                       88
+88                       88
+88,dPPYba,    ,adPPYba,  88  8b,dPPYba,
+88P'    "8a  a8P_____88  88  88P'    "8a
+88       88  8PP"""""""  88  88       d8
+88       88  "8b,   ,aa  88  88b,   ,a8"
+88       88   `"Ybbd8"'  88  88`YbbdP"'
+                             88
+                             88
+*/
+
+function updateHelpDisplay() {
+    const activePanels = document.querySelectorAll('.panel.active');
+    const currentPanel = activePanels[activePanels.length - 1];
+    const dataArea = currentPanel.dataset.area || false;
+    const helpContent = document.getElementById('helpContent');
+    const isActive = helpContent.classList.contains('active');
+    console.debug('current', currentPanel);
+
+    if (dataArea && dataArea == 'questions') {
+        console.log('in questions', isActive);
+
+        if (!isActive) {
+            helpContent.style.display = 'block';
+            setTimeout(() => {
+                console.log('in questions delay');
+                helpContent.classList.add('active');
+            }, 80);
+        }
+
+    }
+
+    if (!dataArea || dataArea != 'questions') {
+        console.log('remove');
+        helpContent.classList.remove('active');
+        setTimeout(() => {
+            console.log('left questions delay');
+            helpContent.style.display = 'none';
+        }, 300);
+    }
+
+
+}
+
 
 
 /*
 
-                                                88
-                                                88    ,d
-                                                88    88
-8b,dPPYba,   ,adPPYba,  ,adPPYba,  88       88  88  MM88MMM  ,adPPYba,
-88P'   "Y8  a8P_____88  I8[    ""  88       88  88    88     I8[    ""
-88          8PP"""""""   `"Y8ba,   88       88  88    88      `"Y8ba,
-88          "8b,   ,aa  aa    ]8I  "8a,   ,a88  88    88,    aa    ]8I
-88           `"Ybbd8"'  `"YbbdP"'   `"YbbdP'Y8  88    "Y888  `"YbbdP"'
+
+                                                                           lllllll         tttt
+                                                                           l:::::l      ttt:::t
+                                                                           l:::::l      t:::::t
+                                                                           l:::::l      t:::::t
+rrrrr   rrrrrrrrr       eeeeeeeeeeee        ssssssssss   uuuuuu    uuuuuu   l::::lttttttt:::::ttttttt        ssssssssss
+r::::rrr:::::::::r    ee::::::::::::ee    ss::::::::::s  u::::u    u::::u   l::::lt:::::::::::::::::t      ss::::::::::s
+r:::::::::::::::::r  e::::::eeeee:::::eess:::::::::::::s u::::u    u::::u   l::::lt:::::::::::::::::t    ss:::::::::::::s
+rr::::::rrrrr::::::re::::::e     e:::::es::::::ssss:::::su::::u    u::::u   l::::ltttttt:::::::tttttt    s::::::ssss:::::s
+ r:::::r     r:::::re:::::::eeeee::::::e s:::::s  ssssss u::::u    u::::u   l::::l      t:::::t           s:::::s  ssssss
+ r:::::r     rrrrrrre:::::::::::::::::e    s::::::s      u::::u    u::::u   l::::l      t:::::t             s::::::s
+ r:::::r            e::::::eeeeeeeeeee        s::::::s   u::::u    u::::u   l::::l      t:::::t                s::::::s
+ r:::::r            e:::::::e           ssssss   s:::::s u:::::uuuu:::::u   l::::l      t:::::t    ttttttssssss   s:::::s
+ r:::::r            e::::::::e          s:::::ssss::::::su:::::::::::::::uul::::::l     t::::::tttt:::::ts:::::ssss::::::s
+ r:::::r             e::::::::eeeeeeee  s::::::::::::::s  u:::::::::::::::ul::::::l     tt::::::::::::::ts::::::::::::::s
+ r:::::r              ee:::::::::::::e   s:::::::::::ss    uu::::::::uu:::ul::::::l       tt:::::::::::tt s:::::::::::ss
+ rrrrrrr                eeeeeeeeeeeeee    sssssssssss        uuuuuuuu  uuuullllllll         ttttttttttt    sssssssssss
+
+
+
+
+
+
+
+*/
+
+/*
+
+88                        88  88           88
+88                        ""  88           88
+88                            88           88
+88,dPPYba,   88       88  88  88   ,adPPYb,88
+88P'    "8a  88       88  88  88  a8"    `Y88
+88       d8  88       88  88  88  8b       88
+88b,   ,a8"  "8a,   ,a88  88  88  "8a,   ,d88
+8Y"Ybbd8"'    `"YbbdP'Y8  88  88   `"8bbdP"Y8
 
 
 */
@@ -476,8 +660,6 @@ function getRIASEC(results) {
     findProgramMatches(RIASEC);
 }
 
-
-
 function twoLetterCodes(permutations) {
     const twoLetterCodes = [];
     for (let value of permutations) {
@@ -513,7 +695,6 @@ function checkRemainingAreas(RIASEC) {
     }
     return additionalPermuts;
 }
-
 
 function checkValues(baseline, testValue) {
     const diff = baseline - testValue;
@@ -812,98 +993,3 @@ function reOrderArray(array, orderByArray) {
     console.log('matchedCodesSorted', array);
     return array;
 }
-
-/*
-             ,d
-             88
-,adPPYba,  MM88MMM  ,adPPYYba,  8b,dPPYba,  ,adPPYba,
-I8[    ""    88     ""     `Y8  88P'   "Y8  I8[    ""
- `"Y8ba,     88     ,adPPPPP88  88           `"Y8ba,
-aa    ]8I    88,    88,    ,88  88          aa    ]8I
-`"YbbdP"'    "Y888  `"8bbdP"Y8  88          `"YbbdP"'
-
-
-*/
-
-function selectInputs() {
-    const inputs = document.querySelectorAll("#questions i.selected");
-    let inputsArray = Array.from(inputs);
-    return inputsArray;
-}
-
-function initStars() {
-    const stars = document.querySelectorAll('.material-icons');
-    const allStars = Array.from(stars);
-    for (let star of allStars) {
-        star.addEventListener('click', adjustRating);
-    }
-}
-
-function adjustRating(ev) {
-    const value = ev.target.dataset.value;
-    const parent = ev.target.parentElement;
-    const stars = parent.querySelectorAll('.material-icons');
-    const starElems = Array.from(stars);
-    clearStars(starElems);
-    for (let i = 0; i < value; i++) {
-        starElems[i].classList.add('activated');
-    }
-
-    ev.target.classList.add('selected');
-}
-
-function clearStars(stars) {
-    for (let star of stars) {
-        star.classList.remove('activated', 'selected');
-    }
-}
-
-/*
-
-88                       88
-88                       88
-88                       88
-88,dPPYba,    ,adPPYba,  88  8b,dPPYba,
-88P'    "8a  a8P_____88  88  88P'    "8a
-88       88  8PP"""""""  88  88       d8
-88       88  "8b,   ,aa  88  88b,   ,a8"
-88       88   `"Ybbd8"'  88  88`YbbdP"'
-                             88
-                             88
-*/
-
-function updateHelpDisplay() {
-    const activePanels = document.querySelectorAll('.panel.active');
-    const currentPanel = activePanels[activePanels.length - 1];
-    const dataArea = currentPanel.dataset.area || false;
-    const helpContent = document.getElementById('helpContent');
-    const isActive = helpContent.classList.contains('active');
-    console.debug('current', currentPanel);
-
-    if (dataArea && dataArea == 'questions') {
-        console.log('in questions', isActive);
-
-        if (!isActive) {
-            helpContent.style.display = 'block';
-            setTimeout(() => {
-                console.log('in questions delay');
-                helpContent.classList.add('active');
-            }, 80);
-        }
-
-    }
-
-    if (!dataArea || dataArea != 'questions') {
-        console.log('remove');
-        helpContent.classList.remove('active');
-        setTimeout(() => {
-            console.log('left questions delay');
-            helpContent.style.display = 'none';
-        }, 300);
-    }
-
-
-}
-
-// go!
-// appStart();
