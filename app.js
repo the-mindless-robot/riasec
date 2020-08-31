@@ -85,10 +85,9 @@ function removeSpaces(string) {
     return string.replace(/\s/g, '');
 }
 
-//TODO:load program urls
 //load/parse program data in background
 const programData = new GoogleSheet(config.sheet);
-let dataObjects = null;
+const dataObjects = {};
 // let codesToPrograms = null;
 // let areaRanking = null;
 programData.load(formatData,{end: 2}).then(formattedData => {
@@ -98,7 +97,11 @@ programData.load(formatData,{end: 2}).then(formattedData => {
     const areas = addAreaRankings(formattedData);
     const programsToUrls = formattedData.programsToUrls;
 
-    dataObjects = {codesToPrograms, areas, programsToUrls};
+    // dataObjects = {codesToPrograms, areas, programsToUrls};
+    dataObjects.codesToPrograms = codesToPrograms;
+    dataObjects.areas = areas;
+    dataObjects.programsToUrls = programsToUrls;
+
     console.debug('dataObjects', dataObjects);
 });
 
@@ -146,8 +149,16 @@ onet.call(path, { start: 1, end: 60 }, (response) => {
         console.error('Error', response.error);
     } else {
         console.log('Response', response);
-        parseQuestions(response.question);
+
+        dataObjects.onetData = {response};
+        dataObjects.onetData.questionsByArea = parseQuestions(dataObjects.onetData.response.question);
+        dataObjects.onetData.questionsHTML = randomizeQuestions(dataObjects.onetData.questionsByArea);
+
+        console.log('this is questionsTemp', dataObjects);
+        // parseQuestions(response.question);
+        displayQuestions(dataObjects.onetData.questionsHTML);
         appStart();
+
     }
 });
 
@@ -164,23 +175,25 @@ function parseQuestions(questionsArray) {
         }
     }
     console.log('questions', questions);
-    randomizeQuestions(questions);
+    // return questions;
+    // randomizeQuestions(questions);
+    return questions;
 }
 
 function randomizeQuestions(questions) {
-    //copy object without reference
-    let allQuestions = JSON.parse(JSON.stringify(questions));
-    console.log('allQuestions', allQuestions);
+    // copy object without reference
+    const allQuestions = JSON.parse(JSON.stringify(questions));
     const areas = Object.keys(questions);
     const arrayOfQuestionsHTML = [];
+
     let numOptions = config.numTotalOptionsPerArea;
 
     for (let i = 0; i < config.numQuestionsPerArea; i++) {
         for (area of areas) {
             //get random number
-            let index = getRandomNumber(numOptions);
+            const index = getRandomNumber(numOptions);
             //add to list
-            let question = allQuestions[area][index];
+            const question = allQuestions[area][index];
             // console.log(area+':'+index, question);
             // let questionHTML = buildLiHTML(question, area);
             // console.log('html', questionHTML);
@@ -190,7 +203,8 @@ function randomizeQuestions(questions) {
         }
         numOptions--;
     }
-    displayQuestions(arrayOfQuestionsHTML)
+    // displayQuestions(arrayOfQuestionsHTML);
+    return arrayOfQuestionsHTML;
 }
 
 /*
@@ -215,6 +229,7 @@ function getRandomNumber(limit) {
 function displayQuestions(arrayOfQuestions) {
     let questionsList = [...arrayOfQuestions];
     buildPagination(questionsList);
+    initStars();
 }
 
 function buildPagination(questionsList) {
@@ -315,11 +330,11 @@ function addQuestions(i, questionsPerPage, questionsList) {
 function appStart() {
     const router = new PanelRouter('panels', 'mainPanel');
     router.start();
-    initStars();
     setEventListeners();
     setProgressBar(router);
 }
 
+/*TODO: has to be invoked after questions/results sections are built*/
 function setEventListeners() {
     document.getElementById('resultsBtn').addEventListener('click', getResults);
     document.getElementById('clear').addEventListener('click', clearValues);
@@ -889,3 +904,6 @@ function updateHelpDisplay() {
 
 
 }
+
+// go!
+// appStart();
