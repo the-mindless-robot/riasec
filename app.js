@@ -1,3 +1,25 @@
+const dataObjects = {};
+
+async function main() {
+
+    const onetResponse = await loadOnetData();
+    const onetDataObjects = await buildOnetDataObjects(onetResponse);
+    dataObjects.onet = onetDataObjects;
+
+    console.log('this is the ONET data:', onetDataObjects);
+
+    const programData = await loadProgramData();
+    const programDataObjects = await buildProgramDataObjects(programData);
+    dataObjects.programs = programDataObjects;
+    console.log('this is the PROGRAM data:', programDataObjects);
+
+    console.log('this is the MAIN dataObject', dataObjects);
+
+    displayQuestions(dataObjects.onet.questionsHTML);
+    appStart();
+}
+
+main();
 /*
 
             dddddddd
@@ -22,6 +44,51 @@ d::::::ddddd::::::dda::::a    a:::::a      t::::::tttt:::::ta::::a    a:::::a
 */
 
 
+// const programData = new GoogleSheet(config.sheet);
+// const onet = new OnetWebService(config.username);
+// let path = '/mnm/interestprofiler/questions';
+// if (config.spanish) {
+//     path = '/mpp/interestprofiler/questions';
+// }
+// const dataObjects = {};
+// // let codesToPrograms = null;
+// // let areaRanking = null;
+// programData.load(formatData, { end: 2 }).then(formattedData => {
+//     console.log('formattedData', formattedData);
+
+//     const codesToPrograms = formattedData.codesToPrograms;
+//     const areas = addAreaRankings(formattedData);
+//     const programsToUrls = formattedData.programsToUrls;
+
+//     // dataObjects = {codesToPrograms, areas, programsToUrls};
+//     dataObjects.codesToPrograms = codesToPrograms;
+//     dataObjects.areas = areas;
+//     dataObjects.programsToUrls = programsToUrls;
+
+//     console.debug('dataObjects', dataObjects);
+// });
+
+
+
+// onet.call(path, { start: 1, end: 60 }, (response) => {
+//     if (response.hasOwnProperty('error')) {
+//         console.error('Error', response.error);
+//     } else {
+//         console.log('Response', response);
+
+//         dataObjects.onetData = { response };
+//         dataObjects.onetData.questionsByArea = parseQuestions(dataObjects.onetData.response.question);
+//         dataObjects.onetData.questionsHTML = randomizeQuestions(dataObjects.onetData.questionsByArea);
+
+//         console.log('this is questionsTemp', dataObjects);
+//         // parseQuestions(response.question);
+//         // appStart();
+//         displayQuestions(dataObjects.onetData.questionsHTML);
+//         appStart();
+//     }
+// });
+
+
 /*
 
            88
@@ -33,8 +100,31 @@ I8[    ""  88P'    "8a  a8P_____88  a8P_____88    88
 aa    ]8I  88       88  "8b,   ,aa  "8b,   ,aa    88,
 `"YbbdP"'  88       88   `"Ybbd8"'   `"Ybbd8"'    "Y888
 
-
 */
+
+function loadProgramData() {
+    return new Promise((resolve, reject) => {
+        try {
+            const programSheet = new GoogleSheet(config.sheet);
+            const programData = programSheet.load(formatData, { end: 2 });
+            resolve(programData);
+        }
+        catch(error) {
+            console.error('failed to load program data', error);
+            reject(error);
+        }
+    });
+}
+
+function buildProgramDataObjects(programData) {
+    const programDataObjects = {};
+    programDataObjects.codesToPrograms = programData.codesToPrograms;
+    programDataObjects.areas = addAreaRankings(programData);
+    programDataObjects.programsToUrls = programData.programsToUrls;
+
+    return programDataObjects;
+}
+
 function formatData(data) {
     console.log('data', data);
 
@@ -42,7 +132,7 @@ function formatData(data) {
     const codesToPrograms = data.hasOwnProperty('programs') ? formatProgramCodes(data.programs) : false;
     const areas = data.hasOwnProperty('areas') ? formatAreaDefinitions(data.areas) : false;
 
-    return {codesToPrograms, areas, programsToUrls};
+    return { codesToPrograms, areas, programsToUrls };
 }
 
 function formatAreaDefinitions(areas) {
@@ -51,7 +141,7 @@ function formatAreaDefinitions(areas) {
         const letter = area.label.charAt(0).toUpperCase();
         const areaLabel = area.label;
         const desc = area.desc;
-        areaDefinitions[letter] = {areaLabel, desc};
+        areaDefinitions[letter] = { areaLabel, desc };
     }
     console.log('areaDefinitions', areaDefinitions);
     return areaDefinitions;
@@ -83,8 +173,8 @@ function formatProgramUrls(programs) {
         const url = program.hasOwnProperty('url') && program.url.length > 0 ? `https://www.sdmesa.edu/academics/academic-programs/${program.url.trim()}.shtml` : false;
         const codes = program.hasOwnProperty('hollandcode') && program.hollandcode.length > 0 ? program.hollandcode.trim() : false;
         const codesArray = program.hasOwnProperty('hollandcode') && program.hollandcode.length > 0 ? buildCodeArray(program.hollandcode) : false;
-        if(discipline && url && codes && codesArray && !programsToUrls.hasOwnProperty(discipline)) {
-            programsToUrls[discipline] = {url, codes, codesArray};
+        if (discipline && url && codes && codesArray && !programsToUrls.hasOwnProperty(discipline)) {
+            programsToUrls[discipline] = { url, codes, codesArray };
         }
     }
     console.log('programsToUrls', programsToUrls);
@@ -102,24 +192,7 @@ function removeSpaces(string) {
 }
 
 //load/parse program data in background
-const programData = new GoogleSheet(config.sheet);
-const dataObjects = {};
-// let codesToPrograms = null;
-// let areaRanking = null;
-programData.load(formatData,{end: 2}).then(formattedData => {
-    console.log('formattedData', formattedData);
 
-    const codesToPrograms = formattedData.codesToPrograms;
-    const areas = addAreaRankings(formattedData);
-    const programsToUrls = formattedData.programsToUrls;
-
-    // dataObjects = {codesToPrograms, areas, programsToUrls};
-    dataObjects.codesToPrograms = codesToPrograms;
-    dataObjects.areas = areas;
-    dataObjects.programsToUrls = programsToUrls;
-
-    console.debug('dataObjects', dataObjects);
-});
 
 
 function addAreaRankings(formattedData) {
@@ -157,29 +230,36 @@ a8"     "8a  88P'   `"8a  a8P_____88    88
 
 */
 
-const onet = new OnetWebService(config.username);
-let path = '/mnm/interestprofiler/questions';
-if (config.spanish) {
-    path = '/mpp/interestprofiler/questions';
+function loadOnetData() {
+    return new Promise((resolve, reject) => {
+        const onet = new OnetWebService(config.username);
+        let path = '/mnm/interestprofiler/questions';
+        if (config.spanish) {
+            path = '/mpp/interestprofiler/questions';
+        }
+
+        onet.call(path, { start: 1, end: 60 }, (response) => {
+            if (response.hasOwnProperty('error')) {
+                console.error('Error', response.error);
+                reject(response.error);
+            } else {
+                resolve(response);
+            }
+        });
+
+    });
 }
 
-onet.call(path, { start: 1, end: 60 }, (response) => {
-    if (response.hasOwnProperty('error')) {
-        console.error('Error', response.error);
-    } else {
-        console.log('Response', response);
+function buildOnetDataObjects(response) {
+    return new Promise((resolve, reject) => {
+        const data = {};
+        data.response = response;
+        data.questionsByArea = parseQuestions(data.response.question);
+        data.questionsHTML = randomizeQuestions(data.questionsByArea);
+        resolve(data);
+    });
+}
 
-        dataObjects.onetData = {response};
-        dataObjects.onetData.questionsByArea = parseQuestions(dataObjects.onetData.response.question);
-        dataObjects.onetData.questionsHTML = randomizeQuestions(dataObjects.onetData.questionsByArea);
-
-        console.log('this is questionsTemp', dataObjects);
-        // parseQuestions(response.question);
-        displayQuestions(dataObjects.onetData.questionsHTML);
-        appStart();
-
-    }
-});
 
 function parseQuestions(questionsArray) {
     const questions = {};
@@ -325,7 +405,7 @@ function displayQuestions(arrayOfQuestions) {
 function buildPagination(questionsList) {
 
     const odd = Number(config.numQuestionsPerArea) % 2 == 0 ? false : true;
-    let questionsPerPage = 12;
+    let questionsPerPage = 10;
     if (odd) {
         questionsPerPage = questionsList.length > 36 ? 15 : 10;
     }
@@ -419,9 +499,12 @@ function addQuestions(i, questionsPerPage, questionsList) {
 */
 
 function setProgressBar(router) {
-    const numPanels = router.getNumPanels() - 1;
+
+    //TODO:fix hard coded numpanels
+    // const numPanels = router.getNumPanels() - 1;
+    const numPanels = 9;
     const increment = Math.ceil(100 / numPanels);
-    console.log('increment', increment);
+    console.log('increment', numPanels, increment);
 
     setNextBtns(increment, router.getNextBtns());
     setPrevBtns(increment, router.getPrevBtns());
@@ -637,7 +720,7 @@ function addEmptyAreas(results) {
 // resutls -> object; scores by RIASEC area
 function getRIASEC(results) {
     console.warn('dataObject', dataObjects);
-    let sortedResults = sortObjByKey(results, dataObjects.areas.sorted);
+    let sortedResults = sortObjByKey(results, dataObjects.programs.areas.sorted);
     let code = "";
     for (let i = 0; i < 3; i++) {
         code += sortedResults[i].charAt(0);
@@ -804,7 +887,7 @@ function ratingEval() {
 */
 
 function findProgramMatches(RIASEC) {
-    const codesToPrograms = dataObjects.codesToPrograms;
+    const codesToPrograms = dataObjects.programs.codesToPrograms;
     const codes = RIASEC.permuts;
     let programs = [];
     RIASEC.matched = {};
@@ -894,14 +977,14 @@ function setBarGraph(RIASEC) {
 }
 
 function getCodeHTML(code, matched = false) {
-    if(matched) {
+    if (matched) {
         return `<span class="code">${code}</span>`;
     }
     return `<span class="code unmatched">${code}</span>`;
 }
 
 function checkIfMatched(MatchesObj, code) {
-    if(MatchesObj.hasOwnProperty(code) && MatchesObj[code] === true) {
+    if (MatchesObj.hasOwnProperty(code) && MatchesObj[code] === true) {
         return true;
     }
     return false;
@@ -910,10 +993,10 @@ function checkIfMatched(MatchesObj, code) {
 function buildDescription(code) {
     const descContainer = document.getElementById('desc');
     let allDescHTML = '';
-    for(const letter of code) {
-        console.log('letter', dataObjects.areas[letter.toUpperCase()]);
-        const desc = dataObjects.areas[letter.toUpperCase()].desc;
-        const areaLabel = dataObjects.areas[letter.toUpperCase()].areaLabel;
+    for (const letter of code) {
+        console.log('letter', dataObjects.programs.areas[letter.toUpperCase()]);
+        const desc = dataObjects.programs.areas[letter.toUpperCase()].desc;
+        const areaLabel = dataObjects.programs.areas[letter.toUpperCase()].areaLabel;
         const descHTML = `<div class="desc">
                             <h4><span>${areaLabel}</span></h4>
                             <p>${desc}</p>
@@ -932,11 +1015,11 @@ function setPrograms(RIASEC) {
 }
 
 function buildMatchHTML(program, RIASEC) {
-    if(dataObjects.programsToUrls.hasOwnProperty(program)) {
-        const programObj = dataObjects.programsToUrls[program];
+    if (dataObjects.programs.programsToUrls.hasOwnProperty(program)) {
+        const programObj = dataObjects.programs.programsToUrls[program];
         const url = programObj.hasOwnProperty('url') && programObj.url.length > 0 ? programObj.url.trim() : false;
         const codes = programObj.hasOwnProperty('codesArray') && programObj.codesArray.length > 0 ? ` ${getMatchedCodeHTML(programObj.codesArray, RIASEC)}` : ``;
-        if(url) {
+        if (url) {
             return `<span class="program"><a href="${url}" target="_blank">${program}</a>${codes}</span>`;
         }
         return `<span class="program">${program}${codes}</span>`;
@@ -952,9 +1035,9 @@ function getMatchedCodeHTML(codes, RIASEC) {
     let codeHTML = '';
     const matchedCodes = buildMatchedCodesArray(codes, RIASEC);
 
-    for(const code of matchedCodes) {
+    for (const code of matchedCodes) {
 
-            codeHTML += `<span class="code">${code}</span>`;
+        codeHTML += `<span class="code">${code}</span>`;
 
     }
     return codeHTML;
@@ -962,12 +1045,12 @@ function getMatchedCodeHTML(codes, RIASEC) {
 
 function buildMatchedCodesArray(codes, RIASEC) {
     const matchedCodesArray = [];
-    for(const code of codes) {
-        if(checkIfMatched(RIASEC.matched, code)) {
+    for (const code of codes) {
+        if (checkIfMatched(RIASEC.matched, code)) {
             matchedCodesArray.push(code);
         }
     }
-    if(matchedCodesArray.length > 1) {
+    if (matchedCodesArray.length > 1) {
         return reOrderArray(matchedCodesArray, RIASEC.permuts);
     }
     return matchedCodesArray;
@@ -982,13 +1065,13 @@ function reOrderArray(array, orderByArray) {
 
         if (valueA < valueB) {
             return -1;
-          }
-          if (valueA > valueB) {
+        }
+        if (valueA > valueB) {
             return 1;
-          }
+        }
 
-          // names must be equal
-          return 0;
+        // names must be equal
+        return 0;
     });
     console.log('matchedCodesSorted', array);
     return array;
