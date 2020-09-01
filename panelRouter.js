@@ -15,12 +15,18 @@ class PanelRouter {
         this.panelClass = panelClass;
         this.panels = this._childrenMatches(this.container, '.'+ panelClass);
         this.loader = document.getElementById('loader');
+
         this.prevBtnsSelector = `.prev.${panelClass}`;
         this.prevBtns = document.querySelectorAll(this.prevBtnsSelector);
+
         this.nextBtnsSelector = `.next.${panelClass}`;
         this.nextBtns = document.querySelectorAll(this.nextBtnsSelector);
-        this.jumpBtns = document.querySelectorAll('.jump');
-        this.skipBtns = document.querySelectorAll('.skip');
+
+        this.jumpBtnsSelector = `.jump.${panelClass}`;
+        this.jumpBtns = document.querySelectorAll(this.jumpBtnsSelector);
+
+        this.skipBtnsSelector = `.skip.${panelClass}`;
+        this.skipBtns = document.querySelectorAll(this.skipBtnsSelector);
 
         //defaults
         this.panelsList = {};
@@ -45,6 +51,8 @@ class PanelRouter {
         this.endingPanel = this.panels.length;
         this.prevBtns = document.querySelectorAll(this.prevBtnsSelector);
         this.nextBtns = document.querySelectorAll(this.nextBtnsSelector);
+        this.skipBtns = document.querySelectorAll(this.skipBtnsSelector);
+        this.jumpBtns = document.querySelectorAll(this.jumpBtnsSelector);
 
         this._initPanels();
         this._setPanelNavigation();
@@ -118,29 +126,26 @@ class PanelRouter {
     }
 
     _clearPanelNavigation() {
+        //removes all current event listeners
         for (const btn of this.prevBtns) {
-            const btnClone = btn.cloneNode(true);
-            btn.parentNode.replaceChild(btnClone, btn);
+            this._resetBtn(btn);
         }
         for (const btn of this.nextBtns) {
-            const btnClone = btn.cloneNode(true);
-            btn.parentNode.replaceChild(btnClone, btn);
+            this._resetBtn(btn);
         }
         for (const btn of this.jumpBtns) {
-            btn.addEventListener('click', (event) => {
-                let nextIndex = Number(event.target.dataset.jump) - 1;
-                // console.log('nextIndex', nextIndex, 'active', this.activePanel);
-                this._jumpTo(nextIndex);
-            });
+            this._resetBtn(btn);
         }
-        // activates only destination panel
         for (const btn of this.skipBtns) {
-            btn.addEventListener('click', (event) => {
-                let nextIndex = Number(event.target.dataset.skip) - 1;
-                // console.log('index', nextIndex, 'active', this.activePanel);
-                this._skipTo(nextIndex);
-            });
+            this._resetBtn(btn);
         }
+        console.debug('all btns reset');
+    }
+
+    _resetBtn(btn) {
+        const btnClone = btn.cloneNode(true);
+        btn.parentNode.replaceChild(btnClone, btn);
+        return;
     }
 
     _back(updateUrl = true) {
