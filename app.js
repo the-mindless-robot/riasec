@@ -1,25 +1,4 @@
-const dataObjects = {};
 
-async function main() {
-
-    const onetResponse = await loadOnetData();
-    const onetDataObjects = await buildOnetDataObjects(onetResponse);
-    dataObjects.onet = onetDataObjects;
-
-    console.log('this is the ONET data:', onetDataObjects);
-
-    const programData = await loadProgramData();
-    const programDataObjects = await buildProgramDataObjects(programData);
-    dataObjects.programs = programDataObjects;
-    console.log('this is the PROGRAM data:', programDataObjects);
-
-    console.log('this is the MAIN dataObject', dataObjects);
-
-    displayQuestions(dataObjects.onet.questionsHTML);
-    appStart();
-}
-
-main();
 /*
 
             dddddddd
@@ -43,50 +22,26 @@ d::::::ddddd::::::dda::::a    a:::::a      t::::::tttt:::::ta::::a    a:::::a
 
 */
 
+const dataObjects = {};
 
-// const programData = new GoogleSheet(config.sheet);
-// const onet = new OnetWebService(config.username);
-// let path = '/mnm/interestprofiler/questions';
-// if (config.spanish) {
-//     path = '/mpp/interestprofiler/questions';
-// }
-// const dataObjects = {};
-// // let codesToPrograms = null;
-// // let areaRanking = null;
-// programData.load(formatData, { end: 2 }).then(formattedData => {
-//     console.log('formattedData', formattedData);
+async function loadAllData() {
 
-//     const codesToPrograms = formattedData.codesToPrograms;
-//     const areas = addAreaRankings(formattedData);
-//     const programsToUrls = formattedData.programsToUrls;
+    const onetResponse = await loadOnetData();
+    const onetDataObjects = await buildOnetDataObjects(onetResponse);
+    dataObjects.onet = onetDataObjects;
 
-//     // dataObjects = {codesToPrograms, areas, programsToUrls};
-//     dataObjects.codesToPrograms = codesToPrograms;
-//     dataObjects.areas = areas;
-//     dataObjects.programsToUrls = programsToUrls;
+    const programData = await loadProgramData();
+    const programDataObjects = await buildProgramDataObjects(programData);
+    dataObjects.programs = programDataObjects;
 
-//     console.debug('dataObjects', dataObjects);
-// });
+    console.debug('this is the MAIN dataObject', dataObjects);
 
+    displayQuestions(dataObjects.onet.questionsHTML);
+    appStart();
+}
 
+loadAllData();
 
-// onet.call(path, { start: 1, end: 60 }, (response) => {
-//     if (response.hasOwnProperty('error')) {
-//         console.error('Error', response.error);
-//     } else {
-//         console.log('Response', response);
-
-//         dataObjects.onetData = { response };
-//         dataObjects.onetData.questionsByArea = parseQuestions(dataObjects.onetData.response.question);
-//         dataObjects.onetData.questionsHTML = randomizeQuestions(dataObjects.onetData.questionsByArea);
-
-//         console.log('this is questionsTemp', dataObjects);
-//         // parseQuestions(response.question);
-//         // appStart();
-//         displayQuestions(dataObjects.onetData.questionsHTML);
-//         appStart();
-//     }
-// });
 
 
 /*
@@ -126,7 +81,7 @@ function buildProgramDataObjects(programData) {
 }
 
 function formatData(data) {
-    console.log('data', data);
+    // console.log('data', data);
 
     const programsToUrls = data.hasOwnProperty('programs') ? formatProgramUrls(data.programs) : false;
     const codesToPrograms = data.hasOwnProperty('programs') ? formatProgramCodes(data.programs) : false;
@@ -177,7 +132,7 @@ function formatProgramUrls(programs) {
             programsToUrls[discipline] = { url, codes, codesArray };
         }
     }
-    console.log('programsToUrls', programsToUrls);
+    // console.log('programsToUrls', programsToUrls);
     return programsToUrls;
 }
 
@@ -273,7 +228,7 @@ function parseQuestions(questionsArray) {
             questions[question.area] = [question.text];
         }
     }
-    console.log('questions', questions);
+    // console.log('questions', questions);
     // return questions;
     // randomizeQuestions(questions);
     return questions;
@@ -415,7 +370,7 @@ function buildPagination(questionsList) {
     const resultsElem = panelsContainer.querySelector('#results');
     const resultsElemClone = resultsElem.cloneNode(true);
     panelsContainer.removeChild(resultsElem);
-    console.log('resElemClone', resultsElemClone);
+    // console.log('resElemClone', resultsElemClone);
     // panelsContainer.innerHTML = "";
 
     for (let i = 0; i < numPages; i++) {
@@ -504,7 +459,7 @@ function setProgressBar(router) {
     // const numPanels = router.getNumPanels() - 1;
     const numPanels = 9;
     const increment = Math.ceil(100 / numPanels);
-    console.log('increment', numPanels, increment);
+    // console.log('increment', numPanels, increment);
 
     setNextBtns(increment, router.getNextBtns());
     setPrevBtns(increment, router.getPrevBtns());
@@ -615,12 +570,12 @@ function updateHelpDisplay() {
     console.debug('current', currentPanel);
 
     if (dataArea && dataArea == 'questions') {
-        console.log('in questions', isActive);
+        // console.log('in questions', isActive);
 
         if (!isActive) {
             helpContent.style.display = 'block';
             setTimeout(() => {
-                console.log('in questions delay');
+                // console.log('in questions delay');
                 helpContent.classList.add('active');
             }, 80);
         }
@@ -628,10 +583,10 @@ function updateHelpDisplay() {
     }
 
     if (!dataArea || dataArea != 'questions') {
-        console.log('remove');
+        // console.log('remove');
         helpContent.classList.remove('active');
         setTimeout(() => {
-            console.log('left questions delay');
+            // console.log('left questions delay');
             helpContent.style.display = 'none';
         }, 300);
     }
@@ -737,7 +692,7 @@ function getRIASEC(results) {
     permutations = [...permutations, ...checkRemainingAreas(RIASEC)];
     permutations = [...permutations, ...twoLetterCodes(permutations)];
     const uniquePermutations = removeDuplicates(permutations);
-    console.log('all', uniquePermutations);
+    // console.log('all', uniquePermutations);
     RIASEC.permuts = uniquePermutations;
 
     findProgramMatches(RIASEC);
@@ -758,12 +713,12 @@ function checkRemainingAreas(RIASEC) {
     //get bottom three areas
     let remainingAreas = r.areas.slice(3);
     let additionalPermuts = [];
-    console.log('remainingAreas', remainingAreas);
+    // console.log('remainingAreas', remainingAreas);
 
     for (let area of remainingAreas) {
         let within = checkValues(baselineValue, r.scores[area]);
         let newCode = r.code.slice(0, 2) + area.charAt(0).toUpperCase();
-        console.log('newCode', newCode);
+        // console.log('newCode', newCode);
         if (within.fivePercent) {
             //get all permutaions of new code
             let permuts = getPermutations(newCode);
@@ -820,7 +775,7 @@ function computePercent(value) {
     const maxScore = Number(config.numQuestionsPerArea) * 5;
     const decimal = Number(value) / maxScore;
     const percent = decimal * 100;
-    console.log(decimal, percent, Math.floor(percent));
+    // console.log(decimal, percent, Math.floor(percent));
 
     return Math.floor(percent);
 }
@@ -994,7 +949,7 @@ function buildDescription(code) {
     const descContainer = document.getElementById('desc');
     let allDescHTML = '';
     for (const letter of code) {
-        console.log('letter', dataObjects.programs.areas[letter.toUpperCase()]);
+        // console.log('letter', dataObjects.programs.areas[letter.toUpperCase()]);
         const desc = dataObjects.programs.areas[letter.toUpperCase()].desc;
         const areaLabel = dataObjects.programs.areas[letter.toUpperCase()].areaLabel;
         const descHTML = `<div class="desc">
