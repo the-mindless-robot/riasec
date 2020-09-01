@@ -25,7 +25,7 @@ d::::::ddddd::::::dda::::a    a:::::a      t::::::tttt:::::ta::::a    a:::::a
 const dataObjects = {};
 
 async function loadAllData() {
-
+    // TODO: use loader while data is processing
     const [onetResponse, programData] = await Promise.all([loadOnetData(), loadProgramData()]);
     const [onetDataObjects, programDataObjects] = await Promise.all([buildOnetDataObjects(onetResponse), buildProgramDataObjects(programData)]);
 
@@ -174,6 +174,7 @@ function addAreaRankings(formattedData) {
     console.debug('areaRanking', areaRanking);
     return areaRanking;
 }
+
 
 /*
                                         ,d

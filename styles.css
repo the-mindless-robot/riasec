@@ -505,3 +505,7 @@ div.divider {
     font-size: 4rem;
     color: #fdb930;
 }
+
+#loader {
+    display: none;
+}
