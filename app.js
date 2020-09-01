@@ -26,12 +26,14 @@ const dataObjects = {};
 
 async function loadAllData() {
 
-    const onetResponse = await loadOnetData();
-    const onetDataObjects = await buildOnetDataObjects(onetResponse);
+    const [onetResponse, programData] = await Promise.all([loadOnetData(), loadProgramData()]);
+    const [onetDataObjects, programDataObjects] = await Promise.all([buildOnetDataObjects(onetResponse), buildProgramDataObjects(programData)]);
+
+    // const onetDataObjects = await buildOnetDataObjects(onetResponse);
     dataObjects.onet = onetDataObjects;
 
-    const programData = await loadProgramData();
-    const programDataObjects = await buildProgramDataObjects(programData);
+    // const programData = await loadProgramData();
+    // const programDataObjects = await buildProgramDataObjects(programData);
     dataObjects.programs = programDataObjects;
 
     console.debug('this is the MAIN dataObject', dataObjects);
