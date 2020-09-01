@@ -1,3 +1,18 @@
+const router = new PanelRouter('panels', 'mainPanel');
+
+async function app() {
+    router._showLoader();
+    const dataLoaded = await loadAllData();
+    if(dataLoaded) {
+        router._hideLoader();
+        displayQuestions(dataObjects.onet.questionsHTML);
+        router.updateRouter();
+        console.debug('after update active panel', router.activePanel);
+        appStart();
+    } else {
+        console.error('fail: data did not load');
+    }
+}
 
 /*
 
@@ -38,12 +53,10 @@ async function loadAllData() {
 
     console.debug('this is the MAIN dataObject', dataObjects);
 
-    displayQuestions(dataObjects.onet.questionsHTML);
-    appStart();
+    // displayQuestions(dataObjects.onet.questionsHTML);
+    // appStart();
+    return true;
 }
-
-loadAllData();
-
 
 
 /*
@@ -328,7 +341,6 @@ d::::::ddddd::::::ddi::::::is:::::ssss::::::s p:::::ppppp:::::::pl::::::la::::a 
 
 */
 function appStart() {
-    const router = new PanelRouter('panels', 'mainPanel');
     router.start();
     setEventListeners();
     setProgressBar(router);
@@ -338,6 +350,7 @@ function appStart() {
 function setEventListeners() {
     document.getElementById('resultsBtn').addEventListener('click', getResults);
     document.getElementById('clear').addEventListener('click', clearValues);
+
 }
 
 /*
@@ -1034,3 +1047,5 @@ function reOrderArray(array, orderByArray) {
     console.log('matchedCodesSorted', array);
     return array;
 }
+
+app();

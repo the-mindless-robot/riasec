@@ -40,7 +40,9 @@ class PanelRouter {
     }
 
     updateRouter() {
+        this._clearPanelNavigation();
         this.panels = this._childrenMatches(this.container, '.'+ this.panelClass);
+        this.endingPanel = this.panels.length;
         this.prevBtns = document.querySelectorAll(this.prevBtnsSelector);
         this.nextBtns = document.querySelectorAll(this.nextBtnsSelector);
 
@@ -115,7 +117,34 @@ class PanelRouter {
         console.debug('JUMP', this.jumpBtns, 'SKIP', this.skipBtns);
     }
 
+    _clearPanelNavigation() {
+        for (const btn of this.prevBtns) {
+            const btnClone = btn.cloneNode(true);
+            btn.parentNode.replaceChild(btnClone, btn);
+        }
+        for (const btn of this.nextBtns) {
+            const btnClone = btn.cloneNode(true);
+            btn.parentNode.replaceChild(btnClone, btn);
+        }
+        for (const btn of this.jumpBtns) {
+            btn.addEventListener('click', (event) => {
+                let nextIndex = Number(event.target.dataset.jump) - 1;
+                // console.log('nextIndex', nextIndex, 'active', this.activePanel);
+                this._jumpTo(nextIndex);
+            });
+        }
+        // activates only destination panel
+        for (const btn of this.skipBtns) {
+            btn.addEventListener('click', (event) => {
+                let nextIndex = Number(event.target.dataset.skip) - 1;
+                // console.log('index', nextIndex, 'active', this.activePanel);
+                this._skipTo(nextIndex);
+            });
+        }
+    }
+
     _back(updateUrl = true) {
+        console.debug('active panel', this.activePanel);
         const nextIndex = this.activePanel - 1;
         this._slideOutPanel(this.activePanel);
         if (updateUrl)
@@ -123,6 +152,7 @@ class PanelRouter {
     }
 
     _forward(updateUrl = true) {
+        console.debug('active panel', this.activePanel);
         const nextIndex = this.activePanel + 1;
         this._slideInPanel(nextIndex);
         if (updateUrl)
