@@ -35,6 +35,7 @@ class Panel {
         }
         //run options after
         if(this.onActivated) {
+            console.log('activated');
             this._run(this.onActivated, 'OnActivated');
         }
     }

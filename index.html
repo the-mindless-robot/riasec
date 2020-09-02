@@ -35,7 +35,7 @@
         </div>
         <div id="panels">
                 <div id="loader">
-                    Loading...
+                    <div class="loader-content">Loading...</div>
                 </div>
                 <div class="panel mainPanel" data-area="instructions">
                     <div class="panel-content">
@@ -150,15 +150,16 @@
                         <p>The <span class="inline-title">Detailed Assessment</span> version contains 60 questions, and is
                             recommended to get the best results.</p>
                         <div class="nav">
-                            <a class="next mainPanel startBtn detail">
-                                <span class="btnLabel">Start the Detailed Assessment</span>
+                            <a data-type="detail" class="startBtn detail">
+                                <!-- <span class="btnLabel">Start the Detailed Assessment</span> -->
+                                this is the button
                             </a>
                         </div>
                         <p class="divider">or</p>
                         <p>The <span class="inline-title">Quick Assessment</span> version contains 6 questions, and is
                             recommended for use when time is limited.</p>
                         <div class="nav">
-                            <a class="next mainPanel startBtn quick">
+                            <a data-type="quick" class="startBtn quick">
                                 <span class="btnLabel">Start the Quick Assessment</span>
                             </a>
                         </div>
@@ -216,7 +217,7 @@
                                 <span class="label">Conventional</span>
                                 <span class="value" id="Conventional-value"></span>
                             </div>
-                            <button id="clear" class="jump" data-jump="1">Reset</button>
+                            <button id="clear" class="jump mainPanel" data-jump="1">Reset</button>
                         </div>
                         <div class="programs">
                             <h2><span>Matching Programs</span></h2>

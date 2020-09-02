@@ -261,7 +261,7 @@ class PanelRouter {
     }
 
     async _showPanel(index) {
-        // console.log('loading panel');
+        console.log('loading panel');
         let panel = this.getPanelInstance(index);
         let async = panel.hasAsyncOnQueue();
 
@@ -382,6 +382,7 @@ class PanelRouter {
     }
 
     setPanelOptions(index, options) {
+        console.debug('setting options');
         this.panelsList[index].setOptions(options);
     }
 
@@ -392,7 +393,7 @@ class PanelRouter {
     }
 
     getPanelInstance(index) {
-        // console.log(`get panel i:${index}`, this.panelsList[index])
+        console.log(`get panel i:${index}`, this.panelsList[index])
         return this.panelsList[index];
     }
 

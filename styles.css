@@ -318,7 +318,7 @@ p.divider {
     margin: 10px 0;
 }
 
-a.next.startBtn {
+a.startBtn {
     border: 1px solid #d4d4d4;
     font-size: 1.25em;
     padding: 10px;
@@ -327,19 +327,19 @@ a.next.startBtn {
     font-weight: 400;
 }
 
-a.next.startBtn.detail {
+a.startBtn.detail {
     background: rgb(0, 132, 255);
     color: #fff;
     /* border-color: rgb(1, 110, 212) */
 }
 
-a.next.startBtn.detail:hover {
+a.startBtn.detail:hover {
 
     background: rgb(0, 174, 255);
     border-color: rgb(0, 132, 255);
 }
 
-a.next.startBtn.quick {
+a.startBtn.quick {
     color: rgb(0, 132, 255);
     border-color: rgb(0, 132, 255);
 }
@@ -506,6 +506,7 @@ div.divider {
     color: #fdb930;
 }
 
-#loader {
-    display: none;
+.panel.active.loading {
+    filter: blur(8px);
+    -webkit-filter: blur(3px);
 }

@@ -50,12 +50,13 @@ html, body {
 }
 
 #loader {
-    background-color: rgba(255,255,255,.8);
+    background-color: rgba(255,255,255,.5);
     position: absolute;
     height: 100%;
     width: 100%;
     z-index: 1000;
     display: none;
+
 }
 
 .loader-content {

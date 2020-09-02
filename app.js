@@ -1,18 +1,85 @@
 const router = new PanelRouter('panels', 'mainPanel');
 
 async function app() {
+
+    const firstPanel = router.getPanelInstance(0);
+    firstPanel.elem.classList.add('loading');
+
     router._showLoader();
     const dataLoaded = await loadAllData();
     if(dataLoaded) {
-        router._hideLoader();
-        displayQuestions(dataObjects.onet.questionsHTML);
-        router.updateRouter();
-        console.debug('after update active panel', router.activePanel);
+        router.setPanelOptions(0, {onActivated: finishLoading(firstPanel)});
+
         appStart();
+
     } else {
         console.error('fail: data did not load');
     }
 }
+
+function setEventListeners() {
+    const assessmentBtns = document.querySelectorAll('.startBtn');
+    for(const btn of assessmentBtns) {
+        btn.addEventListener('click', (event)=>{
+            const target = event.target.tagName;
+            const type = target === 'A'? event.target.dataset.type : event.target.parentElement.dataset.type;
+
+            console.log('use type', target, type);
+            setQuestions(type);
+        });
+    }
+}
+
+
+function setQuestions(assessmentType) {
+    console.log('use this type:', assessmentType);
+    console.log('current version:', dataObjects.version);
+    const questionsDisplayed = dataObjects.version;
+
+    if(!questionsDisplayed) {
+        dataObjects.version = assessmentType;
+
+         // display questions
+        displayQuestions(dataObjects.onet.questionsHTML);
+
+        // update router
+        router.updateRouter();
+
+        // update event listeners
+        updateEventListeners();
+
+        setProgressBar(router);
+
+    }
+
+    //show first page of quesitons
+    setTimeout(()=>{router._forward();},100);
+
+}
+
+
+function finishLoading(firstPanel) {
+    setTimeout(()=>{
+        router._hideLoader();
+        firstPanel.elem.classList.remove('loading');
+    }, 500);
+}
+
+function appStart() {
+    router.start();
+    setEventListeners();
+    setProgressBar(router);
+}
+
+/*TODO: has to be invoked after questions/results sections are built*/
+function updateEventListeners() {
+    document.getElementById('resultsBtn').addEventListener('click', getResults);
+    document.getElementById('clear').addEventListener('click', clearValues);
+
+}
+
+
+app();
 
 /*
 
@@ -37,7 +104,9 @@ d::::::ddddd::::::dda::::a    a:::::a      t::::::tttt:::::ta::::a    a:::::a
 
 */
 
-const dataObjects = {};
+const dataObjects = {
+    version: false
+};
 
 async function loadAllData() {
     // TODO: use loader while data is processing
@@ -325,33 +394,6 @@ d::::::ddddd::::::ddi::::::is:::::ssss::::::s p:::::ppppp:::::::pl::::::la::::a 
                                              ppppppppp
 
 */
-
-
-/*
-
-
-                                        ,d
-                                        88
-8b,dPPYba,   ,adPPYba,   88       88  MM88MMM  ,adPPYba,  8b,dPPYba,
-88P'   "Y8  a8"     "8a  88       88    88    a8P_____88  88P'   "Y8
-88          8b       d8  88       88    88    8PP"""""""  88
-88          "8a,   ,a8"  "8a,   ,a88    88,   "8b,   ,aa  88
-88           `"YbbdP"'    `"YbbdP'Y8    "Y888  `"Ybbd8"'  88
-
-
-*/
-function appStart() {
-    router.start();
-    setEventListeners();
-    setProgressBar(router);
-}
-
-/*TODO: has to be invoked after questions/results sections are built*/
-function setEventListeners() {
-    document.getElementById('resultsBtn').addEventListener('click', getResults);
-    document.getElementById('clear').addEventListener('click', clearValues);
-
-}
 
 /*
 
@@ -1048,4 +1090,3 @@ function reOrderArray(array, orderByArray) {
     return array;
 }
 
-app();
