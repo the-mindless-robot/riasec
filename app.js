@@ -1,3 +1,25 @@
+/*
+  aaaaaaaaaaaaa  ppppp   ppppppppp   ppppp   ppppppppp
+  a::::::::::::a p::::ppp:::::::::p  p::::ppp:::::::::p
+  aaaaaaaaa:::::ap:::::::::::::::::p p:::::::::::::::::p
+           a::::app::::::ppppp::::::ppp::::::ppppp::::::p
+    aaaaaaa:::::a p:::::p     p:::::p p:::::p     p:::::p
+  aa::::::::::::a p:::::p     p:::::p p:::::p     p:::::p
+ a::::aaaa::::::a p:::::p     p:::::p p:::::p     p:::::p
+a::::a    a:::::a p:::::p    p::::::p p:::::p    p::::::p
+a::::a    a:::::a p:::::ppppp:::::::p p:::::ppppp:::::::p
+a:::::aaaa::::::a p::::::::::::::::p  p::::::::::::::::p
+ a::::::::::aa:::ap::::::::::::::pp   p::::::::::::::pp
+  aaaaaaaaaa  aaaap::::::pppppppp     p::::::pppppppp
+                  p:::::p             p:::::p
+                  p:::::p             p:::::p
+                 p:::::::p           p:::::::p
+                 p:::::::p           p:::::::p
+                 p:::::::p           p:::::::p
+                 ppppppppp           ppppppppp
+
+*/
+
 const router = new PanelRouter('panels', 'mainPanel');
 
 async function app() {
@@ -8,6 +30,7 @@ async function app() {
     router._showLoader();
     const dataLoaded = await loadAllData();
     if(dataLoaded) {
+        // hide loader
         router.setPanelOptions(0, {onActivated: finishLoading(firstPanel)});
 
         appStart();
@@ -15,6 +38,19 @@ async function app() {
     } else {
         console.error('fail: data did not load');
     }
+}
+
+function finishLoading(firstPanel) {
+    setTimeout(()=>{
+        router._hideLoader();
+        firstPanel.elem.classList.remove('loading');
+    }, 500);
+}
+
+function appStart() {
+    router.start();
+    setEventListeners();
+    setProgressBar(router);
 }
 
 function setEventListeners() {
@@ -30,51 +66,34 @@ function setEventListeners() {
     }
 }
 
-
-function setQuestions(assessmentType) {
-    console.log('use this type:', assessmentType);
-    console.log('current version:', dataObjects.version);
-    const questionsDisplayed = dataObjects.version;
-
-    if(!questionsDisplayed) {
-        dataObjects.version = assessmentType;
-
-         // display questions
-        displayQuestions(dataObjects.onet.questionsHTML);
-
-        // update router
-        router.updateRouter();
-
-        // update event listeners
-        updateEventListeners();
-
-        setProgressBar(router);
-
-    }
-
-    //show first page of quesitons
-    setTimeout(()=>{router._forward();},100);
-
-}
-
-
-function finishLoading(firstPanel) {
-    setTimeout(()=>{
-        router._hideLoader();
-        firstPanel.elem.classList.remove('loading');
-    }, 500);
-}
-
-function appStart() {
-    router.start();
-    setEventListeners();
-    setProgressBar(router);
-}
-
 /*TODO: has to be invoked after questions/results sections are built*/
 function updateEventListeners() {
     document.getElementById('resultsBtn').addEventListener('click', getResults);
     document.getElementById('clear').addEventListener('click', clearValues);
+
+}
+
+function setQuestions(assessmentType) {
+    console.log('use this type:', assessmentType);
+    console.log('current version:', dataObjects.version);
+
+    // display questions
+    displayQuestions(assessmentType);
+
+    // set new current type
+    dataObjects.version = assessmentType;
+
+    // update router
+    router.updateRouter();
+
+    // update event listeners
+    updateEventListeners();
+
+    setProgressBar(router);
+
+    //show first page of quesitons
+    //TODO: control timing to avoid race condition
+    setTimeout(() => { router._forward(); }, 100);
 
 }
 
@@ -109,7 +128,6 @@ const dataObjects = {
 };
 
 async function loadAllData() {
-    // TODO: use loader while data is processing
     const [onetResponse, programData] = await Promise.all([loadOnetData(), loadProgramData()]);
     const [onetDataObjects, programDataObjects] = await Promise.all([buildOnetDataObjects(onetResponse), buildProgramDataObjects(programData)]);
 
@@ -122,7 +140,7 @@ async function loadAllData() {
 
     console.debug('this is the MAIN dataObject', dataObjects);
 
-    // displayQuestions(dataObjects.onet.questionsHTML);
+    // displayQuestionOnets(dataObjects.onet.questionsHTML);
     // appStart();
     return true;
 }
@@ -342,7 +360,7 @@ function randomizeQuestions(questions) {
         }
         numOptions--;
     }
-    // displayQuestions(arrayOfQuestionsHTML);
+    // displayQuestionOnets(arrayOfQuestionsHTML);
     return arrayOfQuestionsHTML;
 }
 
@@ -409,29 +427,34 @@ a8"    `Y88  88       88  a8P_____88  I8[    ""    88     88  a8"     "8a  88P' 
          88
 */
 
-function displayQuestions(arrayOfQuestions) {
-    let questionsList = [...arrayOfQuestions];
+function displayQuestions(assessmentType) {
+    let questionsList = false;
+    if(assessmentType == 'detail') {
+       questionsList = [...dataObjects.onet.questionsHTML]
+    }
+
     buildPagination(questionsList);
     initStars();
 }
 
 function buildPagination(questionsList) {
+    console.debug('questionsList:', questionsList);
 
-    const odd = Number(config.numQuestionsPerArea) % 2 == 0 ? false : true;
-    let questionsPerPage = 10;
-    if (odd) {
-        questionsPerPage = questionsList.length > 36 ? 15 : 10;
-    }
-    const numPages = Math.ceil(questionsList.length / questionsPerPage);
-
+    // const odd = Number(config.numQuestionsPerArea) % 2 == 0 ? false : true;
+    // let questionsPerPage = 10;
+    // if (odd) {
+    //     questionsPerPage = questionsList.length > 36 ? 15 : 10;
+    // }
+    // const numPages = Math.ceil(questionsList.length / questionsPerPage);
+    const questionsPerPage = 10;
+    const numQuestionPages = 6; //this is not the total number of pages
     const panelsContainer = document.getElementById('panels');
-    const resultsElem = panelsContainer.querySelector('#results');
-    const resultsElemClone = resultsElem.cloneNode(true);
-    panelsContainer.removeChild(resultsElem);
+    const resultsPanel = copyResultsPanel(panelsContainer);
+
     // console.log('resElemClone', resultsElemClone);
     // panelsContainer.innerHTML = "";
 
-    for (let i = 0; i < numPages; i++) {
+    for (let i = 0; i < numQuestionPages; i++) {
         const newPanel = buildPanel();
         const panelContent = `<div class="panel-content">
             <h2>I would like to...</h2>
@@ -441,14 +464,23 @@ function buildPagination(questionsList) {
                     </ol>
                 </div>
                 <div class="nav">
-                    ${getNavValue(i, numPages)}
+                    ${getNavValue(i, numQuestionPages)}
                 </div>
             </div>`;
         newPanel.innerHTML = panelContent;
         panelsContainer.appendChild(newPanel);
     }
-    panelsContainer.appendChild(resultsElemClone);
+    panelsContainer.appendChild(resultsPanel);
     return;
+}
+
+function copyResultsPanel(panelsContainer) {
+
+    const resultsElem = panelsContainer.querySelector('#results');
+    const resultsElemClone = resultsElem.cloneNode(true);
+    panelsContainer.removeChild(resultsElem);
+
+    return resultsElemClone;
 }
 
 
