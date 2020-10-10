@@ -428,6 +428,8 @@ a8"    `Y88  88       88  a8P_____88  I8[    ""    88     88  a8"     "8a  88P' 
 */
 
 function displayQuestions(assessmentType) {
+
+    //build questions object here
     let questionsList = false;
     if(assessmentType == 'detail') {
        questionsList = [...dataObjects.onet.questionsHTML]
@@ -446,44 +448,80 @@ function buildPagination(questionsList) {
     //     questionsPerPage = questionsList.length > 36 ? 15 : 10;
     // }
     // const numPages = Math.ceil(questionsList.length / questionsPerPage);
-    const questionsPerPage = 10;
-    const numQuestionPages = 6; //this is not the total number of pages
+    // const questionsPerPage = 10;
+    // const numQuestionPages = 6; //this is not the total number of pages
+    const questionsObj = {
+        numPages: 6,
+        questionsPerPage: 10,
+        questionsList
+    };
     const panelsContainer = document.getElementById('panels');
-    const resultsPanel = copyResultsPanel(panelsContainer);
+    const resultsPanel = copyAndRemoveResultsPanel(panelsContainer);
+    clearPrevQuestionPanels(panelsContainer);
+    addNewQuestionPanels(panelsContainer, questionsObj);
 
     // console.log('resElemClone', resultsElemClone);
     // panelsContainer.innerHTML = "";
 
-    for (let i = 0; i < numQuestionPages; i++) {
+    // for (let i = 0; i < numQuestionPages; i++) {
+    //     const newPanel = buildPanel();
+    //     const panelContent = `<div class="panel-content">
+    //         <h2>I would like to...</h2>
+    //             <div id="questions">
+    //                 <ol>
+    //                 ${addQuestions(i, questionsPerPage, questionsList)}
+    //                 </ol>
+    //             </div>
+    //             <div class="nav">
+    //                 ${getNavValue(i, numQuestionPages)}
+    //             </div>
+    //         </div>`;
+    //     newPanel.innerHTML = panelContent;
+    //     panelsContainer.appendChild(newPanel);
+    // }
+    panelsContainer.appendChild(resultsPanel);
+    return;
+}
+
+function clearPrevQuestionPanels(panelsContainer) {
+    console.debug('DELETING');
+    const questionPanels = panelsContainer.querySelectorAll('[data-area="questions"]');
+    console.warn('CLEARING PANELS',questionPanels);
+    for(const panel of questionPanels) {
+        panelsContainer.removeChild(panel);
+    }
+    return;
+}
+
+function addNewQuestionPanels(container, questionsObj) {
+    console.debug('BUILDING');
+    const panelsContainer = container;
+    for (let i = 0; i < questionsObj.numPages; i++) {
         const newPanel = buildPanel();
         const panelContent = `<div class="panel-content">
             <h2>I would like to...</h2>
                 <div id="questions">
                     <ol>
-                    ${addQuestions(i, questionsPerPage, questionsList)}
+                    ${addQuestions(i, questionsObj.questionsPerPage, questionsObj.questionsList)}
                     </ol>
                 </div>
                 <div class="nav">
-                    ${getNavValue(i, numQuestionPages)}
+                    ${getNavValue(i, questionsObj.numPages)}
                 </div>
             </div>`;
         newPanel.innerHTML = panelContent;
         panelsContainer.appendChild(newPanel);
     }
-    panelsContainer.appendChild(resultsPanel);
-    return;
 }
 
-function copyResultsPanel(panelsContainer) {
-
+function copyAndRemoveResultsPanel(panelsContainer) {
+    console.debug('COPYING');
     const resultsElem = panelsContainer.querySelector('#results');
     const resultsElemClone = resultsElem.cloneNode(true);
     panelsContainer.removeChild(resultsElem);
 
     return resultsElemClone;
 }
-
-
 
 function buildPanel() {
     const newPanel = document.createElement('div');
