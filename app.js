@@ -429,57 +429,39 @@ a8"    `Y88  88       88  a8P_____88  I8[    ""    88     88  a8"     "8a  88P' 
 
 function displayQuestions(assessmentType) {
 
-    //build questions object here
-    let questionsList = false;
-    if(assessmentType == 'detail') {
-       questionsList = [...dataObjects.onet.questionsHTML]
-    }
+    const questionsList = buildQuestionList(assessmentType);
+    const questionsPerPage = getQuestionsPerPage(assessmentType);
+    const numPages = 6; //number of question pages not total pages
 
-    buildPagination(questionsList);
+    const questionsObj = {
+        numPages,
+        questionsPerPage,
+        questionsList
+    };
+
+    buildPagination(questionsObj);
     initStars();
 }
 
-function buildPagination(questionsList) {
-    console.debug('questionsList:', questionsList);
+function buildQuestionList(assessmentType) {
+    return [...dataObjects.onet.questionsHTML];
+}
 
-    // const odd = Number(config.numQuestionsPerArea) % 2 == 0 ? false : true;
-    // let questionsPerPage = 10;
-    // if (odd) {
-    //     questionsPerPage = questionsList.length > 36 ? 15 : 10;
-    // }
-    // const numPages = Math.ceil(questionsList.length / questionsPerPage);
-    // const questionsPerPage = 10;
-    // const numQuestionPages = 6; //this is not the total number of pages
-    const questionsObj = {
-        numPages: 6,
-        questionsPerPage: 10,
-        questionsList
-    };
+function getQuestionsPerPage(assessmentType) {
+    const numQuestions = assessmentType == 'quick' ? 1 : 10;
+    return numQuestions;
+}
+
+function buildPagination(questionsObj) {
+    console.debug('questionsObj:', questionsObj);
+
     const panelsContainer = document.getElementById('panels');
     const resultsPanel = copyAndRemoveResultsPanel(panelsContainer);
+
     clearPrevQuestionPanels(panelsContainer);
     addNewQuestionPanels(panelsContainer, questionsObj);
-
-    // console.log('resElemClone', resultsElemClone);
-    // panelsContainer.innerHTML = "";
-
-    // for (let i = 0; i < numQuestionPages; i++) {
-    //     const newPanel = buildPanel();
-    //     const panelContent = `<div class="panel-content">
-    //         <h2>I would like to...</h2>
-    //             <div id="questions">
-    //                 <ol>
-    //                 ${addQuestions(i, questionsPerPage, questionsList)}
-    //                 </ol>
-    //             </div>
-    //             <div class="nav">
-    //                 ${getNavValue(i, numQuestionPages)}
-    //             </div>
-    //         </div>`;
-    //     newPanel.innerHTML = panelContent;
-    //     panelsContainer.appendChild(newPanel);
-    // }
     panelsContainer.appendChild(resultsPanel);
+
     return;
 }
 
