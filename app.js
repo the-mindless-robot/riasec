@@ -455,9 +455,12 @@ function buildQuestionList(assessmentType) {
 function getShortVersionQuestions() {
     const areaQuestionsHTML = [];
     const areas = Object.keys(dataObjects.programs.areas);
+    console.warn("AREAs", areas);
     for(const area of areas) {
-        const areaData = dataObjects.programs.areas[area];
-        areaQuestionsHTML.push(buildAreaQuestionHTML(areaData));
+        if(area.length == 1 ) {
+            const areaData = dataObjects.programs.areas[area];
+            areaQuestionsHTML.push(buildAreaQuestionHTML(areaData));
+        }
     }
     console.warn("AREA HTML", areaQuestionsHTML);
     return areaQuestionsHTML;
@@ -467,6 +470,11 @@ function buildAreaQuestionHTML(area) {
     return `
         <h4>${area.areaLabel}</h4>
         <p>${area.desc}</p>
+        <p>Examples
+            <ul>
+                ${getAreaExamples(area.areaLabel)}
+            </ul>
+        </p>
         <br/>
         <div class="value" data-area="${area.areaLabel}">
             <i data-value="1" class="material-icons">star</i>
@@ -476,6 +484,27 @@ function buildAreaQuestionHTML(area) {
             <i data-value="5" class="material-icons">star</i>
         </div>
     `;
+}
+
+function getAreaExamples(area) {
+    console.warn("DATA OBJECTS",dataObjects.onet.questionsByArea[area]);
+    const allQuestions = [...dataObjects.onet.questionsByArea[area]];
+    let examplesHTML = "";
+    let numOptions = allQuestions.length - 1;
+
+    for(let i = 0; i < 3; i++) {
+        const randomIndex = getRandomNumber(numOptions);
+        const example = allQuestions[randomIndex];
+        examplesHTML += buildExampleHTML(example);
+        allQuestions.splice(randomIndex, 1);
+        numOptions--;
+    }
+
+    return examplesHTML;
+
+}
+function buildExampleHTML(example) {
+    return `<li>${example}</li>`;
 }
 
 function getQuestionsPerPage(assessmentType) {
@@ -533,7 +562,7 @@ function buildDetailVersionContent(i, questionsObj) {
 
 function buildQuickVersionContent(i, questionsObj) {
     return `<div class="panel-content">
-            <h2>I would like to...</h2>
+            <h2>I am...</h2>
                 <div id="questions">
                    ${questionsObj.questionsList[i]}
                 </div>
