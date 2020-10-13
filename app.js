@@ -93,6 +93,7 @@ function setQuestions(assessmentType) {
 
     //show first page of quesitons
     //TODO: control timing to avoid race condition
+    //
     setTimeout(() => { router._forward(); }, 100);
 
 }
@@ -434,6 +435,7 @@ function displayQuestions(assessmentType) {
     const numPages = 6; //number of question pages not total pages
 
     const questionsObj = {
+        assessmentType,
         numPages,
         questionsPerPage,
         questionsList
@@ -444,7 +446,36 @@ function displayQuestions(assessmentType) {
 }
 
 function buildQuestionList(assessmentType) {
+    if(assessmentType == 'quick') {
+        return getShortVersionQuestions();
+    }
     return [...dataObjects.onet.questionsHTML];
+}
+
+function getShortVersionQuestions() {
+    const areaQuestionsHTML = [];
+    const areas = Object.keys(dataObjects.programs.areas);
+    for(const area of areas) {
+        const areaData = dataObjects.programs.areas[area];
+        areaQuestionsHTML.push(buildAreaQuestionHTML(areaData));
+    }
+    console.warn("AREA HTML", areaQuestionsHTML);
+    return areaQuestionsHTML;
+}
+
+function buildAreaQuestionHTML(area) {
+    return `
+        <h4>${area.areaLabel}</h4>
+        <p>${area.desc}</p>
+        <br/>
+        <div class="value" data-area="${area.areaLabel}">
+            <i data-value="1" class="material-icons">star</i>
+            <i data-value="2" class="material-icons">star</i>
+            <i data-value="3" class="material-icons">star</i>
+            <i data-value="4" class="material-icons">star</i>
+            <i data-value="5" class="material-icons">star</i>
+        </div>
+    `;
 }
 
 function getQuestionsPerPage(assessmentType) {
@@ -480,20 +511,36 @@ function addNewQuestionPanels(container, questionsObj) {
     const panelsContainer = container;
     for (let i = 0; i < questionsObj.numPages; i++) {
         const newPanel = buildPanel();
-        const panelContent = `<div class="panel-content">
+        const panelContent = questionsObj.assessmentType == 'quick' ? buildQuickVersionContent(i, questionsObj) : buildDetailVersionContent(i, questionsObj);
+        newPanel.innerHTML = panelContent;
+        panelsContainer.appendChild(newPanel);
+    }
+}
+
+function buildDetailVersionContent(i, questionsObj) {
+    return `<div class="panel-content">
+    <h2>I would like to...</h2>
+        <div id="questions">
+            <ol>
+            ${addQuestions(i, questionsObj.questionsPerPage, questionsObj.questionsList)}
+            </ol>
+        </div>
+        <div class="nav">
+            ${getNavValue(i, questionsObj.numPages)}
+        </div>
+    </div>`;
+}
+
+function buildQuickVersionContent(i, questionsObj) {
+    return `<div class="panel-content">
             <h2>I would like to...</h2>
                 <div id="questions">
-                    <ol>
-                    ${addQuestions(i, questionsObj.questionsPerPage, questionsObj.questionsList)}
-                    </ol>
+                   ${questionsObj.questionsList[i]}
                 </div>
                 <div class="nav">
                     ${getNavValue(i, questionsObj.numPages)}
                 </div>
             </div>`;
-        newPanel.innerHTML = panelContent;
-        panelsContainer.appendChild(newPanel);
-    }
 }
 
 function copyAndRemoveResultsPanel(panelsContainer) {
@@ -566,6 +613,7 @@ function addQuestions(i, questionsPerPage, questionsList) {
 function setProgressBar(router) {
 
     //TODO:fix hard coded numpanels
+    // dont count first panel
     // const numPanels = router.getNumPanels() - 1;
     const numPanels = 9;
     const increment = Math.ceil(100 / numPanels);
