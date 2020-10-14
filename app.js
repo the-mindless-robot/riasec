@@ -570,6 +570,7 @@ function buildAreaQuestionHTML(area) {
             <i data-value="5" class="material-icons">star</i>
             <span class="ratingLabel">Agree</span>
         </div>
+        <div class="divider"></div>
     `;
 }
 

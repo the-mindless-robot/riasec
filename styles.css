@@ -206,7 +206,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#001b33",endCo
 
 #progress {
     width: 0;
-    height: 6px;
+    height: 10px;
     background: #fcad11;
     background: rgb(252,173,17);
     background: rgb(235,155,0);
@@ -467,6 +467,7 @@ div.divider {
     margin-top: 25px;
     display: block;
     position: relative;
+    font-weight: 400;
 }
 
 #results h2 span {
@@ -529,7 +530,9 @@ div.divider {
     background: -moz-linear-gradient(270deg, rgb(0, 0, 0) 0%, rgb(255, 170, 0) 100%);
     background: -webkit-linear-gradient(270deg, rgb(0, 0, 0) 0%, rgb(255, 170, 0) 100%);
     background: linear-gradient(270deg, rgb(105, 70, 0) 0%, rgb(255, 177, 21) 100%);
+
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#eb9b00",endColorstr="#ffde9d",GradientType=1);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     -webkit-box-decoration-break: clone;
@@ -563,4 +566,47 @@ div.divider {
 
 .flexEnd {
     justify-content: flex-end;
+}
+
+.steps {
+    display: flex;
+}
+
+.step {
+    padding: 20px;
+    position: relative;
+    font-size: 1.2em;
+}
+
+span.stepNum {
+    font-weight: 900;
+    font-size: 7em;
+    /* border: 5px solid black; */
+    /* border-radius: 50%; */
+    position: absolute;
+    z-index: -1;
+    color: rgb(252 173 17 / 22%);
+    top: -28px;
+    left: -28px;
+    right: 0;
+    background: -moz-linear-gradient(90deg, rgb(255 211 126) 1%, rgb(255 224 162) 10%, rgb(255 244 221) 25%);
+    background: -webkit-linear-gradient(90deg, rgb(255 211 126) 1%, rgb(255 224 162) 10%, rgb(255 244 221) 25%);
+    background: linear-gradient(90deg, rgb(255 211 126) 1%, rgb(255 224 162) 10%, rgb(255 244 221) 25%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#eb9b00",endColorstr="#ffde9d",GradientType=1);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    display: inline-block;
+}
+
+#pageContainer .step h4 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.25em;
+}
+
+#pageContainer .step p {
+    margin-top: 0;
 }
