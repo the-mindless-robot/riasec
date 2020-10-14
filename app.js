@@ -617,7 +617,7 @@ a8"    `Y88  a8P_____88    88     ""     `Y8  88  88
 */
 
 function buildDetailVersionContent(i, questionsObj) {
-    return `<div class="panel-content">
+    return `<div class="panel-content onet">
     <h2>I would like to...</h2>
         <div id="questions">
             <ol>
@@ -940,6 +940,8 @@ function getRIASEC(results) {
     // console.log('all', uniquePermutations);
     RIASEC.permuts = uniquePermutations;
 
+
+
     findProgramMatches(RIASEC);
 }
 
@@ -1109,6 +1111,8 @@ function findProgramMatches(RIASEC) {
 
     RIASEC.programs = removeDuplicates(programs);
 
+    dataObjects.results = RIASEC;
+
     displayResults(RIASEC);
 
 }
@@ -1208,10 +1212,57 @@ function buildDescription(code) {
 
 function setPrograms(RIASEC) {
     let matchesHTML = "";
-    for (let program of RIASEC.programs) {
-        matchesHTML += buildMatchHTML(program, RIASEC);
+    const matchesContainer = document.getElementById('matches');
+    const numMatches = RIASEC.programs.length;
+
+    // show first 15
+    for(let i = 0; i < 15; i++) {
+        const program = RIASEC.programs[i];
+        if(program) {
+            matchesHTML += buildMatchHTML(program, RIASEC);
+        }
+
     }
-    document.getElementById('matches').innerHTML = matchesHTML;
+
+    matchesContainer.innerHTML = matchesHTML;
+
+    if(numMatches > 15) {
+        console.log('MOAR!!!!!!!!!!');
+        const showMoreBtnElem = buildShowMoreBTN();
+        matchesContainer.append(showMoreBtnElem);
+
+
+    }
+
+
+}
+
+function buildShowMoreBTN() {
+    const showMoreBTN = document.createElement("A");
+    showMoreBTN.id = "showMore";
+    showMoreBTN.classList.add('actionBtn', 'blue');
+    showMoreBTN.innerHTML = `Show More Matches`;
+
+    showMoreBTN.addEventListener('click', (ev)=>{
+        console.log('MOAR!!!', dataObjects.results.programs);
+        const matches = [...dataObjects.results.programs];
+        // const removeMatches = matches.splice(0, 15);
+        // console.warn("REMOVED", removeMatches);
+        // console.warn("REMAINING", matches);
+
+        moreMatchesHTML = '';
+        for(const program of matches) {
+            moreMatchesHTML += buildMatchHTML(program, dataObjects.results);
+        }
+
+        const moreBtn = document.getElementById('showMore');
+        const matchesContainer = document.getElementById('matches');
+        matchesContainer.removeChild(moreBtn);
+        matchesContainer.innerHTML = moreMatchesHTML;
+
+    });
+
+    return showMoreBTN;
 }
 
 function buildMatchHTML(program, RIASEC) {

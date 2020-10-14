@@ -34,7 +34,22 @@
         </div>
         <div id="panels">
             <div id="loader">
-                <div class="loader-content">Loading...</div>
+                <div class="loader-content">
+                    <div class="quote">
+
+                        <p>
+                            "A person who never made a mistake never tried anything new."
+                        </p>
+                        <p class="author">
+                            &mdash;Albert Einstein
+                        </p>
+                    </div>
+                    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                    <div>
+                        Loading
+                    </div>
+
+                </div>
             </div>
             <div class="panel mainPanel" data-area="instructions">
                 <div class="panel-content">
@@ -236,7 +251,9 @@
                                 <span class="label">Conventional</span>
                                 <span class="value" id="Conventional-value"></span>
                             </div>
-                            <button id="clear" class="jump mainPanel" data-jump="1">Reset</button>
+                            <a id="clear" class="jump mainPanel actionBtn blue" data-jump="1">
+                                Try it again
+                            </a>
                         </div>
                         <div class="programs">
                             <h2><span>Matching Programs</span></h2>
@@ -244,6 +261,12 @@
 
                             </div>
                         </div>
+                    </div>
+                    <div class="feedback">
+                        <h2><span>Comments & Feedback</span></h2>
+                        <p>This tool is still actively being developed.  Please help us make it better by filling out the feedback form below.  The survey takes less than 2 minutes.</p>
+                        <p>Thank you!</p>
+                        <a href="" class="actionBtn blue">Give Feedback</a>
                     </div>
 
                 </div>
