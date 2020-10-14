@@ -447,64 +447,9 @@ function displayQuestions(assessmentType) {
 
 function buildQuestionList(assessmentType) {
     if(assessmentType == 'quick') {
-        return getShortVersionQuestions();
+        return getQuickVersionQuestions();
     }
     return [...dataObjects.onet.questionsHTML];
-}
-
-function getShortVersionQuestions() {
-    const areaQuestionsHTML = [];
-    const areas = Object.keys(dataObjects.programs.areas);
-    console.warn("AREAs", areas);
-    for(const area of areas) {
-        if(area.length == 1 ) {
-            const areaData = dataObjects.programs.areas[area];
-            areaQuestionsHTML.push(buildAreaQuestionHTML(areaData));
-        }
-    }
-    console.warn("AREA HTML", areaQuestionsHTML);
-    return areaQuestionsHTML;
-}
-
-function buildAreaQuestionHTML(area) {
-    return `
-        <h4>${area.areaLabel}</h4>
-        <p>${area.desc}</p>
-        <p>Examples
-            <ul>
-                ${getAreaExamples(area.areaLabel)}
-            </ul>
-        </p>
-        <br/>
-        <div class="value" data-area="${area.areaLabel}">
-            <i data-value="1" class="material-icons">star</i>
-            <i data-value="2" class="material-icons">star</i>
-            <i data-value="3" class="material-icons">star</i>
-            <i data-value="4" class="material-icons">star</i>
-            <i data-value="5" class="material-icons">star</i>
-        </div>
-    `;
-}
-
-function getAreaExamples(area) {
-    console.warn("DATA OBJECTS",dataObjects.onet.questionsByArea[area]);
-    const allQuestions = [...dataObjects.onet.questionsByArea[area]];
-    let examplesHTML = "";
-    let numOptions = allQuestions.length - 1;
-
-    for(let i = 0; i < 3; i++) {
-        const randomIndex = getRandomNumber(numOptions);
-        const example = allQuestions[randomIndex];
-        examplesHTML += buildExampleHTML(example);
-        allQuestions.splice(randomIndex, 1);
-        numOptions--;
-    }
-
-    return examplesHTML;
-
-}
-function buildExampleHTML(example) {
-    return `<li>${example}</li>`;
 }
 
 function getQuestionsPerPage(assessmentType) {
@@ -523,6 +468,15 @@ function buildPagination(questionsObj) {
     panelsContainer.appendChild(resultsPanel);
 
     return;
+}
+
+function copyAndRemoveResultsPanel(panelsContainer) {
+    console.debug('COPYING');
+    const resultsElem = panelsContainer.querySelector('#results');
+    const resultsElemClone = resultsElem.cloneNode(true);
+    panelsContainer.removeChild(resultsElem);
+
+    return resultsElemClone;
 }
 
 function clearPrevQuestionPanels(panelsContainer) {
@@ -546,6 +500,117 @@ function addNewQuestionPanels(container, questionsObj) {
     }
 }
 
+function buildPanel() {
+    const newPanel = document.createElement('div');
+    newPanel.classList.add('panel');
+    newPanel.classList.add('mainPanel');
+    newPanel.dataset.area = 'questions';
+    return newPanel;
+}
+
+
+/*
+
+                          88              88
+                          ""              88
+                                          88
+ ,adPPYb,d8  88       88  88   ,adPPYba,  88   ,d8
+a8"    `Y88  88       88  88  a8"     ""  88 ,a8"
+8b       88  88       88  88  8b          8888[
+"8a    ,d88  "8a,   ,a88  88  "8a,   ,aa  88`"Yba,
+ `"YbbdP'88   `"YbbdP'Y8  88   `"Ybbd8"'  88   `Y8a
+         88
+         88
+*/
+
+
+
+function getQuickVersionQuestions() {
+    const areaQuestionsHTML = [];
+    const areas = Object.keys(dataObjects.programs.areas);
+    console.warn("AREAs", areas);
+    for(const area of areas) {
+        if(area.length == 1 ) {
+            const areaData = dataObjects.programs.areas[area];
+            areaQuestionsHTML.push(buildAreaQuestionHTML(areaData));
+        }
+    }
+    console.warn("AREA HTML", areaQuestionsHTML);
+    return areaQuestionsHTML;
+}
+
+function buildQuickVersionContent(i, questionsObj) {
+    return `<div class="panel-content areaQuestion">
+            <h4>I am...</h4>
+                <div id="questions">
+                   ${questionsObj.questionsList[i]}
+                </div>
+                <div class="nav">
+                    ${getNavValue(i, questionsObj.numPages)}
+                </div>
+            </div>`;
+}
+
+function buildAreaQuestionHTML(area) {
+    return `
+        <h2>${area.areaLabel}</h2>
+        <p class="areaDesc">${area.desc}</p>
+        <p><span class="examples">Examples</span>
+            <ul>
+                ${getAreaExamples(area.areaLabel)}
+            </ul>
+        </p>
+        <br/>
+        <div class="value" data-area="${area.areaLabel}">
+            <span class="ratingLabel">Disagree</span>
+            <i data-value="1" class="material-icons">star</i>
+            <i data-value="2" class="material-icons">star</i>
+            <i data-value="3" class="material-icons">star</i>
+            <i data-value="4" class="material-icons">star</i>
+            <i data-value="5" class="material-icons">star</i>
+            <span class="ratingLabel">Agree</span>
+        </div>
+    `;
+}
+
+function getAreaExamples(area) {
+    console.warn("DATA OBJECTS",dataObjects.onet.questionsByArea[area]);
+    const allQuestions = [...dataObjects.onet.questionsByArea[area]];
+    let examplesHTML = "";
+    let numOptions = allQuestions.length - 1;
+
+    for(let i = 0; i < 3; i++) {
+        const randomIndex = getRandomNumber(numOptions);
+        const example = allQuestions[randomIndex];
+        examplesHTML += buildExampleHTML(example);
+        allQuestions.splice(randomIndex, 1);
+        numOptions--;
+    }
+
+    return examplesHTML;
+
+}
+
+function buildExampleHTML(example) {
+    return `<li>${example}</li>`;
+}
+
+
+
+/*
+
+         88                                   88  88
+         88                ,d                 ""  88
+         88                88                     88
+ ,adPPYb,88   ,adPPYba,  MM88MMM  ,adPPYYba,  88  88
+a8"    `Y88  a8P_____88    88     ""     `Y8  88  88
+8b       88  8PP"""""""    88     ,adPPPPP88  88  88
+"8a,   ,d88  "8b,   ,aa    88,    88,    ,88  88  88
+ `"8bbdP"Y8   `"Ybbd8"'    "Y888  `"8bbdP"Y8  88  88
+
+
+*/
+
 function buildDetailVersionContent(i, questionsObj) {
     return `<div class="panel-content">
     <h2>I would like to...</h2>
@@ -560,34 +625,30 @@ function buildDetailVersionContent(i, questionsObj) {
     </div>`;
 }
 
-function buildQuickVersionContent(i, questionsObj) {
-    return `<div class="panel-content">
-            <h2>I am...</h2>
-                <div id="questions">
-                   ${questionsObj.questionsList[i]}
-                </div>
-                <div class="nav">
-                    ${getNavValue(i, questionsObj.numPages)}
-                </div>
-            </div>`;
+function addQuestions(i, questionsPerPage, questionsList) {
+    let questionsHTML = '';
+    let index = i * questionsPerPage;
+    const end = index + questionsPerPage;
+    for (index; index < end; index++) {
+        if (questionsList[index]) {
+            questionsHTML += questionsList[index];
+        }
+
+    }
+    return questionsHTML;
 }
 
-function copyAndRemoveResultsPanel(panelsContainer) {
-    console.debug('COPYING');
-    const resultsElem = panelsContainer.querySelector('#results');
-    const resultsElemClone = resultsElem.cloneNode(true);
-    panelsContainer.removeChild(resultsElem);
+/*
 
-    return resultsElemClone;
-}
 
-function buildPanel() {
-    const newPanel = document.createElement('div');
-    newPanel.classList.add('panel');
-    newPanel.classList.add('mainPanel');
-    newPanel.dataset.area = 'questions';
-    return newPanel;
-}
+8b,dPPYba,   ,adPPYYba,  8b       d8
+88P'   `"8a  ""     `Y8  `8b     d8'
+88       88  ,adPPPPP88   `8b   d8'
+88       88  88,    ,88    `8b,d8'
+88       88  `"8bbdP"Y8      "8"
+
+
+*/
 
 function getNavValue(i, numPages) {
     const lastPage = i == numPages - 1 ? true : false;
@@ -609,19 +670,6 @@ function getNavValue(i, numPages) {
                 <span class="btnLabel">NEXT</span>
                 <span class="iconify" data-icon="ic:baseline-chevron-right" data-inline="false"></span>
             </a>`;
-}
-
-function addQuestions(i, questionsPerPage, questionsList) {
-    let questionsHTML = '';
-    let index = i * questionsPerPage;
-    const end = index + questionsPerPage;
-    for (index; index < end; index++) {
-        if (questionsList[index]) {
-            questionsHTML += questionsList[index];
-        }
-
-    }
-    return questionsHTML;
 }
 
 
