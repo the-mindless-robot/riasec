@@ -89,7 +89,11 @@ function setQuestions(assessmentType) {
     // update event listeners
     updateEventListeners();
 
-    setProgressBar(router);
+    // true if reset
+    setProgressBar(router, true);
+
+    // updateProgressBar(increment);
+    // updateHelpDisplay();
 
     //show first page of quesitons
     //TODO: control timing to avoid race condition
@@ -688,7 +692,7 @@ function getNavValue(i, numPages) {
 88                                      "Y8bbdP"
 */
 
-function setProgressBar(router) {
+function setProgressBar(router, reset = false) {
 
     //TODO:fix hard coded numpanels
     // dont count first panel
@@ -699,6 +703,11 @@ function setProgressBar(router) {
 
     setNextBtns(increment, router.getNextBtns());
     setPrevBtns(increment, router.getPrevBtns());
+
+    if(reset) {
+        updateProgressBar(increment);
+        updateHelpDisplay();
+    }
 }
 
 function setNextBtns(increment, btns) {
