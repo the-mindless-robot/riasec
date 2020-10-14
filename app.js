@@ -1227,11 +1227,8 @@ function setPrograms(RIASEC) {
     matchesContainer.innerHTML = matchesHTML;
 
     if(numMatches > 15) {
-        console.log('MOAR!!!!!!!!!!');
         const showMoreBtnElem = buildShowMoreBTN();
         matchesContainer.append(showMoreBtnElem);
-
-
     }
 
 
