@@ -168,7 +168,7 @@ function loadProgramData() {
     return new Promise((resolve, reject) => {
         try {
             const programSheet = new GoogleSheet(config.sheet);
-            const programData = programSheet.load(formatData, { end: 2 });
+            const programData = programSheet.load(formatData, { end: 3 });
             resolve(programData);
         }
         catch(error) {
@@ -179,6 +179,7 @@ function loadProgramData() {
 }
 
 function buildProgramDataObjects(programData) {
+
     const programDataObjects = {};
     programDataObjects.codesToPrograms = programData.codesToPrograms;
     programDataObjects.areas = addAreaRankings(programData);
@@ -188,16 +189,17 @@ function buildProgramDataObjects(programData) {
 }
 
 function formatData(data) {
-    // console.log('data', data);
+    console.log('data', data);
 
     const programsToUrls = data.hasOwnProperty('programs') ? formatProgramUrls(data.programs) : false;
     const codesToPrograms = data.hasOwnProperty('programs') ? formatProgramCodes(data.programs) : false;
-    const areas = data.hasOwnProperty('areas') ? formatAreaDefinitions(data.areas) : false;
+    const areas = data.hasOwnProperty('areas') && data.hasOwnProperty('shortdesc') ? formatAreaDefinitions(data.areas, data.shortdesc) : false;
+
 
     return { codesToPrograms, areas, programsToUrls };
 }
 
-function formatAreaDefinitions(areas) {
+function formatAreaDefinitions(areas, shortdesc) {
     const areaDefinitions = {};
     for (const area of areas) {
         const letter = area.label.charAt(0).toUpperCase();
@@ -205,8 +207,29 @@ function formatAreaDefinitions(areas) {
         const desc = area.desc;
         areaDefinitions[letter] = { areaLabel, desc };
     }
+
+    for(const area of shortdesc) {
+        const letter = area.label.charAt(0).toUpperCase();
+        areaDefinitions[letter].shortdesc = buildShortDesc(area);
+    }
     console.log('areaDefinitions', areaDefinitions);
     return areaDefinitions;
+}
+
+function buildShortDesc(area) {
+    const areaClone = {...area};
+    delete areaClone.label;
+
+    const shortDesc = [];
+
+    for(const key in areaClone) {
+        const desc = area[key];
+        if(typeof desc == 'string' && desc.length > 0) {
+            shortDesc.push(desc);
+        }
+    }
+    console.debug('shortDesc', shortDesc);
+    return shortDesc;
 }
 
 function formatProgramCodes(programs) {
@@ -536,7 +559,7 @@ function getQuickVersionQuestions() {
     for(const area of areas) {
         if(area.length == 1 ) {
             const areaData = dataObjects.programs.areas[area];
-            areaQuestionsHTML.push(buildAreaQuestionHTML(areaData));
+            areaQuestionsHTML.push(buildAreaQuestionHTMLv2(areaData));
         }
     }
     console.warn("AREA HTML", areaQuestionsHTML);
@@ -545,7 +568,7 @@ function getQuickVersionQuestions() {
 
 function buildQuickVersionContent(i, questionsObj) {
     return `<div class="panel-content areaQuestion">
-            <h4>I am...</h4>
+                <br/><br/>
                 <div id="questions">
                    ${questionsObj.questionsList[i]}
                 </div>
@@ -553,6 +576,25 @@ function buildQuickVersionContent(i, questionsObj) {
                     ${getNavValue(i, questionsObj.numPages)}
                 </div>
             </div>`;
+}
+
+function buildAreaQuestionHTMLv2(area) {
+    return `<ul>
+                ${buildAreaShortDesc(area.shortdesc)}
+            </ul>
+
+        <br/>
+        <div class="value" data-area="${area.areaLabel}">
+            <span class="ratingLabel">Disagree</span>
+            <i data-value="1" class="material-icons">star</i>
+            <i data-value="2" class="material-icons">star</i>
+            <i data-value="3" class="material-icons">star</i>
+            <i data-value="4" class="material-icons">star</i>
+            <i data-value="5" class="material-icons">star</i>
+            <span class="ratingLabel">Agree</span>
+        </div>
+        <div class="divider"></div>
+    `;
 }
 
 function buildAreaQuestionHTML(area) {
@@ -577,6 +619,18 @@ function buildAreaQuestionHTML(area) {
         <div class="divider"></div>
     `;
 }
+
+function buildAreaShortDesc(shortDesc) {
+    let examplesHTML = "";
+
+    for(const desc of shortDesc) {
+        examplesHTML += buildExampleHTML(desc);
+    }
+
+    return examplesHTML;
+
+}
+
 
 function getAreaExamples(area) {
     console.warn("DATA OBJECTS",dataObjects.onet.questionsByArea[area]);
