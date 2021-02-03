@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>RIASEC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="panels.css" rel="stylesheet">
@@ -25,12 +26,42 @@
         </div>
         <div class="side-nav" id="helpContent">
             <h4 class="flex"><span class="iconify fill" data-icon="mdi:lightbulb" data-inline="false"></span>
-                <span>Remember</span></h4>
+                <span>Remember</span>
+            </h4>
             <ul>
                 <li>This is NOT A TEST</li>
                 <li>There is no right or wrong answer</li>
                 <li>You can take all the time you need</li>
             </ul>
+        </div>
+        <div id="signup" class="modal">
+            <div class="modal-content">
+                <h4>Email Results</h4>
+                <form class="col s12">
+                    <div class="row">
+                        <div class="input-field col l4 m6 s12">
+                            <input class="get" id="first_name" type="text">
+                            <label for="first_name">First Name</label>
+                        </div>
+                        <div class="input-field col l4 m6 s12">
+                            <input class="get" id="last_name" type="text">
+                            <label for="last_name">Last Name</label>
+                        </div>
+                        <div class="input-field col l4 m6 s12">
+                            <input class="get" id="email" type="text">
+                            <label for="email">Email</label>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                    </div>
+                </form>
+                <a id="send" class="actionBtn blue v-align">
+                    <span class="iconify" data-icon="mdi:email-send" data-inline="false"></span> Send
+                </a>
+            </div>
+
+
         </div>
         <div id="panels">
             <div id="loader">
@@ -44,7 +75,12 @@
                             &mdash;Albert Einstein
                         </p>
                     </div>
-                    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                    <div class="lds-ring">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                     <div>
                         Loading
                     </div>
@@ -190,8 +226,18 @@
 
             <div id="results" class="panel mainPanel" data-area="results" data-nav="results">
                 <div class="panel-content">
-                    <h1><span class="iconify" data-icon="ic:baseline-leaderboard" data-inline="false"></span><span>Your
-                            Results</span></h1>
+                    <div class="title">
+                        <h1><span class="iconify" data-icon="ic:baseline-leaderboard" data-inline="false"></span>
+                            <span>Your Results</span>
+                        </h1>
+                        <div class="email">
+                            <a id="email" class="actionBtn modal-trigger blue v-align" href="#signup">
+                                <span class="iconify" data-icon="mdi:email-send" data-inline="false"></span>Email
+                                Results
+                            </a>
+                        </div>
+                    </div>
+
                     <div class="steps">
                         <div class="step">
                             <span class="stepNum">1</span>
@@ -213,6 +259,7 @@
                                 associate degree, transfer or career goal.</p>
                         </div>
                     </div>
+
                     <h2><span>RIASEC Code</span></h2>
                     <div id="code"></div>
                     <h2><span>Top Interest Areas</span></h2>
@@ -264,9 +311,11 @@
                     </div>
                     <div class="feedback">
                         <h2><span>Comments & Feedback</span></h2>
-                        <p>This tool is still actively being developed.  Please help us make it better by filling out the feedback form below.  The survey takes less than 2 minutes.</p>
+                        <p>This tool is still actively being developed. Please help us make it better by filling out the
+                            feedback form below. The survey takes less than 2 minutes.</p>
                         <p>Thank you!</p>
-                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSc58EEHBB6r-q9N25FtuJ_LBmWzvOwqiFnqPaM3bWltEMEUOQ/viewform" target="_blank" class="actionBtn blue">Give Feedback</a>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSc58EEHBB6r-q9N25FtuJ_LBmWzvOwqiFnqPaM3bWltEMEUOQ/viewform"
+                            target="_blank" class="actionBtn blue">Give Feedback</a>
                     </div>
 
                 </div>
@@ -274,11 +323,14 @@
         </div>
 </body>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="m_init.js"></script>
 <script src="GoogleSheet.js"></script>
 <script src="config.js"></script>
 <script src="panels.js"></script>
 <script src="panelRouter.js"></script>
 <script src="onetWebService.js"></script>
+<script src="formGrunt.js"></script>
 <script src="app.js"></script>
 <script src="https://code.iconify.design/1/1.0.6/iconify.min.js"></script>
 

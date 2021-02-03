@@ -1379,3 +1379,51 @@ function reOrderArray(array, orderByArray) {
     return array;
 }
 
+/*
+
+
+                                                                iiii  lllllll
+                                                               i::::i l:::::l
+                                                                iiii  l:::::l
+                                                                      l:::::l
+    eeeeeeeeeeee       mmmmmmm    mmmmmmm     aaaaaaaaaaaaa   iiiiiii  l::::l
+  ee::::::::::::ee   mm:::::::m  m:::::::mm   a::::::::::::a  i:::::i  l::::l
+ e::::::eeeee:::::eem::::::::::mm::::::::::m  aaaaaaaaa:::::a  i::::i  l::::l
+e::::::e     e:::::em::::::::::::::::::::::m           a::::a  i::::i  l::::l
+e:::::::eeeee::::::em:::::mmm::::::mmm:::::m    aaaaaaa:::::a  i::::i  l::::l
+e:::::::::::::::::e m::::m   m::::m   m::::m  aa::::::::::::a  i::::i  l::::l
+e::::::eeeeeeeeeee  m::::m   m::::m   m::::m a::::aaaa::::::a  i::::i  l::::l
+e:::::::e           m::::m   m::::m   m::::ma::::a    a:::::a  i::::i  l::::l
+e::::::::e          m::::m   m::::m   m::::ma::::a    a:::::a i::::::il::::::l
+ e::::::::eeeeeeee  m::::m   m::::m   m::::ma:::::aaaa::::::a i::::::il::::::l
+  ee:::::::::::::e  m::::m   m::::m   m::::m a::::::::::aa:::ai::::::il::::::l
+    eeeeeeeeeeeeee  mmmmmm   mmmmmm   mmmmmm  aaaaaaaaaa  aaaaiiiiiiiillllllll
+
+
+*/
+
+document.getElementById('send').addEventListener('click', runEmailSequence);
+
+function runEmailSequence() {
+    // show loader
+
+    // get values
+    const userInputs = getFormValues();
+    console.log('userInputs', userInputs);
+
+    // build request
+
+    // send request
+
+    // parse response
+
+    // display response
+
+    // hide loader
+}
+
+function getFormValues() {
+    const emailForm = new FormGrunt('get');
+    console.log('FORM', emailForm);
+    return emailForm.getAllInputValues();
+}

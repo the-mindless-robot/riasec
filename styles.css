@@ -733,6 +733,10 @@ color: #fdb930;
     color: rgb(255, 255, 255);
 }
 
+.blue .iconify {
+    color: rgb(255, 255, 255);
+}
+
 #clear {
     margin: 25px 0;
     padding: 10px 15px;
@@ -754,3 +758,20 @@ color: #fdb930;
 .desc p {
     font-size: 1.2em;
 }
+
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+a.v-align {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+a.actionBtn .iconify {
+    margin-right: 5px;
+}
+
