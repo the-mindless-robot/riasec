@@ -827,3 +827,7 @@ a.actionBtn .iconify {
     color: #ff6a6a;
     font-size: 32px;
 }
+
+#close {
+    cursor: pointer;
+}
