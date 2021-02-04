@@ -1406,6 +1406,8 @@ document.getElementById('send').addEventListener('click', runEmailSequence);
 
 function runEmailSequence() {
     // show loader
+    const loader = document.getElementById('modal-loader');
+    loader.style.display = 'flex';
 
     // get values
     const userInputs = getFormValues();
@@ -1441,22 +1443,39 @@ function runEmailSequence() {
     const request = {url, method, data};
     console.log('REQUEST', request);
 
-
-
     // send request
     Handshake.send(request).then(response => {
+        const loader = document.getElementById('modal-loader');
 
+        // parse response
         const responseData = JSON.parse(response);
         console.log('RESPONSE:', responseData);
 
+        // display response
+        if(responseData.result.httpCode === 201 || responseData.result.httpCode === 200) {
+            showSuccess();
+        } else {
+            showError();
+        }
+
+        // hide loader
+        loader.style.display = 'none';
     });
 
-    // parse response
-
-    // display response
-
-    // hide loader
 }
+
+function showSuccess() {
+    const msg = document.getElementById('msg');
+    msg.classList.add('success');
+    msg.innerHTML = "Email sent.  You will receive your results shortly.";
+}
+
+function showError() {
+    const msg = document.getElementById('msg');
+    msg.classList.add('error');
+    msg.innerHTML = "Whoops, it looks like something went wrong.  Please try again.";
+}
+
 
 function convertToString(array) {
     let string = "";

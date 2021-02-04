@@ -36,6 +36,20 @@
         </div>
         <div id="signup" class="modal">
             <div class="modal-content">
+                <div id="modal-loader">
+                    <div class="preloader-wrapper big active">
+                        <div class="spinner-layer spinner-blue-only">
+                          <div class="circle-clipper left">
+                            <div class="circle"></div>
+                          </div><div class="gap-patch">
+                            <div class="circle"></div>
+                          </div><div class="circle-clipper right">
+                            <div class="circle"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <p>Sending Email...</p>
+                </div>
                 <h4>Email Results</h4>
                 <form class="col s12">
                     <div class="row">
@@ -52,10 +66,8 @@
                             <label for="email">Email</label>
                         </div>
                     </div>
-                    <div class="row">
-
-                    </div>
                 </form>
+                <p id="msg"></p>
                 <a id="send" class="actionBtn blue v-align">
                     <span class="iconify" data-icon="mdi:email-send" data-inline="false"></span> Send
                 </a>
