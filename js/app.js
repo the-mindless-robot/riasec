@@ -1423,6 +1423,9 @@ function clearFormData(elem) {
         label.classList.remove('active');
     }
 
+    const msg = document.getElementById('msg');
+    msg.style.display = "none";
+
 
 }
 
