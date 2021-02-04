@@ -1411,14 +1411,27 @@ function runEmailSequence() {
     const userInputs = getFormValues();
     console.log('userInputs', userInputs);
 
+    const results = dataObjects.results;
+    const userData = {
+        ...userInputs,
+        code: results.code,
+        artistic: results.scores.Artistic,
+        conventional: results.scores.Conventional,
+        enterprising: results.scores.Enterprising,
+        investigative: results.scores.Investigative,
+        realistic: results.scores.Realistic,
+        social: results.scores.Social,
+        version: dataObjects.version
+    }
+    console.debug('RESULTS', userData);
     // build request
-    const url = 'php/request.php';
+    const url = './php/request.php';
     const method = 'POST';
 
     const data = new FormData;
     const table = 'riasec_users';
     const action = 'INSERT';
-    const dataString = JSON.stringify(userInputs);
+    const dataString = JSON.stringify(userData);
     data.append('table', table);
     data.append('dataString', dataString);
     data.append('action', action);
@@ -1426,13 +1439,15 @@ function runEmailSequence() {
     const request = {url, method, data};
     console.log('REQUEST', request);
 
+
+
     // send request
-    Handshake.send(request).then(response => {
+    // Handshake.send(request).then(response => {
 
-        const responseData = JSON.parse(response);
-        console.log('RESPONSE:', responseData);
+    //     const responseData = JSON.parse(response);
+    //     console.log('RESPONSE:', responseData);
 
-    });
+    // });
 
     // parse response
 
