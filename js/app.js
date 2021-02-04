@@ -1421,7 +1421,9 @@ function runEmailSequence() {
         investigative: results.scores.Investigative,
         realistic: results.scores.Realistic,
         social: results.scores.Social,
-        version: dataObjects.version
+        version: dataObjects.version,
+        programs: convertToString(results.programs),
+        email_list: convertToHTML(results.programs)
     }
     console.debug('RESULTS', userData);
     // build request
@@ -1442,18 +1444,41 @@ function runEmailSequence() {
 
 
     // send request
-    // Handshake.send(request).then(response => {
+    Handshake.send(request).then(response => {
 
-    //     const responseData = JSON.parse(response);
-    //     console.log('RESPONSE:', responseData);
+        const responseData = JSON.parse(response);
+        console.log('RESPONSE:', responseData);
 
-    // });
+    });
 
     // parse response
 
     // display response
 
     // hide loader
+}
+
+function convertToString(array) {
+    let string = "";
+    for(const value of array) {
+        string += `${value}, `;
+    }
+    string = string.substring(0, string.length - 2);
+    return string;
+}
+
+function convertToHTML(array) {
+    let listHTML = "";
+    for(const item of array) {
+        listHTML += buildHTML(item);
+    }
+    return listHTML;
+}
+
+function buildHTML(item) {
+    const link = dataObjects.programs.programsToUrls[item].url;
+    const codes = dataObjects.programs.programsToUrls[item].codes;
+    return `<li><a href="${link}">${item}</a><br/>Codes: ${codes}</li>`;
 }
 
 function getFormValues() {
