@@ -18,7 +18,6 @@ class FormGrunt {
             // console.debug(inputAttributes);
 
              //type is required
-             // TODO: check if fallback break lookup functions
              const type = inputAttributes.type ? inputAttributes.type.toLowerCase() : input.type || false;
              const lookup = inputAttributes.lookup ? inputAttributes.lookup : input.id || input.name || false;
 
