@@ -1412,8 +1412,25 @@ function runEmailSequence() {
     console.log('userInputs', userInputs);
 
     // build request
+    const url = 'request.php';
+    const method = 'POST';
+
+    const data = new FormData;
+    const table = 'riasec_users';
+    const dataString = JSON.stringify(userInputs);
+    data.append('table', table);
+    data.append('dataString', dataString);
+
+    const request = {url, method, data};
+    console.log('REQUEST', request);
 
     // send request
+    Handshake.send(request).then(response => {
+
+        const responseData = JSON.parse(response);
+        console.log('RESPONSE:', responseData);
+
+    });
 
     // parse response
 
