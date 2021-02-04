@@ -116,7 +116,7 @@ display: flex;
 }
 
 .flex.flex-sample {
-align-items: center;
+align-items: flex-start;
 flex-wrap: nowrap;
 
 }
@@ -128,6 +128,10 @@ font-size: 24px;
 span.program {
 display: block;
 padding: 5px 0;
+}
+
+span.program a {
+    font-size: 1.1rem;
 }
 
 span.code {
@@ -261,7 +265,7 @@ color: #36536f98;
 }
 
 
-p.divider {
+p.divider-text {
 margin: 30px 10px;
 font-weight: bold;
 font-style: italic;
@@ -368,17 +372,11 @@ font-size: 1.05em;
 }
 
 .side-nav {
-position: fixed;
-top: 275px;
 z-index: 1000;
-max-width: 300px;
 background: #fff;
 border: 1px solid #fdb930;
 padding: 10px;
 display: none;
-border-top-right-radius: 5px;
-border-bottom-right-radius: 5px;
-left: -300px;
 transition: left .3s ease-in-out;
 }
 
@@ -767,13 +765,19 @@ color: #fdb930;
 
 a.v-align {
     display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+a.v-align.full {
+    display: flex;
 }
 
 a.actionBtn .iconify {
     margin-right: 5px;
 }
+
 
 #modal-loader {
     position: absolute;
@@ -801,4 +805,25 @@ a.actionBtn .iconify {
 
 #msg.error {
     border: 1px solid red;
+}
+
+#questions ul li {
+   list-style-type: disc;
+   margin-left: 15px;
+   font-size: 1.1em;
+}
+
+.panel-content {
+    padding: 20px;
+}
+
+.modal .modal-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#close .iconify {
+    color: #ff6a6a;
+    font-size: 32px;
 }

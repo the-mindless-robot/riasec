@@ -760,7 +760,7 @@ function setProgressBar(router, reset = false) {
 
     if(reset) {
         updateProgressBar(increment);
-        updateHelpDisplay();
+        // updateHelpDisplay();
     }
 }
 
@@ -768,7 +768,7 @@ function setNextBtns(increment, btns) {
     btns.forEach(btn => {
         btn.addEventListener('click', (ev) => {
             updateProgressBar(increment);
-            updateHelpDisplay();
+            // updateHelpDisplay();
         });
     });
 }
@@ -777,7 +777,7 @@ function setPrevBtns(increment, btns) {
     btns.forEach(btn => {
         btn.addEventListener('click', (ev) => {
             updateProgressBar(increment, true);
-            updateHelpDisplay();
+            // updateHelpDisplay();
         });
     });
 }
@@ -1197,7 +1197,7 @@ a8"    `Y88  88  I8[    ""  88P'    "8a  88  ""     `Y8  `8b     d8'
 function displayResults(RIASEC) {
     console.log('RIASEC', RIASEC);
     setCodeAndDesc(RIASEC);
-    setOptionsAndMatches(RIASEC);
+    // setOptionsAndMatches(RIASEC);
     setBarGraph(RIASEC);
     setPrograms(RIASEC);
 }
@@ -1291,8 +1291,8 @@ function setPrograms(RIASEC) {
 function buildShowMoreBTN() {
     const showMoreBTN = document.createElement("A");
     showMoreBTN.id = "showMore";
-    showMoreBTN.classList.add('actionBtn', 'blue');
-    showMoreBTN.innerHTML = `Show More Matches`;
+    showMoreBTN.classList.add('actionBtn', 'blue', 'v-align');
+    showMoreBTN.innerHTML = `<span class="iconify" data-icon="mdi:plus-thick" data-inline="false"></span> Show More Matches`;
 
     showMoreBTN.addEventListener('click', (ev)=>{
         console.log('MOAR!!!', dataObjects.results.programs);
@@ -1403,6 +1403,28 @@ e::::::::e          m::::m   m::::m   m::::ma::::a    a:::::a i::::::il::::::l
 */
 
 document.getElementById('send').addEventListener('click', runEmailSequence);
+document.getElementById('close').addEventListener('click', closeModal);
+
+function closeModal() {
+    const elem = document.querySelector('.modal');
+    const modal = M.Modal.getInstance(elem);
+    clearFormData(elem);
+    modal.close();
+}
+
+function clearFormData(elem) {
+    const inputs = elem.querySelectorAll('input');
+    for(const input of inputs) {
+        input.value = "";
+    }
+
+    const labels = elem.querySelectorAll('label');
+    for(const label of labels) {
+        label.classList.remove('active');
+    }
+
+
+}
 
 function runEmailSequence() {
     // show loader
@@ -1497,7 +1519,7 @@ function convertToHTML(array) {
 function buildHTML(item) {
     const link = dataObjects.programs.programsToUrls[item].url;
     const codes = dataObjects.programs.programsToUrls[item].codes;
-    return `<li><a href="${link}">${item}</a><br/>Codes: ${codes}</li>`;
+    return `<li><a href="${link}">${item}</a> ${codes}</li>`;
 }
 
 function getFormValues() {

@@ -24,7 +24,7 @@
         <div id="progress-bar">
             <div id="progress"></div>
         </div>
-        <div class="side-nav" id="helpContent">
+        <!-- <div class="side-nav" id="helpContent">
             <h4 class="flex"><span class="iconify fill" data-icon="mdi:lightbulb" data-inline="false"></span>
                 <span>Remember</span>
             </h4>
@@ -33,7 +33,7 @@
                 <li>There is no right or wrong answer</li>
                 <li>You can take all the time you need</li>
             </ul>
-        </div>
+        </div> -->
         <div id="signup" class="modal">
             <div class="modal-content">
                 <div id="modal-loader">
@@ -50,7 +50,11 @@
                       </div>
                       <p>Sending Email...</p>
                 </div>
-                <h4>Email Results</h4>
+                <div class="modal-title">
+                    <h4>Email Results</h4>
+                    <a id="close"><span class="iconify" data-icon="mdi:close-circle" data-inline="false"></span></a>
+                </div>
+
                 <form class="col s12">
                     <div class="row">
                         <div class="input-field col l4 m6 s12">
@@ -68,8 +72,8 @@
                     </div>
                 </form>
                 <p id="msg"></p>
-                <a id="send" class="actionBtn blue v-align">
-                    <span class="iconify" data-icon="mdi:email-send" data-inline="false"></span> Send
+                <a id="send" class="actionBtn blue v-align full">
+                    <span class="iconify" data-icon="mdi:email-send" data-inline="false"></span> Send Email
                 </a>
             </div>
 
@@ -87,12 +91,18 @@
                             &mdash;Albert Einstein
                         </p>
                     </div>
-                    <div class="lds-ring">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
+                    <div class="preloader-wrapper big active">
+                        <div class="spinner-layer spinner-blue-only">
+                          <div class="circle-clipper left">
+                            <div class="circle"></div>
+                          </div><div class="gap-patch">
+                            <div class="circle"></div>
+                          </div><div class="circle-clipper right">
+                            <div class="circle"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <br/>
                     <div>
                         Loading
                     </div>
@@ -102,11 +112,11 @@
             <div class="panel mainPanel" data-area="instructions">
                 <div class="panel-content">
                     <h2>Welcome</h2>
-                    <p>Welcome to the Mesa College Interest Assessment!</p>
-                    <p>The Mesa College Interest Assessment can help you find out what your interests are in
+                    <p>Welcome to the Mesa College Career Interest Assessment!</p>
+                    <p>The Mesa College Career Interest Assessment can help you find out what your interests are in
                         relation to the world of work and how they relate to Mesa's Academic Programs and transfer
                         options.</p>
-                    <p>This Mesa College Interest Assessment can also help you to discover careers you might want to
+                    <p>This Career Interest Assessment can also help you to discover careers you might want to
                         explore.</p>
                     <p>For further clarification and planning for major and career pathways, make an appointment to
                         meet with a Mesa College <a
@@ -209,15 +219,15 @@
             <div class="panel mainPanel" data-area="instructions">
                 <div class="panel-content">
                     <h2>Select your assessment type</h2>
-                    <p>The <span class="inline-title">Detailed Assessment</span> version contains 60 questions, and is
+                    <p>The <span class="inline-title">Detailed Assessment</span> (10 minutes) is
                         recommended to get the best results.</p>
                     <div class="nav">
                         <a data-type="detail" class="startBtn detail">
                             <span class="btnLabel">Start the Detailed Assessment</span>
                         </a>
                     </div>
-                    <p class="divider">or</p>
-                    <p>The <span class="inline-title">Quick Assessment</span> version contains 6 questions, and is
+                    <p class="divider-text">or</p>
+                    <p>The <span class="inline-title">Quick Assessment</span> (2 minutes) is
                         recommended for use when time is limited.</p>
                     <div class="nav">
                         <a data-type="quick" class="startBtn quick">
@@ -234,8 +244,6 @@
                 </div>
 
             </div>
-
-
             <div id="results" class="panel mainPanel" data-area="results" data-nav="results">
                 <div class="panel-content">
                     <div class="title">
@@ -267,7 +275,7 @@
                         <div class="step">
                             <span class="stepNum">3</span>
                             <h4>Plan</h4>
-                            <p>See a General Counselor or Career Counselor to start planning your path to a certificate,
+                            <p>See a <a href="http://www.sdmesa.edu/student-services/counseling/index.shtml" target="_blank">General Counselor</a> or <a href="http://www.sdmesa.edu/student-services/career-center/career-counseling/index.shtml" target="_blank">Career Counselor</a> to start planning your path to a certificate,
                                 associate degree, transfer or career goal.</p>
                         </div>
                     </div>
@@ -310,8 +318,8 @@
                                 <span class="label">Conventional</span>
                                 <span class="value" id="Conventional-value"></span>
                             </div>
-                            <a id="clear" class="jump mainPanel actionBtn blue" data-jump="1">
-                                Try it again
+                            <a id="clear" class="jump mainPanel actionBtn blue v-align" data-jump="1">
+                                <span class="iconify" data-icon="mdi:repeat-variant" data-inline="false"></span> Try It Again
                             </a>
                         </div>
                         <div class="programs">
@@ -327,9 +335,8 @@
                             feedback form below. The survey takes less than 2 minutes.</p>
                         <p>Thank you!</p>
                         <a href="https://docs.google.com/forms/d/e/1FAIpQLSc58EEHBB6r-q9N25FtuJ_LBmWzvOwqiFnqPaM3bWltEMEUOQ/viewform"
-                            target="_blank" class="actionBtn blue">Give Feedback</a>
+                            target="_blank" class="actionBtn blue v-align"><span class="iconify" data-icon="mdi:comment-text-outline" data-inline="false"></span> Give Feedback</a>
                     </div>
-
                 </div>
             </div>
         </div>
