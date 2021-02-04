@@ -1412,14 +1412,16 @@ function runEmailSequence() {
     console.log('userInputs', userInputs);
 
     // build request
-    const url = 'request.php';
+    const url = 'php/request.php';
     const method = 'POST';
 
     const data = new FormData;
     const table = 'riasec_users';
+    const action = 'INSERT';
     const dataString = JSON.stringify(userInputs);
     data.append('table', table);
     data.append('dataString', dataString);
+    data.append('action', action);
 
     const request = {url, method, data};
     console.log('REQUEST', request);
