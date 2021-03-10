@@ -972,7 +972,7 @@ function addEmptyAreas(results) {
 }
 
 // resutls -> object; scores by RIASEC area
-function getRIASEC(results) {
+async function getRIASEC(results) {
     console.warn('dataObject', dataObjects);
     let sortedResults = sortObjByKey(results, dataObjects.programs.areas.sorted);
     let code = "";
@@ -993,8 +993,6 @@ function getRIASEC(results) {
     const uniquePermutations = removeDuplicates(permutations);
     // console.log('all', uniquePermutations);
     RIASEC.permuts = uniquePermutations;
-
-
 
     findProgramMatches(RIASEC);
 }
@@ -1143,32 +1141,60 @@ function ratingEval() {
 */
 
 function findProgramMatches(RIASEC) {
-    const codesToPrograms = dataObjects.programs.codesToPrograms;
-    const codes = RIASEC.permuts;
-    let programs = [];
-    RIASEC.matched = {};
-    for (let code of codes) {
-        //codes to program from data
-        if (codesToPrograms.hasOwnProperty(code)) {
-            // programs = [...programs, [code, ...codesToPrograms[code]]];
-            programs = [...programs, ...codesToPrograms[code]];
-            RIASEC.matched[code] = true;
-        } else {
-            console.debug('No match found: ', code);
-            RIASEC.matched[code] = false;
+        const codesToPrograms = dataObjects.programs.codesToPrograms;
+        const codes = RIASEC.permuts;
+        let programs = [];
+        RIASEC.matched = {};
+        for (let code of codes) {
+            //codes to program from data
+            if (codesToPrograms.hasOwnProperty(code)) {
+                // programs = [...programs, [code, ...codesToPrograms[code]]];
+                programs = [...programs, ...codesToPrograms[code]];
+                RIASEC.matched[code] = true;
+            } else {
+                console.debug('No match found: ', code);
+                RIASEC.matched[code] = false;
+            }
         }
-    }
 
-    console.log('programs', programs);
-    console.log('unique', removeDuplicates(programs));
-    console.log('RIASEC.matched', RIASEC.matched);
+        console.log('programs', programs);
+        console.log('unique', removeDuplicates(programs));
+        console.log('RIASEC.matched', RIASEC.matched);
 
-    RIASEC.programs = removeDuplicates(programs);
+        RIASEC.programs = removeDuplicates(programs);
 
+        dataObjects.results = RIASEC;
+
+        //TODO: this is bad need to refactor
+        findCareerMatches(RIASEC);
+
+}
+
+async function findCareerMatches(RIASEC) {
+
+    console.warn('THIS', RIASEC.code);
+    const url = `https://infinite-spire-51367.herokuapp.com/career/riasec/${RIASEC.code}`;
+    const response = await fetch(url);
+    const careers = response.status == 200 ? await response.json() : false;
+    console.debug('CAREERS!!!!!!!', careers);
+
+    const careerObj = transformCareers(careers);
+    console.debug('Career OBJ', careerObj);
+
+    RIASEC.careers = careerObj;
     dataObjects.results = RIASEC;
 
     displayResults(RIASEC);
 
+}
+
+function transformCareers(careers) {
+    const careersObj = {};
+    for(const group of careers) {
+        const id = group._id;
+        careersObj[id] = group.careers;
+    }
+    return careersObj;
 }
 
 function removeDuplicates(array) {
@@ -1179,7 +1205,6 @@ function removeDuplicates(array) {
     });
     return uniqueArray;
 }
-
 
 /*
 
@@ -1195,11 +1220,13 @@ a8"    `Y88  88  I8[    ""  88P'    "8a  88  ""     `Y8  `8b     d8'
                             88                              d8'
 */
 function displayResults(RIASEC) {
+
     console.log('RIASEC', RIASEC);
     setCodeAndDesc(RIASEC);
     // setOptionsAndMatches(RIASEC);
-    setBarGraph(RIASEC);
+    // setBarGraph(RIASEC);
     setPrograms(RIASEC);
+    setCareers(RIASEC.code);
 }
 
 function setCodeAndDesc(RIASEC) {
@@ -1263,6 +1290,7 @@ function buildDescription(code) {
     }
     descContainer.innerHTML = allDescHTML;
 }
+
 
 function setPrograms(RIASEC) {
     let matchesHTML = "";
@@ -1377,6 +1405,38 @@ function reOrderArray(array, orderByArray) {
     });
     console.log('matchedCodesSorted', array);
     return array;
+}
+
+
+/*
+
+
+
+
+ ,adPPYba,  ,adPPYYba,  8b,dPPYba,   ,adPPYba,   ,adPPYba,  8b,dPPYba,  ,adPPYba,
+a8"     ""  ""     `Y8  88P'   "Y8  a8P_____88  a8P_____88  88P'   "Y8  I8[    ""
+8b          ,adPPPPP88  88          8PP"""""""  8PP"""""""  88           `"Y8ba,
+"8a,   ,aa  88,    ,88  88          "8b,   ,aa  "8b,   ,aa  88          aa    ]8I
+ `"Ybbd8"'  `"8bbdP"Y8  88           `"Ybbd8"'   `"Ybbd8"'  88          `"YbbdP"'
+
+
+*/
+
+function setCareers(code) {
+    const riasecArray = getCodesArray(code);
+    console.log('riasecArray', riasecArray);
+    for(const code of riasecArray) {
+        console.log('code loop', code);
+    }
+}
+
+function getCodesArray(code) {
+    console.log(code);
+    const a = code[0] || '';
+    const b = code[1] || '';
+    const c = code[2] || '';
+
+    return [`${a}${b}${c}`, `${a}${b}`, `${a}`, `${a}${c}${b}`, `${a}${c}`, `${b}${a}${c}`, `${b}${a}`];
 }
 
 /*
