@@ -1229,6 +1229,7 @@ function displayResults(RIASEC) {
     // setBarGraph(RIASEC);
     setPrograms(RIASEC);
     setCareers(RIASEC);
+    loadFilters();
 }
 
 function setCodeAndDesc(RIASEC) {
@@ -1299,21 +1300,37 @@ function setPrograms(RIASEC) {
     const matchesContainer = document.getElementById('matches');
     const numMatches = RIASEC.programs.length;
 
+    let filter = 1;
+    const numFilters = 10;
+
     // show first 15
-    for(let i = 0; i < 15; i++) {
-        const program = RIASEC.programs[i];
-        if(program) {
-            matchesHTML += buildMatchHTML(program, RIASEC);
+    // for(let i = 0; i < 15; i++) {
+    //     const program = RIASEC.programs[i];
+    //     if(program) {
+    //         matchesHTML += buildMatchHTML(program, RIASEC);
+    //     }
+
+    // }
+
+    for(const program of RIASEC.programs) {
+
+        matchesHTML += buildMatchHTML(program, RIASEC, filter);
+
+        if(filter === numFilters) {
+            filter = 1;
+        } else {
+            filter++;
         }
+
 
     }
 
     matchesContainer.innerHTML = matchesHTML;
 
-    if(numMatches > 15) {
-        const showMoreBtnElem = buildShowMoreBTN();
-        matchesContainer.append(showMoreBtnElem);
-    }
+    // if(numMatches > 15) {
+    //     const showMoreBtnElem = buildShowMoreBTN();
+    //     matchesContainer.append(showMoreBtnElem);
+    // }
 
 
 }
@@ -1346,15 +1363,15 @@ function buildShowMoreBTN() {
     return showMoreBTN;
 }
 
-function buildMatchHTML(program, RIASEC) {
+function buildMatchHTML(program, RIASEC, filter) {
     if (dataObjects.programs.programsToUrls.hasOwnProperty(program)) {
         const programObj = dataObjects.programs.programsToUrls[program];
         const url = programObj.hasOwnProperty('url') && programObj.url.length > 0 ? programObj.url.trim() : false;
         const codes = programObj.hasOwnProperty('codesArray') && programObj.codesArray.length > 0 ? ` ${getMatchedCodeHTML(programObj.codesArray, RIASEC)}` : ``;
         if (url) {
-            return `<span class="program"><a href="${url}" target="_blank">${program}</a>${codes}</span>`;
+            return `<span class="program major" data-group="${filter}"><a href="${url}" target="_blank">${program}</a>${codes}</span>`;
         }
-        return `<span class="program">${program}${codes}</span>`;
+        return `<span class="program major" data-group="${filter}">${program}${codes}</span>`;
 
     } else {
         console.debug('No program found:', program);
@@ -1430,14 +1447,23 @@ function setCareers(RIASEC) {
     let careersHTML = '';
     const careerContainer = document.getElementById('careerList');
 
+    let filter = 1;
+    const numFilters = 10;
+
 
     console.log('riasecArray', riasecArray);
     for(const code of riasecArray) {
         console.log('code loop', code);
         if(careers.hasOwnProperty(code)) {
             for(const career of careers[code]) {
-                const careerHTML = buildCareerHTML(career);
+                const careerHTML = buildCareerHTML(career, filter);
                 careersHTML += careerHTML;
+
+                if(filter === numFilters) {
+                    filter = 1;
+                } else {
+                    filter++;
+                }
             }
 
         }
@@ -1446,10 +1472,10 @@ function setCareers(RIASEC) {
     careerContainer.innerHTML = careersHTML;
 }
 
-function buildCareerHTML(career) {
+function buildCareerHTML(career, filter) {
     const url = `http://www.sdmesa.edu/academics-new/careers/career.html?id=${career.code}`;
 
-    return `<span class="program career">
+    return `<span class="program career" data-group="${filter}">
                 ${checkVideo(career)}
                 <a href="${url}" target="_blank">${career.title}</a>
                 <span class="code">${career.riasec_code}</span>
@@ -1473,10 +1499,12 @@ function showVideo(ONET, RIASEC) {
     const videoModal = document.getElementById('careerVideo');
     const title = videoModal.querySelector('h4');
     const iframe = videoModal.querySelector('iframe');
+    const button = videoModal.querySelector('#exploreCareer');
     const career = findCareer(ONET, RIASEC);
     if(career) {
         title.innerHTML = career.title;
-        iframe.src =  `https://cdn.careeronestop.org/OccVids/OccupationVideos/${ONET}.mp4`;
+        iframe.src = `https://cdn.careeronestop.org/OccVids/OccupationVideos/${ONET}.mp4`;
+        button.href = `http://www.sdmesa.edu/academics-new/careers/career.html?id=${career.code}`;
     }
 
     const modalInstance = M.Modal.getInstance(videoModal);
@@ -1512,6 +1540,121 @@ function getCodesArray(code) {
 
     return [`${a}${b}${c}`, `${a}${b}`, `${a}`, `${a}${c}${b}`, `${a}${c}`, `${b}${a}${c}`, `${b}${a}`];
 }
+
+
+/*
+
+   ad88  88  88
+  d8"    ""  88    ,d
+  88         88    88
+MM88MMM  88  88  MM88MMM  ,adPPYba,  8b,dPPYba,
+  88     88  88    88    a8P_____88  88P'   "Y8
+  88     88  88    88    8PP"""""""  88
+  88     88  88    88,   "8b,   ,aa  88
+  88     88  88    "Y888  `"Ybbd8"'  88
+
+
+*/
+
+function loadFilters() {
+
+    const filterBtns = getFilters();
+    console.debug('filter btns', filterBtns)
+
+    for (const btn of filterBtns) {
+        console.debug('btns', btn);
+
+        btn.addEventListener('click', (ev) => {
+            console.debug('hit');
+            console.log('click', ev.target);
+            activateFilter(ev.target);
+            const filter = ev.target.dataset.filter;
+            filterResults(filter);
+        });
+    }
+
+    const resetBtn = document.getElementById('resetFilters');
+    resetBtn.addEventListener('click', clearFilters);
+
+    return;
+}
+
+function activateFilter(elem) {
+    const filterBtns = getFilters();
+    for(const btn of filterBtns) {
+        btn.classList.remove('active');
+    }
+    elem.classList.add('active');
+
+    return;
+}
+
+function filterResults(filter) {
+
+    resetFilters();
+
+    const programs = document.querySelectorAll('.major');
+    const careers = document.querySelectorAll('.career');
+    console.debug('FILTER BY', programs, careers, filter);
+
+    for(const program of programs) {
+        const group = program.dataset.group;
+        if(group !== filter) {
+            program.style.display = 'none';
+        }
+    }
+
+    for(const career of careers) {
+        const group = career.dataset.group;
+        if(group !== filter) {
+            career.style.display = 'none';
+        }
+    }
+
+    return;
+
+}
+
+
+
+function resetFilters() {
+    const programs = document.querySelectorAll('.major');
+    const careers = document.querySelectorAll('.career');
+
+    for(const program of programs) {
+        const group = program.dataset.group;
+
+        program.style.display = 'block';
+
+    }
+
+    for(const career of careers) {
+        const group = career.dataset.group;
+
+        career.style.display = 'block';
+
+    }
+
+    return;
+}
+
+function clearFilters() {
+    const activeBtn = document.querySelector('.filter.active');
+    activeBtn.classList.remove('active');
+
+    resetFilters();
+
+    return;
+}
+
+function getFilters() {
+    const filtersContainer = document.getElementById('filters');
+    const filterBtns = filtersContainer.querySelectorAll('.filter');
+    return filterBtns;
+}
+
+
+
 
 /*
 
