@@ -1501,10 +1501,12 @@ function showVideo(ONET, RIASEC) {
     const iframe = videoModal.querySelector('iframe');
     const button = videoModal.querySelector('#exploreCareer');
     const career = findCareer(ONET, RIASEC);
+    const desc = videoModal.querySelector('.desc');
     if(career) {
         title.innerHTML = career.title;
         iframe.src = `https://cdn.careeronestop.org/OccVids/OccupationVideos/${ONET}.mp4`;
         button.href = `http://www.sdmesa.edu/academics-new/careers/career.html?id=${career.code}`;
+        desc.innerHTML = career.description;
     }
 
     const modalInstance = M.Modal.getInstance(videoModal);
