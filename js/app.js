@@ -1226,7 +1226,7 @@ function displayResults(RIASEC) {
     // setOptionsAndMatches(RIASEC);
     // setBarGraph(RIASEC);
     setPrograms(RIASEC);
-    setCareers(RIASEC.code);
+    setCareers(RIASEC);
 }
 
 function setCodeAndDesc(RIASEC) {
@@ -1422,12 +1422,84 @@ a8"     ""  ""     `Y8  88P'   "Y8  a8P_____88  a8P_____88  88P'   "Y8  I8[    "
 
 */
 
-function setCareers(code) {
-    const riasecArray = getCodesArray(code);
+function setCareers(RIASEC) {
+    const riasecArray = getCodesArray(RIASEC.code);
+    const careers = RIASEC.careers;
+    let careersHTML = '';
+    const careerContainer = document.getElementById('careerList');
+
+
     console.log('riasecArray', riasecArray);
     for(const code of riasecArray) {
         console.log('code loop', code);
+        if(careers.hasOwnProperty(code)) {
+            for(const career of careers[code]) {
+                const careerHTML = buildCareerHTML(career);
+                careersHTML += careerHTML;
+            }
+
+        }
     }
+
+    careerContainer.innerHTML = careersHTML;
+}
+
+function buildCareerHTML(career) {
+    const url = `http://www.sdmesa.edu/academics-new/careers/career.html?id=${career.code}`;
+
+    return `<span class="program career">
+                ${checkVideo(career)}
+                <a href="${url}" target="_blank">${career.title}</a>
+                <span class="code">${career.riasec_code}</span>
+            </span>`;
+
+}
+
+function checkVideo(career) {
+    const video = career.video !== '' ? career.video : false;
+    if(video) {
+        return `<a href="#video" class="modal-trigger" onclick="showVideo('${career.code}', '${career.riasec_code}')" target="_blank" class="video">
+        &nbsp;<span class="iconify" data-icon="dashicons:video-alt3" data-inline="false"></span>
+        </a>`;
+    } else {
+        return '';
+    }
+}
+
+function showVideo(ONET, RIASEC) {
+    console.log('SHOW VIDEO', ONET);
+    const videoModal = document.getElementById('careerVideo');
+    const title = videoModal.querySelector('h4');
+    const iframe = videoModal.querySelector('iframe');
+    const career = findCareer(ONET, RIASEC);
+    if(career) {
+        title.innerHTML = career.title;
+        iframe.src =  `https://cdn.careeronestop.org/OccVids/OccupationVideos/${ONET}.mp4`;
+    }
+
+    const modalInstance = M.Modal.getInstance(videoModal);
+    modalInstance.open();
+}
+
+async function getVideo(ONET) {
+
+        const url = `https://www.candidcareer.com/api/userapi.php?method=getJobDescriptionVideoByOnetCode&onet_code=${ONET}&shared=SanDiegoMesaCollege&type=json`;
+    const res = await fetch(url);
+    const video = res.status == 200 ? await res.json() : false;
+    if(video) {
+        console.log('candid vid', video);
+    }
+
+}
+
+function findCareer(ONET, RIASEC) {
+    const careers = dataObjects.results.careers[RIASEC];
+    for(const career of careers) {
+        if(career.code == ONET) {
+            return career;
+        }
+    }
+    return false;
 }
 
 function getCodesArray(code) {
@@ -1463,12 +1535,20 @@ e::::::::e          m::::m   m::::m   m::::ma::::a    a:::::a i::::::il::::::l
 */
 
 document.getElementById('send').addEventListener('click', runEmailSequence);
-document.getElementById('close').addEventListener('click', closeModal);
+const closeBtns = document.querySelectorAll('.close-btn');
+for(const btn of closeBtns) {
+    btn.addEventListener('click', closeModal);
+}
 
-function closeModal() {
-    const elem = document.querySelector('.modal');
-    const modal = M.Modal.getInstance(elem);
-    clearFormData(elem);
+function closeModal(ev) {
+    // TODO: check element clicked
+    const path = ev.target;
+    const btn = path.parentElement.parentElement;
+    const id = btn.id;
+    console.log('ID', id);
+    const modalElem = id === 'email' ? document.getElementById('signup') : document.getElementById('careerVideo');
+    const modal = M.Modal.getInstance(modalElem);
+    clearFormData(modalElem);
     modal.close();
 }
 
