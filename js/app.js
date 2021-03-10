@@ -254,8 +254,10 @@ function formatProgramCodes(programs) {
 function formatProgramUrls(programs) {
     const programsToUrls = {};
     for (const program of programs) {
+        const newPages = 'https://www.sdmesa.edu/academics-new/programs/jack-dev/new-academic-pages-beta/';
+        const currentPages = 'https://www.sdmesa.edu/academics/academic-programs/';
         const discipline = program.hasOwnProperty('discipline') && program.discipline.length > 0 ? program.discipline.trim() : false;
-        const url = program.hasOwnProperty('url') && program.url.length > 0 ? `https://www.sdmesa.edu/academics/academic-programs/${program.url.trim()}.shtml` : false;
+        const url = program.hasOwnProperty('url') && program.url.length > 0 ? `${newPages}${program.url.trim()}.shtml` : false;
         const codes = program.hasOwnProperty('hollandcode') && program.hollandcode.length > 0 ? program.hollandcode.trim() : false;
         const codesArray = program.hasOwnProperty('hollandcode') && program.hollandcode.length > 0 ? buildCodeArray(program.hollandcode) : false;
         if (discipline && url && codes && codesArray && !programsToUrls.hasOwnProperty(discipline)) {
