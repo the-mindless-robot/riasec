@@ -731,6 +731,11 @@ color: #fdb930;
     color: rgb(255, 255, 255);
 }
 
+.mesa {
+    background: rgb(0, 47, 90);
+    color: rgb(255, 255, 255);
+}
+
 .blue .iconify {
     color: rgb(255, 255, 255);
 }
