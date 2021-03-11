@@ -593,6 +593,11 @@ function buildAreaQuestionHTMLv2(area) {
             <i data-value="3" class="material-icons">star</i>
             <i data-value="4" class="material-icons">star</i>
             <i data-value="5" class="material-icons">star</i>
+            <i data-value="6" class="material-icons">star</i>
+            <i data-value="7" class="material-icons">star</i>
+            <i data-value="8" class="material-icons">star</i>
+            <i data-value="9" class="material-icons">star</i>
+            <i data-value="10" class="material-icons">star</i>
             <span class="ratingLabel">Agree</span>
         </div>
         <div class="divider"></div>
@@ -1075,7 +1080,12 @@ function getPermutations(string) {
 }
 
 function computePercent(value) {
-    const maxScore = Number(config.numQuestionsPerArea) * 5;
+    const type = dataObjects.version || "detail";
+    let maxScore = Number(config.numQuestionsPerArea) * 5;
+
+    if(type === "quick")
+        maxScore = 10;
+
     const decimal = Number(value) / maxScore;
     const percent = decimal * 100;
     // console.log(decimal, percent, Math.floor(percent));
@@ -1645,7 +1655,8 @@ function resetFilters() {
 
 function clearFilters() {
     const activeBtn = document.querySelector('.filter.active');
-    activeBtn.classList.remove('active');
+    if(activeBtn)
+        activeBtn.classList.remove('active');
 
     resetFilters();
 
