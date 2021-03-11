@@ -68,9 +68,15 @@ color: #fdb930;
 }
 
 .area {
-margin-bottom: 10px;
+/* margin-bottom: 10px; */
 position: relative;
-margin-left: 85px;
+/* margin-left: 85px; */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 20px;
 }
 
 .area span.value {
@@ -78,9 +84,9 @@ padding: 20px 0;
 background: #ffc34b5e;
 display: inline-block;
 border-top-right-radius: 3px;
-border-bottom-right-radius: 3px;
+border-top-left-radius: 3px;
 box-sizing: border-box;
-height: 50px;
+width: 85px;
 }
 
 .area span.label {
@@ -90,9 +96,9 @@ display: block;
 .area.highlight .value {
 background-color: #fdb930;
 background: rgb(235,155,0);
-background: -moz-linear-gradient(300deg, rgba(235,155,0,1) 0%, rgba(252,173,17,1) 65%, rgba(255,222,157,1) 100%);
-background: -webkit-linear-gradient(300deg, rgba(235,155,0,1) 0%, rgba(252,173,17,1) 65%, rgba(255,222,157,1) 100%);
-background: linear-gradient(300deg, rgba(235,155,0,1) 0%, rgba(252,173,17,1) 65%, rgba(255,222,157,1) 100%);
+background: -moz-linear-gradient(135deg, rgba(235,155,0,1) 0%, rgba(252,173,17,1) 65%, rgba(255,222,157,1) 100%);
+background: -webkit-linear-gradient(135deg, rgba(235,155,0,1) 0%, rgba(252,173,17,1) 65%, rgba(255,222,157,1) 100%);
+background: linear-gradient(135deg, rgba(235,155,0,1) 0%, rgba(252,173,17,1) 65%, rgba(255,222,157,1) 100%);
 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#eb9b00",endColorstr="#ffde9d",GradientType=1);
 
 }
@@ -400,14 +406,21 @@ padding-left: 20px;
 }
 
 .area .score {
-position: absolute;
-right: 102%;
+/* position: absolute; */
+/* right: 102%; */
 font-weight: bold;
 padding: 0 5px;
-font-size: 65px;
+font-size: 30px;
 top: 0;
 color: #d4d4d4;
 letter-spacing: -3 px;
+}
+
+.label-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;;
 }
 
 .area.highlight .score {
@@ -732,7 +745,7 @@ color: #fdb930;
 }
 
 .mesa {
-    background: rgb(0, 47, 90);
+    background: rgb(0, 47, 90) !important;
     color: rgb(255, 255, 255);
 }
 
@@ -839,7 +852,8 @@ a.actionBtn .iconify {
 }
 
 .results {
-    display: none;
+    display: flex;
+    justify-content: center;
 }
 
 .video {
@@ -901,4 +915,15 @@ a.actionBtn .iconify {
     color: rgb(255, 124, 124);
     position: relative;
     top: 5px;
+}
+
+.modal {
+    max-height: 75%;;
+}
+
+.value-container {
+    height: 100px;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
 }

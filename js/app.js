@@ -959,6 +959,8 @@ function clearValues() {
     const progress = document.getElementById('progress');
     progress.style.width = 0;
 
+    clearFilters();
+
 }
 
 function addEmptyAreas(results) {
@@ -1226,7 +1228,7 @@ function displayResults(RIASEC) {
     console.log('RIASEC', RIASEC);
     setCodeAndDesc(RIASEC);
     // setOptionsAndMatches(RIASEC);
-    // setBarGraph(RIASEC);
+    setBarGraph(RIASEC);
     setPrograms(RIASEC);
     setCareers(RIASEC);
     loadFilters();
@@ -1256,7 +1258,8 @@ function setBarGraph(RIASEC) {
         areaScore.innerHTML = RIASEC.scores[area];
 
         const scorePercent = computePercent(RIASEC.scores[area]);
-        areaValue.style.width = scorePercent + "%";
+        // areaValue.style.height = scorePercent + "%";
+        areaValue.style.height = scorePercent + "%";
 
         if (RIASEC.code.indexOf(area.charAt(0)) != -1) {
             areaElem.classList.add('highlight');
