@@ -168,7 +168,7 @@ function loadProgramData() {
     return new Promise((resolve, reject) => {
         try {
             const programSheet = new GoogleSheet(config.sheet);
-            const programData = programSheet.load(formatData, { end: 3 });
+            const programData = programSheet.load(formatData);
             resolve(programData);
         }
         catch(error) {
@@ -527,6 +527,7 @@ function addNewQuestionPanels(container, questionsObj) {
         newPanel.innerHTML = panelContent;
         panelsContainer.appendChild(newPanel);
     }
+    return;
 }
 
 function buildPanel() {
@@ -717,11 +718,23 @@ function addQuestions(i, questionsPerPage, questionsList) {
 */
 
 function getNavValue(i, numPages) {
+    console.debug('page:', i);
     const lastPage = i == numPages - 1 ? true : false;
+    const firstPage = i === 0 ? true : false;
+    if (firstPage) {
+        return `<a class="prev mainPanel">
+                    <span class="iconify" data-icon="ic:baseline-chevron-left" data-inline="false"></span>
+                    <span class="btnLabel">PREV<br/><span class="areaLabel">Assessment Type</span></span>
+                </a>
+                <a class="next mainPanel">
+                    <span class="btnLabel">NEXT<br/><span class="areaLabel">2/6</span></span>
+                    <span class="iconify" data-icon="ic:baseline-chevron-right" data-inline="false"></span>
+                </a>`;
+    }
     if (lastPage) {
         return `<a class="prev mainPanel">
                     <span class="iconify" data-icon="ic:baseline-chevron-left" data-inline="false"></span>
-                    <span class="btnLabel">PREV</span>
+                    <span class="btnLabel">PREV<br/><span class="areaLabel">${i}/6</span></span>
                 </a>
                 <a id="resultsBtn" class="next mainPanel">
                     <span class="btnLabel">RESULTS</span>
@@ -730,10 +743,10 @@ function getNavValue(i, numPages) {
     }
     return `<a class="prev mainPanel">
                 <span class="iconify" data-icon="ic:baseline-chevron-left" data-inline="false"></span>
-                <span class="btnLabel">PREV</span>
+                <span class="btnLabel">PREV<br/><span class="areaLabel">${i}/6</span></span>
             </a>
             <a class="next mainPanel">
-                <span class="btnLabel">NEXT</span>
+                <span class="btnLabel">NEXT<br/><span class="areaLabel">${i+2}/6</span></span>
                 <span class="iconify" data-icon="ic:baseline-chevron-right" data-inline="false"></span>
             </a>`;
 }
@@ -1157,9 +1170,10 @@ function ratingEval() {
 function findProgramMatches(RIASEC) {
         const codesToPrograms = dataObjects.programs.codesToPrograms;
         const codes = RIASEC.permuts;
+        const rankedCodes = rankPermuts(RIASEC);
         let programs = [];
         RIASEC.matched = {};
-        for (let code of codes) {
+        for (let code of rankedCodes) {
             //codes to program from data
             if (codesToPrograms.hasOwnProperty(code)) {
                 // programs = [...programs, [code, ...codesToPrograms[code]]];
@@ -1182,6 +1196,93 @@ function findProgramMatches(RIASEC) {
         //TODO: this is bad need to refactor
         findCareerMatches(RIASEC);
 
+}
+
+function rankPermuts(RIASEC) {
+    console.log('RANK', RIASEC.permuts, 'by', RIASEC.code);
+    const priority = [...getPriority(RIASEC.code)];
+    const currentPermuts = [...RIASEC.permuts];
+    let rankedPermuts = [];
+
+    for(const code of priority) {
+
+        console.debug('PRIORITY CODE', code);
+
+        const indexes = findIndexOfMatches(code, currentPermuts);
+
+        console.debug('PRIORITY MATCHES', indexes, 'in', currentPermuts);
+
+        // freeze list in time for reference until next code.
+        let codeSpecificPermuts = [...currentPermuts];
+
+        for(const index of indexes) {
+                console.debug('PRIORITY ADD', index, ':',codeSpecificPermuts[index]);
+                const codeToUpdate = codeSpecificPermuts[index];
+
+                // add code to ranked
+                rankedPermuts.push(codeToUpdate);
+
+                // remove code from current list at new index
+                currentPermuts.splice(currentPermuts.indexOf(codeToUpdate), 1);
+        }
+
+    }
+
+    // if there is anything left after checking the priority codes
+    if(currentPermuts.length > 0) {
+        rankedPermuts = [...rankedPermuts, ...currentPermuts];
+    }
+
+    console.log('RANKED PERMUTS', rankedPermuts);
+
+    return rankedPermuts;
+}
+
+function findIndexOfMatches(code, array) {
+    if(code.length === 3) {
+        return [array.indexOf(code)];
+    }
+
+    if(code.length === 2) {
+        const match = code.substring(0,2);
+        return runArray(match, 2, array);
+    }
+
+    if(code.length === 1) {
+        const match = code.substring(0,1);
+        return runArray(match, 1, array);
+    }
+}
+
+function runArray(match, limit, array) {
+    const indexes = [];
+    for(const item of array) {
+        const value = item.substring(0, limit);
+        if(match == value) {
+            indexes.push(array.indexOf(item));
+        }
+    }
+    return indexes;
+}
+
+function getPriority(code) {
+    const priorityRank = [];
+    const A = code[0];
+    const B = code[1];
+    const C = code[2];
+
+    const priorityDefinition = `${A}${B}${C} ${A}${B} ${A}${C}${B} ${A}${C} ${A} ${B}${A}${C} ${B}${A} ${B}${C}${A} ${B}${C} ${B} ${C}${A}${B} ${C}${A} ${C}${B}${A} ${C}${B} ${C}`;
+    const priorityArray = priorityDefinition.split(/[ ]+/);
+    console.log('priority array', priorityArray);
+
+    return priorityArray;
+}
+
+function existsInList(value, array) {
+    if(array.indexOf(value) != -1) {
+        return true;
+    }
+    return false;
 }
 
 async function findCareerMatches(RIASEC) {

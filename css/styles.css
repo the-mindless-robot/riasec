@@ -253,6 +253,16 @@ font-size: 1rem;
 #pageContainer .btnLabel {
 font-family: 'Lato', sans-serif;
 font-weight: 700;
+line-height: .9;
+}
+
+
+#pageContainer .btnLabel.btnLabel-lg {
+    padding: 8px;
+}
+
+.areaLabel {
+    font-size: .6em;
 }
 
 .nav a {
@@ -267,7 +277,11 @@ border: 1px solid transparent;
 border-radius: 3px;
 color: #0084ff98;
 color: #001e3a98;
-color: #36536f98;
+
+}
+
+.nav a .areaLabel {
+    color: #36536f98;
 }
 
 
@@ -289,7 +303,8 @@ padding-left: 20px;
 
 .nav a .iconify {
 font-size: 2em;
-color: #36536f98
+color: #36536f98;
+color: #001e3a98;;
 }
 
 #resultsBtn {
@@ -322,6 +337,10 @@ color: #0084ff;
 color: #0084ff;
 }
 
+.nav a:hover .areaLabel {
+    color: #0084ff;
+    }
+
 .nav a:active, .nav a:focus, .nav a:target, .actionBtn:active, .actionBtn:focus, .actionBtn:target {
 border: none !important;
 background: #fdb930 !important;
@@ -332,6 +351,11 @@ color: #fff !important;
 .nav a:active .iconify, .nav a:focus .iconify, .nav a:target .iconify{
 color: #fff !important;
 }
+
+.nav a:active .areaLabel, .nav a:focus .areaLabel, .nav a:target .areaLabel{
+    color: #fff !important;
+    }
+
 
 .nav {
 display: flex;

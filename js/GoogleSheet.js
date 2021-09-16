@@ -1,72 +1,88 @@
-/*
- * Google Sheet Loader
- * Version 1.0
- * Joel Arias
- *
- */
-
 class GoogleSheet {
-    constructor(id) {
-        this.id = id;
-    }
-    async load(callback = false, options = false) {
-        const sheet = {};
-        let moreData;
-        let sheetNumber = options && options.hasOwnProperty('start') ? options.start : 1;
-        const sheetNumberEnd = options && options.hasOwnProperty('end') ? options.end : false;
+	constructor(id) {
+		this.id = id;
+	}
 
-        do {
-            moreData = false;
-            const url = 'https://spreadsheets.google.com/feeds/list/' + this.id + '/' + sheetNumber + '/public/values?alt=json';
+	async load(callback = false) {
+		const sheet = {};
 
-            const response = await fetch(url);
-            // console.log('response', response);
-            console.log(`sheet${sheetNumber} ${response.status}`);
-            const data = response.status == 200 ? await response.json() : false;
+		const APIkey = config.apiKey;
+		const sheetTitles = await this._getSheetTitles(APIkey);
+		console.debug('titles', sheetTitles);
 
-            if(data) {
-                const sheetName = await getSheetName(data);
-                const rows = await buildRows(data);
-                sheet[sheetName] = rows;
+		for(const title of sheetTitles) {
+			const encodedTitle = encodeURIComponent(title);
+			const url = 'https://sheets.googleapis.com/v4/spreadsheets/' + this.id + '/values/' + encodedTitle + '?key='+ APIkey;
+			const data = await this._requestData(url);
+			if(data) {
+                // format sheet title if necessary
+                const formattedTitle = title.toLowerCase().trim();
+				const rows = this._buildRowsV4(data);
+				sheet[formattedTitle] = rows;
+			}
+		}
 
-                if(!sheetNumberEnd || sheetNumber != sheetNumberEnd) {
-                    sheetNumber++;
-                    moreData = true;
-                }
-            }
-        }
-        while (moreData);
+		if(callback && typeof callback == 'function') {
+			return callback(sheet);
+		}
+		return sheet;
+	}
 
-        if(callback && typeof callback == 'function') {
-           return callback(sheet);
-        }
-        return sheet;
-    }
-}
+	async _requestData(url) {
+		const response = await fetch(url);
+		const data = response.status == 200 ? await response.json() : false;
+		return data;
+	}
 
-async function buildRows(data) {
+	async _getSheetTitles(APIkey) {
+		const sheets = [];
+		const url = 'https://sheets.googleapis.com/v4/spreadsheets/' + this.id + '/?key='+ APIkey;
+		const data = await this._requestData(url);
 
-    const rows = [];
+		if(data) {
+			for(const sheet of data.sheets) {
+				sheets.push(sheet.properties.title);
+			}
+			return sheets;
+		}
 
-    if (data.feed.entry) {
-        data.feed.entry.forEach(row => {
-            // console.log('row => ', row);
-            const rowObj = {};
-            for (const field in row) {
-                if (field.substring(0, 3) == 'gsx') {
-                    rowObj[field.split('$')[1]] = row[field].$t;
-                }
-            }
-            rows.push(rowObj);
-        });
-    } else {
-        console.warn('No data in sheet');
-        return "No data found";
-    }
+		return false;
 
-    return rows;
-}
+	}
 
-async function getSheetName(data) {
-    return  data.feed.title.$t.toLowerCase().trim();
+	_buildRowsV4(data) {
+		const rows = [];
+
+		if(data.values) {
+
+			const labels = data.values[0];
+
+			for(let row=1; row < data.values.length; row++) {
+				const rowObj = {};
+
+				const rowValues = data.values[row];
+
+				for(let i=0; i < labels.length; i++) {
+					const label = this._removeSpecialCharsAndSpaces(labels[i].trim().toLowerCase());
+					const value = rowValues[i]?.trim() ?? '';
+
+					//                 console.debug(`${label} : ${value}`);
+					rowObj[label] = value;
+					//                 console.debug('rowObj', rowObj);
+				}
+				rows.push(rowObj)
+			}
+		}
+
+		return rows;
+	}
+
+	_removeSpaces(string) {
+		return string.replace(/\s+/g, '')
+	}
+
+	_removeSpecialCharsAndSpaces(string) {
+		return string.replace(/[^\w]/g, '')
+	}
+
 }
