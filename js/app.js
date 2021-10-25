@@ -21,6 +21,10 @@ a:::::aaaa::::::a p::::::::::::::::p  p::::::::::::::::p
 */
 
 const router = new PanelRouter('panels', 'mainPanel');
+const config = {
+    numQuestionsPerArea: 10,
+    numTotalOptionsPerArea: 10
+};
 
 async function app() {
 
@@ -96,8 +100,6 @@ function setQuestions(assessmentType) {
     // updateHelpDisplay();
 
     //show first page of quesitons
-    //TODO: control timing to avoid race condition
-    //
     setTimeout(() => { router._forward(); }, 100);
 
 }
@@ -167,8 +169,11 @@ aa    ]8I  88       88  "8b,   ,aa  "8b,   ,aa    88,
 function loadProgramData() {
     return new Promise((resolve, reject) => {
         try {
-            const programSheet = new GoogleSheet(config.sheet);
-            const programData = programSheet.load(formatData);
+            const programSheet = new Sheet("1mSjbAORDq8HxoWT10a220onnIJYiVEGNK5j2PZnEVYE", "AIzaSyCG04xoZtZ1-UyNin7_msnXZEGOl4fxt3E");
+            const programData = programSheet.load({
+                callback: formatData,
+                showTitles: true
+            });
             resolve(programData);
         }
         catch(error) {
@@ -320,11 +325,11 @@ a8"     "8a  88P'   `"8a  a8P_____88    88
 
 function loadOnetData() {
     return new Promise((resolve, reject) => {
-        const onet = new OnetWebService(config.username);
+        const onet = new OnetWebService("sdmesa");
         let path = '/mnm/interestprofiler/questions';
-        if (config.spanish) {
-            path = '/mpp/interestprofiler/questions';
-        }
+        // if (config.spanish) {
+        //     path = '/mpp/interestprofiler/questions';
+        // }
 
         onet.call(path, { start: 1, end: 60 }, (response) => {
             if (response.hasOwnProperty('error')) {
@@ -368,6 +373,7 @@ function parseQuestions(questionsArray) {
 }
 
 function randomizeQuestions(questions) {
+    
     // copy object without reference
     const allQuestions = JSON.parse(JSON.stringify(questions));
     const areas = Object.keys(questions);
@@ -1342,7 +1348,7 @@ function displayResults(RIASEC) {
     setBarGraph(RIASEC);
     setPrograms(RIASEC);
     setCareers(RIASEC);
-    loadFilters();
+    // loadFilters();
 }
 
 function setCodeAndDesc(RIASEC) {
@@ -1804,14 +1810,23 @@ for(const btn of closeBtns) {
 
 function closeModal(ev) {
     // TODO: check element clicked
-    const path = ev.target;
-    const btn = path.parentElement.parentElement;
+    console.debug('clicked', ev.target)
+    const btn = findParent(ev.target, "A");
+    
     const id = btn.id;
     console.log('ID', id);
     const modalElem = id === 'email' ? document.getElementById('signup') : document.getElementById('careerVideo');
     const modal = M.Modal.getInstance(modalElem);
     clearFormData(modalElem);
     modal.close();
+}
+
+function findParent(target, match) {
+    console.debug('check', target, match);
+    if(target.nodeName === match) {
+        return target;
+    }
+    return findParent(target.parentElement, match);
 }
 
 function clearFormData(elem) {
