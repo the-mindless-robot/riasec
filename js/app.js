@@ -259,10 +259,10 @@ function formatProgramCodes(programs) {
 function formatProgramUrls(programs) {
     const programsToUrls = {};
     for (const program of programs) {
-        const newPages = 'https://www.sdmesa.edu/academics-new/programs/jack-dev/new-academic-pages-beta/';
+        const newPages = 'https://www.sdmesa.edu/academics/v2/programs/';
         const currentPages = 'https://www.sdmesa.edu/academics/academic-programs/';
         const discipline = program.hasOwnProperty('discipline') && program.discipline.length > 0 ? program.discipline.trim() : false;
-        const url = program.hasOwnProperty('url') && program.url.length > 0 ? `${newPages}${program.url.trim()}.shtml` : false;
+        const url = program.hasOwnProperty('url') && program.url.length > 0 ? `${newPages}${program.url.trim()}` : false;
         const codes = program.hasOwnProperty('hollandcode') && program.hollandcode.length > 0 ? program.hollandcode.trim() : false;
         const codesArray = program.hasOwnProperty('hollandcode') && program.hollandcode.length > 0 ? buildCodeArray(program.hollandcode) : false;
         if (discipline && url && codes && codesArray && !programsToUrls.hasOwnProperty(discipline)) {
@@ -1593,7 +1593,7 @@ function setCareers(RIASEC) {
 }
 
 function buildCareerHTML(career, filter) {
-    const url = `http://www.sdmesa.edu/academics-new/careers/career.html?id=${career.code}`;
+    const url = `https://www.sdmesa.edu/academics/v2/careers/career.shtml?id=${career.code}`;
 
     return `<span class="program career" data-group="${filter}">
                 ${checkVideo(career)}
@@ -1625,7 +1625,7 @@ function showVideo(ONET, RIASEC) {
     if(career) {
         title.innerHTML = career.title;
         iframe.src = `https://cdn.careeronestop.org/OccVids/OccupationVideos/${ONET}.mp4`;
-        button.href = `http://www.sdmesa.edu/academics-new/careers/career.html?id=${career.code}`;
+        button.href = `https://www.sdmesa.edu/academics/v2/careers/career.shtml?id=${career.code}`;
         desc.innerHTML = career.description;
     }
 
