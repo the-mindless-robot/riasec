@@ -1495,6 +1495,7 @@ function buildMatchHTML(program, RIASEC, filter) {
 
     } else {
         console.debug('No program found:', program);
+        return '';
     }
 
 }
