@@ -1938,9 +1938,13 @@ function convertToHTML(array) {
 }
 
 function buildHTML(item) {
-    const link = dataObjects.programs.programsToUrls[item].url;
-    const codes = dataObjects.programs.programsToUrls[item].codes;
-    return `<li><a href="${link}">${item}</a> ${codes}</li>`;
+    const link = dataObjects.programs.programsToUrls[item]?.url ?? false;
+    const codes = dataObjects.programs.programsToUrls[item]?.codes ?? false;
+    if(link && link !== '' && codes) {
+        return `<li><a href="${link}">${item}</a> ${codes}</li>`;
+    }
+    return '';
+    
 }
 
 function getFormValues() {

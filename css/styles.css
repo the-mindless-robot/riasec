@@ -1006,3 +1006,7 @@ a.actionBtn .iconify {
     justify-content: flex-end;
     flex-direction: column;
 }
+
+a#de {
+    display: none;
+}
