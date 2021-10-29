@@ -937,6 +937,7 @@ a.actionBtn .iconify {
 .video {
     max-width: 40em;
     margin: 10px auto;
+    text-align: center;
 }
 
 .video .iframe-wrapper {

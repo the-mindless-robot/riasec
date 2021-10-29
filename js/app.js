@@ -1616,23 +1616,49 @@ function checkVideo(career) {
 }
 
 function showVideo(ONET, RIASEC) {
+    
     console.log('SHOW VIDEO', ONET);
     const videoModal = document.getElementById('careerVideo');
+    const loader = videoModal.querySelector('.preloader-wrapper');
+    loader.style.display = 'inline-block';
     const title = videoModal.querySelector('h4');
+    const iframeWrapper = videoModal.querySelector('.iframe-wrapper');
+    iframeWrapper.style.display = 'none';
     const iframe = videoModal.querySelector('iframe');
+    iframe.addEventListener('load', hideVideoLoader);
     const button = videoModal.querySelector('#exploreCareer');
     const career = findCareer(ONET, RIASEC);
     const desc = videoModal.querySelector('.desc');
+
     if(career) {
         title.innerHTML = career.title;
-        iframe.src = `https://cdn.careeronestop.org/OccVids/OccupationVideos/${ONET}.mp4`;
-        button.href = `https://www.sdmesa.edu/academics/v2/careers/career.shtml?id=${career.code}`;
         desc.innerHTML = career.description;
+        button.href = `https://www.sdmesa.edu/academics/v2/careers/career.shtml?id=${career.code}`;
+        iframe.src = `https://cdn.careeronestop.org/OccVids/OccupationVideos/${ONET}.mp4`;
+    } else {
+        title.innerHTML = "";
+        desc.innerHTML = "Whoops! No data found for this career.";
+        button.style.display = "none";
     }
-
     const modalInstance = M.Modal.getInstance(videoModal);
     modalInstance.open();
+    
 }
+
+function hideVideoLoader() {
+    
+    const videoModal = document.getElementById('careerVideo');
+    
+    const iframe = videoModal.querySelector('.iframe-wrapper');
+    iframe.style.display = 'block';
+
+    const loader = videoModal.querySelector('.preloader-wrapper')
+    loader.style.display = 'none';
+    
+    console.debug('hit load', loader, iframe);
+    return;
+}
+
 
 async function getVideo(ONET) {
 
@@ -1817,8 +1843,14 @@ function closeModal(ev) {
     const id = btn.id;
     console.log('ID', id);
     const modalElem = id === 'email' ? document.getElementById('signup') : document.getElementById('careerVideo');
+    if(id === 'video') {
+        const iframe = modalElem.querySelector('iframe');
+        iframe.removeEventListener('load', hideVideoLoader);
+        iframe.src = '';
+    } else {
+        clearFormData(modalElem);
+    }
     const modal = M.Modal.getInstance(modalElem);
-    clearFormData(modalElem);
     modal.close();
 }
 
