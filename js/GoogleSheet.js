@@ -6,10 +6,14 @@ class Sheet {
 
     async load(options = false) {
         const sheet = {};
-
-        const sheetTitles = options?.sheetTitle && options.sheetTitle.length > 0 ? options.sheetTitle : await this._getSheetTitles(this.b);
+        const sheetTitles = options?.sheetTitle ? options.sheetTitle : await this._getSheetTitles(this.b);
+        
         if (options?.showTitles) {
             console.debug('titles', sheetTitles);
+        }
+        if(sheetTitles.constructor !== Array || sheetTitles.length <= 0 ) {
+            console.error('sheetTitles must be array with at least one item', sheetTitles);
+            return;
         }
 
         for (const title of sheetTitles) {
@@ -38,6 +42,7 @@ class Sheet {
     async _requestData(url) {
         const response = await fetch(url);
         const data = response.status == 200 ? await response.json() : false;
+
         return data;
     }
 
@@ -91,5 +96,4 @@ class Sheet {
     _removeSpecialCharsAndSpaces(string) {
         return string.replace(/[^\w]/g, '')
     }
-
 }
